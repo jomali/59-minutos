@@ -1,0 +1,736 @@
+!% -SD
+!% +language_name=Spanish
+!% $MAX_LABELS=2000
+!% $MAX_ZCODE_SIZE=45000
+!% $list
+
+
+!!==============================================================================
+!!
+!!	59 MINUTOS
+!!
+!!==============================================================================
+!!
+!!	File:			59mins.inf
+!!	Author(s):		J. Francisco Martín <jfm.lisaso@gmail.com>
+!!	Languague:		ES (Castellano)
+!!	System:			Inform-INFSP 6
+!!	Platform:		Máquina-Z / GLULX
+!!	Version:		0.1
+!!	Released:		2014/03/05
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	Este archivo forma parte de 59 MINUTOS.
+!!
+!!	59 MINUTOS es software libre: usted puede redistribuirlo y/o
+!!	modificarlo bajo los términos de la Licencia Pública General GNU
+!!	publicada por la Fundación para el Software Libre, ya sea la versión
+!!	3 de la Licencia, o (a su elección) cualquier versión posterior.
+!!
+!!	59 MINUTOS se distribuye con la esperanza de que sea útil, pero
+!!	SIN GARANTÍA ALGUNA; ni siquiera la garantía implícita MERCANTIL o
+!!	de APTITUD PARA UN PROPÓSITO DETERMINADO. Consulte los detalles de
+!!	la Licencia Pública General GNU para más información.
+!!
+!!	Debería haber recibido una copia de la Licencia Pública General GNU
+!!	junto a 59 MINUTOS. En caso contrario, consulte
+!!	<http://www.gnu.org/licenses/>.
+!!
+!!	Copyright (c) 2014, J. Francisco Martín
+!!
+!!------------------------------------------------------------------------------
+
+
+!!==============================================================================
+!!	Constantes y variables globales del relato
+!!------------------------------------------------------------------------------
+
+Constant Story "59 MINUTOS";
+Constant Headline "Un relato interactivo de J. Francisco Martín, 2014";
+
+Constant ALPHA_RELEASE;			! Fase de desarrollo ALFA
+Constant Checking 1;			! Código de la versión del relato
+Release 0; Serial "140311";		! 1.0 - 2014/03/11
+
+!Constant BETA_RELEASE;			! Fase de desarrollo BETA
+!Constant Checking 1;			! Código de la versión del relato
+!Release 0; Serial "140311";	! 1.0 - 2014/03/11
+
+!Constant DEMO_RELEASE;			! Versión de demostración
+!Constant Checking 1;			! Código de la versión del relato
+!Release 0; Serial "140311";	! 1.0 - 2014/03/11
+
+!Constant FINAL_RELEASE;		! Versión publicable
+!Constant Checking 1;			! Código de la versión del relato
+!Release 0; Serial "140311";	! 1.0 - 2014/03/11
+
+!! TODO - en lugar de establecer un límite al máximo número de objetos que 
+!! puede llevar el personaje en mano, sería interesante considerar el inv. del 
+!! personaje como un contenedor más, con límites de peso, tamaño,... ¿Creando 
+!! un objeto personaje e invocando a la rutina de cambio de personaje?
+
+Constant MANUAL_PRONOUNS;		! Los pronoms. refieren a objetos ya mencionados
+Constant NO_PLACES;				! Acciones LUGARES y OBJETOS desactivadas
+Constant NO_SCORE;				! No se lleva conteo de puntuación
+Constant SIN_MENSAJES;			! Se omiten los mensajes por defecto de la lib.
+Constant MAX_CARRIED 3;			! Máx. objetos que se pueden llevar en mano
+Constant SACK_OBJECT obj_ropa;	! Contenedor principal para la librería
+
+Constant PARSER_STYLE _IST_;	! Selecciona estilo de los mensajes del parser
+Constant PARSER_PREFIX "[";		! Define texto inicial de los mens. del parser
+Constant PARSER_SUFIX "]";		! Define texto final de los mens. del parser
+
+
+!!==============================================================================
+!!	Reemplazos de rutinas utilizadas por la librería Inform
+!!------------------------------------------------------------------------------
+
+Replace AttemptToTakeObject;	! Intento de transferir un objeto al jugador
+Replace Banner;					! Créditos generales de la aplicación
+Replace DrawStatusLine;			! Dibuja la barra de estado
+Replace GetGNAOfObject;			! Rutina para obtener el GNA de un objeto
+Replace InvSub;					! Rutinas para tomar INVENTARIO del personaje
+Replace InvTallSub;				! Rutinas para tomar INVENTARIO del personaje
+Replace InvWideSub;				! Rutinas para tomar INVENTARIO del personaje
+Replace LMode1Sub;				! Lookmode 1: Breve
+Replace LMode2Sub;				! Lookmode 2: Largo (establecido por defecto)
+Replace LMode3Sub;				! Lookmode 3: Superbreve
+Replace LookSub;				! Rutina para la acción ##Look
+Replace VersionSub;				! Créditos detallados de la aplicación
+Replace WearSub;				! Rutina para la acción ##Wear
+
+
+!!==============================================================================
+!!	Librerías y extensiones (Parte 1 de 2)
+!!------------------------------------------------------------------------------
+
+#Ifdef TARGET_GLULX;
+Include "gwindefs.h";			! GWindows: Definiciones
+#Endif; ! TARGET_GLULX;
+
+Include "Parser.h";				! Decodifica la entrada del teclado
+Include ">59mins_lib.inf";		! Personalizaciones de la librería Inform
+Include ">59mins_langLM.inf";	! Mensajes de la librería
+Include ">59mins_langOM.inf";	! Mensajes de los objetos
+
+#Ifdef TARGET_GLULX;
+Include "gwincls.h";			! GWindows; Window Class Framework
+#Endif; ! TARGET_GLULX;
+
+
+!!==============================================================================
+!!	Puntos de entrada para Glk (sólo en Glulx)
+!!------------------------------------------------------------------------------
+
+#Ifdef TARGET_GLULX;
+!!------------------------------------------------------------------------------
+!!	Rutina gancho encargada de reinicializar Damusix y recuperar los canales de
+!!	audio. (Sin esta rutina, al reiniciar la aplicación la música se solapará
+!!	con aquella que se estuviese reproduciendo durante la partida anterior).
+!!------------------------------------------------------------------------------
+[ GWindowsGlkIdentify phase type ref rock;
+	!! Se identifican todos los Objetos de Sonido gestionados por Damusix
+	Damusix.IdentificarSonidos(phase);
+	phase = type + ref + rock; ! (para evitar alertas del compilador)
+];
+
+!!------------------------------------------------------------------------------
+!! Controlador de eventos Glk con la librería GWindows.
+!!------------------------------------------------------------------------------
+[ GWindowsGlkEvent ev context abortres;
+	!! Se notifica el efecto de fade de Tiempo Real
+	Damusix.NotificarFade(ev);
+	!! Se gestiona el evento glk:
+	switch (ev-->0) {
+	0:	! evtype_None        - none
+	1:	! evtype_Timer       - event repeated at fixed intervals
+		AimingManager.run();
+	2:	! evtype_CharInput   - keystroke input in a window
+	3:	! evtype_LineInput   - full line of input in a window
+	4:	! evtype_MouseInput  - mouse input in a window
+	5:	! evtype_Arrange     - some windows sizes have changed
+	6:	! evtype_Redraw      - graphic windows need redrawing
+	7:	! evtype_SoundNotify - sound finished playing
+	8:	! evtype_Hyperlink   - selection of a hyperlink in a window
+	}
+	ev = context + abortres; ! (para evitar alertas del compilador)
+];
+#Endif; ! TARGET_GLULX;
+
+
+!!==============================================================================
+!!	Librerías y extensiones (Parte 2 de 2)
+!!------------------------------------------------------------------------------
+
+#Ifdef TARGET_GLULX;
+Include "damusix.h";			! Administrador unificado de sonido en Glulx
+Include "gwindows.h";			! GWindows: Remplazos de la librería
+Include ">59mins.bli";			! Recursos multimedia de la aplicación
+Include ">59mins_gui.inf";		! Definición de la interfaz gráfica
+#Endif; ! TARGET_GLULX;
+
+Include "aimAndFire.h";			! Sistema de apuntado y disparo QTE
+Include "receptacles.h";		! Contenedores (con capacidad limitada)
+Include "topicInventory.h";		! Sistema de conversación con inv. de temas
+Include "types.h";				! Rutinas para modificar estilo de los textos
+
+Include "VerbLib.h";			! Define cómo trabajan las acciones
+
+
+!!==============================================================================
+!!	Puntos de entrada y otras rutinas
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!!	Manipula la entrada del usuario antes de que sea analizada por la librería.
+!!------------------------------------------------------------------------------
+[ BeforeParsing;
+	ConversationManager.try();
+];
+
+!!------------------------------------------------------------------------------
+!!	Deja la ventana en blanco.
+!!------------------------------------------------------------------------------
+[ EraseWindow;
+    #Ifdef TARGET_ZCODE;
+    @erase_window -1;
+    #Ifnot; ! TARGET_GLULX
+    if (gg_quotewin) {
+		glk($0024, gg_quotewin, 0); ! close_window
+		gg_quotewin = 0;
+    }
+    glk($002A, gg_mainwin); ! window_clear
+    if (gg_statuswin) glk($002A, gg_statuswin); ! window_clear
+    #Endif;
+];
+
+!!------------------------------------------------------------------------------
+!!	Imprime una regla horizontal centrada en pantalla.
+!!------------------------------------------------------------------------------
+[ HorizontalRule;
+	monospaced_style();
+	spaces (ScreenWidth()-1-7) / 2;
+	print "*  *  *^";
+	roman_style();
+];
+
+!!------------------------------------------------------------------------------
+!! Inicialización del relato.
+!!------------------------------------------------------------------------------
+[ Initialise;
+	EraseWindow();				! Borra la ventana
+	lookmode = 2;				! Modo de las descripciones de localidad autom.
+	move obj_ropa to player;
+	give obj_ropa worn;
+	GRAMMATICAL_INFLECTION = THIRD_PERSON_PRESENT;
+
+	!! Comprobaciones multimedia:
+	#Ifdef TARGET_GLULX;
+	HideGraphicWindow();
+	if (~~Damusix.TestAudio()) {
+		print (strong) "ADVERTENCIA:", " Esta aplicación incluye contenidos
+		gráficos y de audio, pero tu intérprete GLULX no los soporta
+		adecuadamente. El programa se iniciará con parte o la totalidad de sus
+		recursos multimedia desactivados.^";
+		new_line;
+		print (parser) "Pulse una tecla para continuar.";
+		PressAnyKey();
+		EraseWindow();
+	}
+	#Endif; ! TARGET_GLULX;
+
+	!! Advertencia de la demostración:
+	#Ifndef DEBUG;
+	#Ifdef DEMO_RELEASE;
+	print (strong) "ADVERTENCIA:", " Esta aplicación es una versión de
+	demostración de un relato interactivo en estado de desarrollo. Los
+	contenidos (en especial los textos) mostrados a continuación pueden no
+	ajustarse necesariamente a los de la versión final.^";
+	new_line;
+	print (parser) "Pulse una tecla para continuar.";
+	PressAnyKey();
+	EraseWindow();
+	#Endif; ! DEMO_RELEASE;
+	#Endif; ! DEBUG;
+
+	#Ifdef DEBUG;
+	#Ifdef TARGET_GLULX;
+	Damusix.DesactivarAudio();
+	#Endif; ! TARGET_GLULX;
+	#Endif; ! DEBUG;
+
+	MainMenu();					! Menú principal. Establece la localidad inicial
+
+	return 2;
+];
+
+!!------------------------------------------------------------------------------
+!!	Foco del jugador.
+!!------------------------------------------------------------------------------
+[ InScope person item;
+	!! En la oscuridad, se mueven al foco del jugador todos aquellos objetos
+	!! que hayan sido ya manipulados previamente por el personaje
+	if ( person == player && location == thedark ) {
+		objectloop(item in parent(player))
+			if (item has moved) PlaceInScope(item);
+	}
+	return false;
+];
+
+!!------------------------------------------------------------------------------
+!!	Menús (menú principal y menú con el índice de escenas).
+!!------------------------------------------------------------------------------
+[ MainMenu i key;
+	EraseWindow();
+	Banner();
+	new_line;
+	HorizontalRule();
+	new_line;
+	monospaced_style();
+	print "  Empezar la demostración  ";
+		for (i=0 : i<(ScreenWidth() - 1 - 40) : i++) print ".";
+		print "  [ESPACIO]  ^";
+	print "  Recuperar partida guardada  ";
+		for (i=0 : i<(ScreenWidth() - 1 - 43) : i++) print ".";
+		print "      R      ^";
+	print "  Salir de la aplicación  ";
+		for (i=0 : i<(ScreenWidth() - 1 - 39) : i++) print ".";
+		print "      Q      ^";
+	roman_style();
+
+	key = KeyCharPrimitive();
+	location = obj_COCINA;
+	switch (key) {
+		'R', 'r': EraseWindow(); print "Cargando partida...^"; <<Restore>>;
+		'Q', 'q': quit;
+	}
+
+	EraseWindow();
+];
+
+!!------------------------------------------------------------------------------
+!!	Espera una pulsación de tecla o, si se introduce un valor, a que pase una
+!!	cantidad delay de décimas de segundo antes de continuar. Retorna verdadero
+!!	si la tecla pulsada es 'q' o 'Q', falso en caso contrario.
+!!------------------------------------------------------------------------------
+[ PressAnyKey delay char;
+	#Ifdef TARGET_GLULX;
+	if (Damusix.EnFade()) delay = 0;
+	#Endif; ! TARGET_GLULX;
+	if (delay > 0) char = KeyDelay(delay);
+	else char = KeyCharPrimitive();
+	if (char == 'q' or 'Q') return true;
+	else return false;
+];
+
+!!------------------------------------------------------------------------------
+!!	Rutinas y definiciones requeridas para lanzar la acción ##Examine sobre un
+!!	objeto tecleando únicamente su nombre. Sigue la implementación propuesta en
+!!	<http://rec.arts.int-fiction.narkive.com/Cz9j184N/inform-6-parser-question>
+!!	con modificaciones para que sólo se intente lanzar la acción sobre objetos
+!!	que realmente existen y están presentes dentro del foco del jugador. De
+!!	otra forma, siempre se intentaría lanzar la acción ##Examine, aún cuando la
+!!	intención del jugador no fuese examinar un objeto si no utilizar una acción
+!!	que no está definida.
+!!------------------------------------------------------------------------------
+[ UnknownVerb word obj;
+	objectloop(obj) {
+		if (TestScope(obj, player)) {
+			if ((WordInProperty(word, obj, name))
+				|| (WordInProperty(word, obj, name_m))
+				|| (WordInProperty(word, obj, name_f))
+				|| (WordInProperty(word, obj, name_mp))
+				|| (WordInProperty(word, obj, name_fp))) {
+				verb_wordnum = 0;
+				return 'no.verb';
+			}
+		}
+	}
+	return false;
+];
+
+[ PrintVerb word;
+	if (word == 'no.verb') {
+		print "hacer algo con";
+		return true;
+	}
+	return false;
+];
+
+Verb 'no.verb' * noun -> Examine;
+
+
+!!==============================================================================
+!!	Gramática estándar y extendida
+!!------------------------------------------------------------------------------
+
+Include	"SpanishG.h";		! Gramática española
+Include	"SpanishEG.h";		! Gramática española extendida
+
+!!------------------------------------------------------------------------------
+!! ##Audio, ##AudioOn, ##AudioOff
+!!------------------------------------------------------------------------------
+#Ifdef TARGET_GLULX;
+Verb meta 'audio' 'music' 'musica' 'sonido' 'sonidos'
+	*								-> Audio
+	* 'on' / 'si'					-> AudioOn
+	* 'encendido' / 'activado'		-> AudioOn
+	* 'off' / 'no'					-> AudioOff
+	* 'apagado' / 'desactivado'		-> AudioOff
+;
+VerboIrregular "establecer la reproducción de audio"
+	with imperativo 'audio' 'music' 'musica' 'sonido' 'sonidos';
+
+[ AudioSub;
+	if (Damusix.HayAudio()) <<AudioOff>>;
+	else <<AudioOn>>;
+];
+
+[ AudioOnSub;
+	if (Damusix.HayAudio())
+		print_ret (parser) "La reproducción de audio ya estaba activada.";
+	Damusix.ActivarAudio();
+	print_ret (parser) "Reproducción de audio activada.";
+];
+
+[ AudioOffSub;
+	if (~~Damusix.HayAudio())
+		print_ret (parser) "La reproducción de audio ya estaba desactivada.";
+	Damusix.DesactivarAudio();
+	print_ret (parser) "Reproducción de audio desactivada.";
+];
+#Endif; ! TARGET_GLULX;
+
+!!------------------------------------------------------------------------------
+!! ##CloseX
+!!------------------------------------------------------------------------------
+Extend	only 'corre' replace
+	* noun							-> CloseX
+;
+
+[ CloseXSub;
+	print (parser) "En lugar de ~correr~ el objeto, se intenta utilizar
+	la acción ~cerrar~, que en este contexto es sinónima, y es más general.
+	(Apenas hay objetos corredizos en el mundo del relato, pero muchos se
+	pueden abrir y cerrar.)";
+	new_line; new_line;
+	<<Close noun second>>;
+];
+
+!!------------------------------------------------------------------------------
+!! ##DisrobeX
+!! Los verbos "desnudar"/"desvestir" pueden invocarse sin indicar un objeto, de
+!! manera que un objeto "clothing" pueda capturar la acción ##DisrobeX en su
+!! rutina "react_before" y lanzar la acción ##Disrobe sobre sí mismo.
+!!------------------------------------------------------------------------------
+Verb	'desnuda' 'desviste'
+	*								-> DisrobeX
+	* '-te'/'-me'					-> DisrobeX
+	* noun							-> DisrobeX
+	* '-te'/'-me' noun				-> DisrobeX
+;
+VerboIrregular "desvestir" with imperativo 'desnuda' 'desviste';
+
+[ DisrobeXSub;
+	if (noun == nothing)
+		print_ret (parser) "Tienes que indicar qué quieres quitarte.";
+	<<Disrobe noun>>;
+];
+
+!!------------------------------------------------------------------------------
+!! ##GNA (sólo en modo de depuración)
+!!------------------------------------------------------------------------------
+#Ifdef	DEBUG;
+Verb meta 'gna'
+	* multi							-> GNA
+;
+
+[ GNA g;
+	g = GetGNAOfObject(noun);
+	print g, ": ";
+	switch (g) {
+		0,1,2,3,4,5: print "animado ";
+		default:	 print "inanimado ";
+	}
+	switch (g) {
+		0,1,2,6,7,8: print "singular ";
+		default:	 print "plural ";
+	}
+	switch (g) {
+		0,3,6,9:	 print "masculino";
+		1,4,7,10:	 print "femenino";
+		default:	 print "neutro";
+	}
+];
+
+[ GNASub;
+	start_parser_style();
+	print "Objeto: ";
+	roman_style();
+	print (name) noun;
+	parser_style();
+	print ". (", (The) noun," / ", (the) noun," / ", (a) noun,
+	" / -", (o) noun, ")^GNA ", (GNA) noun;
+	end_parser_style();
+	new_line;
+];
+#Endif; ! DEBUG;
+
+!!------------------------------------------------------------------------------
+!! ##Graphics, ##GraphicsOn, ##GraphicsOff
+!!------------------------------------------------------------------------------
+#Ifdef TARGET_GLULX;
+Verb meta 'grafico' 'graficos' 'graphic' 'graphics'
+	*								-> Graphics
+	* 'on'/'si'						-> GraphicsOn
+	* 'encendido'/'activado'		-> GraphicsOn
+	* 'encendidos'/'activados'		-> GraphicsOn
+	* 'off'/'no'					-> GraphicsOff
+	* 'apagado'/'desactivado'		-> GraphicsOff
+	* 'apagados'/'desactivados'		-> GraphicsOff
+;
+VerboIrregular "establecer ventana gráfica"
+	with imperativo 'grafico' 'graficos' 'graphic' 'graphics';
+
+!! FIXME - Cuando se cierra la ventana y se abre después, la imágen que se
+!! mostraba deja de hacerlo.
+
+[ GraphicsSub;
+	if (GRAPHIC_WIN_FLAG) <<GraphicsOff>>;
+	else <<GraphicsOn>>;
+];
+
+[ GraphicsOnSub;
+	if (GRAPHIC_WIN_FLAG)
+		print_ret (parser) "La ventana gráfica ya estaba abierta.";
+	ShowGraphicWindow();
+	print_ret (parser) "Ventana gráfica abierta.";
+];
+
+[ GraphicsOffSub;
+	if (~~GRAPHIC_WIN_FLAG)
+		print_ret (parser) "La ventana gráfica ya estaba cerrada.";
+	HideGraphicWindow();
+	print_ret (parser) "Ventana gráfica cerrada.";
+];
+#Endif; ! TARGET_GLULX;
+
+!!------------------------------------------------------------------------------
+!! ##LMode2
+!!------------------------------------------------------------------------------
+Extend only 'normal' replace
+    *								-> LMode2
+;
+
+!!------------------------------------------------------------------------------
+!! ##NoSuchVerb
+!! Permite eliminar acciones definidas automáticamente por la librería Inform.
+!! Código extraído de <http://www.firthworks.com/roger/informfaq/vv.html#6>.
+!!------------------------------------------------------------------------------
+[ Anything; ! Ignore the remaining input line
+	while (NextWordStopped() ~= -1);
+	return GPR_PREPOSITION;
+];
+
+[ NoSuchVerbSub; return ParserError(VERB_PE); ];
+
+Extend	'perdona' replace
+	* Anything						-> NoSuchVerb
+;
+
+Extend	'nada' replace
+	* Anything						-> NoSuchVerb
+;
+
+!!------------------------------------------------------------------------------
+!! ##OpenX
+!!------------------------------------------------------------------------------
+Verb	'descorre'
+	* noun							-> OpenX
+;
+
+[ OpenXSub;
+	print (parser) "En lugar de ~descorrer~ el objeto, se intenta utilizar
+	la acción ~abrir~, que en este contexto es sinónima, y es más general.
+	(Apenas hay objetos corredizos en el mundo del relato, pero muchos se
+	pueden abrir y cerrar.)";
+	new_line; new_line;
+	<<Open noun second>>;
+];
+
+!!------------------------------------------------------------------------------
+!! ##RemarkableObjects
+!!------------------------------------------------------------------------------
+Verb	meta 'objetos' 'objs'
+	*								-> RemarkableObjects
+;
+VerboIrregular "mostrar objetos clave" with imperativo 'objetos' 'objs';
+
+Global remarkableObjectsCount;
+[ CountRemarkableObjects obj;
+	if (obj has remarkable) remarkableObjectsCount++;
+];
+[ PrintRemarkableObjects obj;
+	if (obj has remarkable) {
+		PronounNotice(obj);
+		print " ", (the) obj;
+		remarkableObjectsCount--;
+		if (remarkableObjectsCount > 1) print ",";
+		else if (remarkableObjectsCount == 1) print " y";
+	}
+];
+
+[ RemarkableObjectsSub;
+	remarkableObjectsCount = 0;
+	LoopOverScope(CountRemarkableObjects);
+	if (remarkableObjectsCount == 0)
+		print_ret (parser) "No hay objetos destacables con los que puedas
+		interactuar.";
+	start_parser_style();
+	print "Puedes interactuar con";
+	LoopOverScope(PrintRemarkableObjects);
+	print ".";
+	end_parser_style();
+	new_line;
+	return true;
+];
+
+!!------------------------------------------------------------------------------
+!! ##TalkOn, ##TalkTo
+!!------------------------------------------------------------------------------
+Extend	'habla' replace
+	* noun							-> TalkTo
+	* 'a'/'con' noun				-> TalkTo
+	* creature						-> TalkTo
+	* 'a'/'con' creature			-> TalkTo
+	* 'por' noun					-> TalkOn
+	* 'por' creature				-> TalkOn
+;
+
+Verb	'conversa' 'platica'
+	* noun							-> TalkTo
+	* 'a'/'con' noun				-> TalkTo
+	* creature						-> TalkTo
+	* 'a'/'con' creature			-> TalkTo
+	* 'por' noun					-> TalkOn
+	* 'por' creature				-> TalkOn
+;
+
+[ TalkOnSub;
+	start_parser_style();
+	print "Habla con ", (name) noun;
+	end_parser_style();
+	new_line;
+	<<TalkTo noun second>>;
+];
+
+[ TalkToSub;
+	if ( noun == player ) {
+		switch (GRAMMATICAL_INFLECTION) {
+		1,2,3:	"Hablar con uno mismo no resulta especialmente divertido.";
+		4,5,6:	"Hablar con uno mismo no resultaba especialmente divertido.";
+		}
+	}
+	if ( noun hasnt animate )
+		switch (GRAMMATICAL_INFLECTION) {
+		1,2,3:	"Mejor intentar hablar con cosas que puedan devolver
+				una respuesta.";
+		4,5,6:	"Mejor intentar hablar con cosas que pudiesen devolver
+				una respuesta.";
+	}
+	switch (GRAMMATICAL_INFLECTION) {
+	1:	print_ret (The) noun, " no parece", (n) noun, " estar interesad",
+		(o) noun, " en hablar conmigo.";
+	2:	print_ret (The) noun, " no parece", (n) noun, " estar interesad",
+		(o) noun, " en hablar contigo.";
+	3:	print (The) noun, " no parece", (n) noun, " estar interesad",
+		(o) noun, " en hablar con ";
+		if (player has female ||
+			(player provides gender && player.gender == G_FEMENINO))
+			print "ella";
+		else
+			print "él";
+		".";
+	4:	print_ret (The) noun, " no parecía", (n) noun, " estar interesad",
+		(o) noun, " en hablar conmigo.";
+	5:	print_ret (The) noun, " no parecía", (n) noun, " estar interesad",
+		(o) noun, " en hablar contigo.";
+	6:	print (The) noun, " no parecía", (n) noun, " estar interesad",
+		(o) noun, " en hablar con ";
+		if (player has female ||
+			(player provides gender && player.gender == G_FEMENINO))
+			print "ella";
+		else
+			print "él";
+		".";
+	}
+];
+
+!!------------------------------------------------------------------------------
+!! ##TopicInventory
+!!------------------------------------------------------------------------------
+Verb	meta 'temas' 't//'
+	*								-> TopicInventory
+;
+VerboIrregular "mostrar inventario de temas" with imperativo 'temas' 't//';
+
+[ TopicInventorySub;
+	if (~~(ConversationManager.is_running()))
+		print_ret (parser) "No hay conversaciones activas en este momento.";
+	ConversationManager.show_topic_inventory(true);
+];
+
+!!------------------------------------------------------------------------------
+!! ##Wear
+!! Basada en la implementación de *verblibm.h*. Si el objeto no está en
+!! posesión del jugador, se le intenta pasar a su inventario automáticamente.
+!!------------------------------------------------------------------------------
+Extend	'ponte' replace
+	* noun							-> Wear
+	* 'con' noun					-> Wear
+;
+
+[ WearSub;
+	if (ObjectIsUntouchable(noun)) return;
+	if (noun hasnt clothing)    return L__M(##Wear, 1, noun);
+	if (parent(noun) ~= player)
+		if (AttemptToTakeObject(noun))
+			return true;
+	if (noun has worn)          return L__M(##Wear, 3, noun);
+	give noun worn;
+	if (AfterRoutines() == 1) rtrue;
+	if (keep_silent == 1) rtrue;
+	L__M(##Wear, 4, noun);
+];
+
+!!------------------------------------------------------------------------------
+!! ##WearX
+!! El verbo "vestir" ('vistete', 'vestirse', 'vestirte'...) puede invocarse sin
+!! indicar un objeto, de manera que un objeto "clothing" pueda capturar la
+!! acción ##WearX en su rutina "react_before" y lanzar la acción ##Wear sobre
+!! sí mismo.
+!!------------------------------------------------------------------------------
+Extend	only 'vistete' 'vestirse' 'vestirte' 'vestirme' 'visteme' replace
+	*								-> WearX
+	* noun							-> WearX
+	* 'con' noun					-> WearX
+;
+VerboIrregular "vestir" with imperativo
+	'vistete' 'vestirse' 'vestirte' 'vestirme' 'visteme';
+
+[ WearXSub;
+	if (noun == nothing)
+		print_ret (parser) "Tienes que indicar con qué quieres vestirte.";
+	<<Wear noun>>;
+];
+
+
+!!==============================================================================
+!!	Definición de atributos, clases y objetos
+!!------------------------------------------------------------------------------
+
+Include ">59mins_escena0.inf";
+Include ">59mins_escena1.inf";
+
+
