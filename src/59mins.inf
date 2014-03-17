@@ -730,7 +730,8 @@ VerboIrregular "vestir" with imperativo
 !!	Definición de atributos, clases y objetos
 !!------------------------------------------------------------------------------
 
-Include ">59mins_escena0.inf";
-Include ">59mins_escena1.inf";
+Include ">59mins_clases.inf";
+Include ">59mins_casa.inf";
+Include ">59mins_recuerdos.inf";
 
 

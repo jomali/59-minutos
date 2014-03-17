@@ -31,15 +31,36 @@ if [ "$2" != "" ]; then op=$2;
 else 
 	echo "[1] Compilar el relato para MÁQUINA-Z"
 	echo "[2] Compilar el relato para GLULX"
+	echo "[3] Compilar el relato para GLULX (sin multimedia)"
 	echo -n "Selecciona una opción: "
 	read op;
 	echo " "
 fi
 
 #===============================================================================
+# Compilar el relato para GLULX (sin multimedia)
+#-------------------------------------------------------------------------------
+if [ "$op" = "3" ]; then
+	echo "============================================="
+	echo "COMPILANDO PARA GLULX (sin multimedia)..."
+	echo "---------------------------------------------"
+	inform +include_path=,/usr/share/inform/include/,/usr/share/inform/module/,/usr/share/inform/6.31/include/,/usr/share/inform/6.31/module/,/usr/share/inform/6.31/include/gwindows/,/usr/share/inform/6.31/include/other/ -G $gameFile.inf ../$gameFile.ulx
+
+	echo " "
+	echo -n "Pulsa cualquier tecla para ejecutar la aplicación ('q' para salir): "
+	read key
+	
+	if [ "$key" = "q" ]; then exit 0;
+	fi
+	if [ "$key" = "Q" ]; then exit 0;
+	fi
+	cd ..
+	$glulx_interpreter $gameFile.ulx
+
+#===============================================================================
 # Compilar el relato para GLULX
 #-------------------------------------------------------------------------------
-if [ "$op" = "2" ]; then
+elif [ "$op" = "2" ]; then
 	echo "============================================="
 	echo "COMPILANDO PARA GLULX..."
 	echo "---------------------------------------------"
