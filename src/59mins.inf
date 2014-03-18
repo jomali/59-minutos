@@ -65,17 +65,19 @@ Release 0; Serial "140311";		! 1.0 - 2014/03/11
 !Constant Checking 1;			! Código de la versión del relato
 !Release 0; Serial "140311";	! 1.0 - 2014/03/11
 
+!Constant NO_MULTIMEDIA;			! No se incluyen contenidos multimedia
+
 !! TODO - en lugar de establecer un límite al máximo número de objetos que 
 !! puede llevar el personaje en mano, sería interesante considerar el inv. del 
 !! personaje como un contenedor más, con límites de peso, tamaño,... ¿Creando 
 !! un objeto personaje e invocando a la rutina de cambio de personaje?
 
 Constant MANUAL_PRONOUNS;		! Los pronoms. refieren a objetos ya mencionados
+Constant MAX_CARRIED 2;			! Máx. objetos que se pueden llevar en mano
 Constant NO_PLACES;				! Acciones LUGARES y OBJETOS desactivadas
 Constant NO_SCORE;				! No se lleva conteo de puntuación
-Constant SIN_MENSAJES;			! Se omiten los mensajes por defecto de la lib.
-Constant MAX_CARRIED 3;			! Máx. objetos que se pueden llevar en mano
 Constant SACK_OBJECT obj_ropa;	! Contenedor principal para la librería
+Constant SIN_MENSAJES;			! Se omiten los mensajes por defecto de la lib.
 
 Constant PARSER_STYLE _IST_;	! Selecciona estilo de los mensajes del parser
 Constant PARSER_PREFIX "[";		! Define texto inicial de los mens. del parser
@@ -106,7 +108,9 @@ Replace WearSub;				! Rutina para la acción ##Wear
 !!------------------------------------------------------------------------------
 
 #Ifdef TARGET_GLULX;
+#Ifndef NO_MULTIMEDIA;
 Include "gwindefs.h";			! GWindows: Definiciones
+#Endif; ! NO_MULTIMEDIA;
 #Endif; ! TARGET_GLULX;
 
 Include "Parser.h";				! Decodifica la entrada del teclado
@@ -115,7 +119,9 @@ Include ">59mins_langLM.inf";	! Mensajes de la librería
 Include ">59mins_langOM.inf";	! Mensajes de los objetos
 
 #Ifdef TARGET_GLULX;
+#Ifndef NO_MULTIMEDIA;
 Include "gwincls.h";			! GWindows; Window Class Framework
+#Endif; ! NO_MULTIMEDIA;
 #Endif; ! TARGET_GLULX;
 
 
@@ -124,6 +130,15 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 !!------------------------------------------------------------------------------
 
 #Ifdef TARGET_GLULX;
+#Ifdef NO_MULTIMEDIA;
+
+[ HandleGlkEvent ev; 
+	if (ev-->0 == 1) ! evtype_Timer
+		AimingManager.run();
+];
+
+#Ifnot;
+
 !!------------------------------------------------------------------------------
 !!	Rutina gancho encargada de reinicializar Damusix y recuperar los canales de
 !!	audio. (Sin esta rutina, al reiniciar la aplicación la música se solapará
@@ -156,6 +171,8 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 	}
 	ev = context + abortres; ! (para evitar alertas del compilador)
 ];
+
+#Endif; ! NO_MULTIMEDIA;
 #Endif; ! TARGET_GLULX;
 
 
@@ -164,10 +181,12 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 !!------------------------------------------------------------------------------
 
 #Ifdef TARGET_GLULX;
+#Ifndef NO_MULTIMEDIA;
 Include "damusix.h";			! Administrador unificado de sonido en Glulx
 Include "gwindows.h";			! GWindows: Remplazos de la librería
 Include ">59mins.bli";			! Recursos multimedia de la aplicación
 Include ">59mins_gui.inf";		! Definición de la interfaz gráfica
+#Endif; ! NO_MULTIMEDIA;
 #Endif; ! TARGET_GLULX;
 
 Include "aimAndFire.h";			! Sistema de apuntado y disparo QTE
@@ -180,6 +199,16 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 
 !!==============================================================================
 !!	Puntos de entrada y otras rutinas
+!!------------------------------------------------------------------------------
+!!	Rutinas implementadas:
+!!	 *	BeforeParsing()
+!!	 *	EraseWindow()
+!!	 *	HorizontalRule()
+!!	 *	Initialise()
+!!	 *	InScope()
+!!	 *	MainMenu()
+!!	 *	PressAnyKey()
+!!	 *	UnknownVerb(), PrintVerb()
 !!------------------------------------------------------------------------------
 
 !!------------------------------------------------------------------------------
@@ -221,12 +250,10 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 [ Initialise;
 	EraseWindow();				! Borra la ventana
 	lookmode = 2;				! Modo de las descripciones de localidad autom.
-	move obj_ropa to player;
-	give obj_ropa worn;
-	GRAMMATICAL_INFLECTION = THIRD_PERSON_PRESENT;
 
 	!! Comprobaciones multimedia:
 	#Ifdef TARGET_GLULX;
+	#Ifndef NO_MULTIMEDIA;
 	HideGraphicWindow();
 	if (~~Damusix.TestAudio()) {
 		print (strong) "ADVERTENCIA:", " Esta aplicación incluye contenidos
@@ -238,10 +265,10 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 		PressAnyKey();
 		EraseWindow();
 	}
+	#Endif; ! NO_MULTIMEDIA;
 	#Endif; ! TARGET_GLULX;
 
 	!! Advertencia de la demostración:
-	#Ifndef DEBUG;
 	#Ifdef DEMO_RELEASE;
 	print (strong) "ADVERTENCIA:", " Esta aplicación es una versión de
 	demostración de un relato interactivo en estado de desarrollo. Los
@@ -252,18 +279,21 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 	PressAnyKey();
 	EraseWindow();
 	#Endif; ! DEMO_RELEASE;
-	#Endif; ! DEBUG;
-
-	#Ifdef DEBUG;
-	#Ifdef TARGET_GLULX;
-	Damusix.DesactivarAudio();
-	#Endif; ! TARGET_GLULX;
-	#Endif; ! DEBUG;
 
 	MainMenu();					! Menú principal. Establece la localidad inicial
 
 	return 2;
 ];
+
+!!------------------------------------------------------------------------------
+!!	Inicializaciones del relato (en modo depuración)
+!!------------------------------------------------------------------------------
+#Ifdef DEBUG;
+[ InitialiseDebug;
+	move obj_pelotaBaloncesto to obj_Silvia;
+	location = obj_TERRAZA;
+];
+#Endif; ! DEBUG;
 
 !!------------------------------------------------------------------------------
 !!	Foco del jugador.
@@ -298,9 +328,16 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 		for (i=0 : i<(ScreenWidth() - 1 - 39) : i++) print ".";
 		print "      Q      ^";
 	roman_style();
-
 	key = KeyCharPrimitive();
-	location = obj_COCINA;
+
+	ChangePlayer(obj_Silvia);	! Personaje controlado por el jugador
+	SetGrammaticalInflection(THIRD_PERSON_PRESENT); ! Flexión gramatical lib.
+	location = obj_COCINA;		! Localidad inicial del relato
+
+	#Ifdef DEBUG;
+	InitialiseDebug();
+	#Endif; ! DEBUG;
+
 	switch (key) {
 		'R', 'r': EraseWindow(); print "Cargando partida...^"; <<Restore>>;
 		'Q', 'q': quit;
@@ -316,7 +353,9 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 !!------------------------------------------------------------------------------
 [ PressAnyKey delay char;
 	#Ifdef TARGET_GLULX;
+	#Ifndef NO_MULTIMEDIA;
 	if (Damusix.EnFade()) delay = 0;
+	#Endif; ! NO_MULTIMEDIA;
 	#Endif; ! TARGET_GLULX;
 	if (delay > 0) char = KeyDelay(delay);
 	else char = KeyCharPrimitive();
@@ -364,6 +403,24 @@ Verb 'no.verb' * noun -> Examine;
 !!==============================================================================
 !!	Gramática estándar y extendida
 !!------------------------------------------------------------------------------
+!!	Acciones añadidas:
+!!	 *	##Audio, ##AudioOn, ##AudioOff
+!!	 *	##CloseX
+!!	 *	##DisrobeX
+!!	 *	##GNA (sólo en modo de depuración)
+!!	 *	##Graphics, ##GraphicsOn, ##GraphicsOff
+!!	 *	##LMode2
+!!	 *	##NoSuchVerb
+!!	 *	##OpenX
+!!	 *	##RemarkableObjects
+!!	 *	##TalkOn, ##TalkTo
+!!	 *	##TopicInventory
+!!	 *	##Wear
+!!	 *	##WearX
+!!	Acciones eliminadas:
+!!	 *	##Sorry
+!!	 *	##Swim
+!!------------------------------------------------------------------------------
 
 Include	"SpanishG.h";		! Gramática española
 Include	"SpanishEG.h";		! Gramática española extendida
@@ -372,6 +429,7 @@ Include	"SpanishEG.h";		! Gramática española extendida
 !! ##Audio, ##AudioOn, ##AudioOff
 !!------------------------------------------------------------------------------
 #Ifdef TARGET_GLULX;
+#Ifndef NO_MULTIMEDIA;
 Verb meta 'audio' 'music' 'musica' 'sonido' 'sonidos'
 	*								-> Audio
 	* 'on' / 'si'					-> AudioOn
@@ -400,6 +458,7 @@ VerboIrregular "establecer la reproducción de audio"
 	Damusix.DesactivarAudio();
 	print_ret (parser) "Reproducción de audio desactivada.";
 ];
+#Endif; ! NO_MULTIMEDIA;
 #Endif; ! TARGET_GLULX;
 
 !!------------------------------------------------------------------------------
@@ -481,6 +540,7 @@ Verb meta 'gna'
 !! ##Graphics, ##GraphicsOn, ##GraphicsOff
 !!------------------------------------------------------------------------------
 #Ifdef TARGET_GLULX;
+#Ifndef NO_MULTIMEDIA;
 Verb meta 'grafico' 'graficos' 'graphic' 'graphics'
 	*								-> Graphics
 	* 'on'/'si'						-> GraphicsOn
@@ -514,6 +574,7 @@ VerboIrregular "establecer ventana gráfica"
 	HideGraphicWindow();
 	print_ret (parser) "Ventana gráfica cerrada.";
 ];
+#Endif; ! NO_MULTIMEDIA;
 #Endif; ! TARGET_GLULX;
 
 !!------------------------------------------------------------------------------
@@ -730,8 +791,8 @@ VerboIrregular "vestir" with imperativo
 !!	Definición de atributos, clases y objetos
 !!------------------------------------------------------------------------------
 
-Include ">59mins_clases.inf";
-Include ">59mins_casa.inf";
-Include ">59mins_recuerdos.inf";
+Include ">59mins_classes.inf";
+Include ">59mins_objects.inf";
+Include ">59mins_objects2.inf";
 
 

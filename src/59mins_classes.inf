@@ -7,7 +7,7 @@
 !!
 !!==============================================================================
 !!
-!!	File:			59mins_clases.inf
+!!	File:			59mins_classes.inf
 !!	Author(s):		J. Francisco Martín <jfm.lisaso@gmail.com>
 !!	Languague:		ES (Castellano)
 !!	System:			Inform-INFSP 6
@@ -63,7 +63,10 @@
 !!		objectName.className::react_before();
 !!------------------------------------------------------------------------------
 
-Attribute	remarkable;			! Marca un objeto como destacado
+!!------------------------------------------------------------------------------
+!! Marca un objeto como destacado
+!!------------------------------------------------------------------------------
+Attribute	remarkable;
 
 !!------------------------------------------------------------------------------
 !! Representa un objeto localidad dentro del modelo de mundo.
@@ -463,74 +466,5 @@ Class	TextSequence
 			}
 		],
  has	proper general;
-
-
-!!==============================================================================
-!!	LIMBO: En algún lugar
-!!------------------------------------------------------------------------------
-
-Room	obj_LIMBO "En algún lugar"
- with	name	'limbo' 'lugar' 'sueno' 'vacio',
-		description [; return O__M(self, 1); ],
-		clarification 0;
-
-Atrezzo	"paredes" 
- with	name_m	'muro',
-		name_mp	'muros',
-		name_f	'pared' 'esquina',
-		name_fp	'paredes' 'esquinas',
-		gender	G_FEMENINO + G_PLURAL,
-		adjectives
-			'amarillenta' 'amarillentas' 'amarillento' 'amarillentos' 'blanca' 
-			'blancas' 'blanco' 'blancos',
-		before [;
-			Examine, Search:
-				switch ( GRAMMATICAL_INFLECTION ) {
-					1,2,3: "No hay nada especial en ", (the) self, ".";
-					4,5,6: "No había nada especial en ", (the) self, ".";
-				}
-			default:
-				switch (GRAMMATICAL_INFLECTION) {
-					1: "No creo que sea necesario preocuparme por ";
-					2: "No es necesario que te preocupes por ";
-					3: "No es necesario que se preocupe por ";
-					4: "No creí que fuese necesario preocuparme por ";
-					5: "No era necesario que te preocupases por ";
-					6: "No era necesario que se preocupase por ";
-				}
-				SpanishNominativePronoun(self);
-				".";
-		], 
- has	female pluralname;
-
-!!	 *	FIXME - Nombres y adjetivos
-!!	 *	FIXME - description
-!!	 *	FIXME - rutinas before y after
-Item	obj_ropa "ropa" obj_LIMBO
- class	Receptacle
- with	name_f	'ropa',
-		gender	G_FEMENINO,
-		article	 "su",
-		adjectives 'brown' 'olive' 'green',
-		description [;
-			"A tasteful ensemble from Ann Taylor in muted browns and olive 
-			greens (she has been an automn person since she was old enough to 
-			match her own socks).";
-		],
-		react_before [;
-			DisrobeX:
-				if (noun == nothing)
-					<<Disrobe self>>;
-			WearX:
-				if (noun == nothing)
-					<<Wear self>>;
-		],
-		before [;
-		],
-		after [;
-		],
-		capacity_size 3,
-		size 4,
- has	clothing container female open;
 
 

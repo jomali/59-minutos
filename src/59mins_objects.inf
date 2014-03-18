@@ -3,11 +3,11 @@
 !!==============================================================================
 !!
 !!	59 MINUTOS
-!!	Escena 1: Hilo principal de la narración
+!!	Definición de localidades y objetos de la casa
 !!
 !!==============================================================================
 !!
-!!	File:			59mins_escena1.inf
+!!	File:			59mins_objects.inf
 !!	Author(s):		J. Francisco Martín <jfm.lisaso@gmail.com>
 !!	Languague:		ES (Castellano)
 !!	System:			Inform-INFSP 6
@@ -16,8 +16,6 @@
 !!	Released:		2014/03/05
 !!
 !!------------------------------------------------------------------------------
-!!
-!!	Copyright (c) 2014, J. Francisco Martín
 !!
 !!	Este archivo forma parte de 59 MINUTOS.
 !!
@@ -35,7 +33,90 @@
 !!	junto a 59 MINUTOS. En caso contrario, consulte
 !!	<http://www.gnu.org/licenses/>.
 !!
+!!	Copyright (c) 2014, J. Francisco Martín
+!!
 !!------------------------------------------------------------------------------
+
+
+!!==============================================================================
+!!	LIMBO: En algún lugar
+!!------------------------------------------------------------------------------
+
+Room	obj_LIMBO "En algún lugar"
+ with	name	'limbo' 'lugar' 'sueno' 'vacio',
+		description [; return O__M(self, 1); ],
+		clarification 0;
+
+!!	 *	FIXME - adjectives
+Atrezzo	"paredes" 
+ with	found_in
+			obj_BANNO obj_COCINA obj_DORMITORIO obj_PASILLO obj_RECIBIDOR 
+			obj_SALON obj_TALLER obj_TERRAZA,
+		name_m	'muro',
+		name_mp	'muros',
+		name_f	'pared' 'esquina',
+		name_fp	'paredes' 'esquinas',
+		gender	G_FEMENINO + G_PLURAL,
+		adjectives
+			'amarillenta' 'amarillentas' 'amarillento' 'amarillentos' 'blanca' 
+			'blancas' 'blanco' 'blancos',
+		before [;
+			Examine, Search:
+				switch (GRAMMATICAL_INFLECTION) {
+					1,2,3: "No hay nada especial en ", (the) self, ".";
+					4,5,6: "No había nada especial en ", (the) self, ".";
+				}
+			default:
+				switch (GRAMMATICAL_INFLECTION) {
+					1: "No creo que sea necesario preocuparme por ";
+					2: "No es necesario que te preocupes por ";
+					3: "No es necesario que se preocupe por ";
+					4: "No creí que fuese necesario preocuparme por ";
+					5: "No era necesario que te preocupases por ";
+					6: "No era necesario que se preocupase por ";
+				}
+				SpanishNominativePronoun(self);
+				".";
+		], 
+ has	female pluralname;
+
+NPC		obj_Silvia "Silvia" obj_LIMBO
+ with	name_f	'silvia',
+		name_m	'personaje',
+		gender	G_FEMENINO,
+		description [; return L__M(##Miscellany, 19); ],
+ has	female proper;
+
+!!	 *	FIXME - nombres
+!!	 *	FIXME - adjectives
+!!	 *	FIXME - description
+!!	 *	FIXME - rutinas before y after
+Item	obj_ropa "ropa" obj_Silvia
+ class	Receptacle
+ with	name_f	'ropa',
+		gender	G_FEMENINO,
+		article	 "su",
+		adjectives 'brown' 'olive' 'green',
+		description [;
+			"A tasteful ensemble from Ann Taylor in muted browns and olive 
+			greens (she has been an automn person since she was old enough to 
+			match her own socks).";
+		],
+		react_before [;
+			DisrobeX:
+				if (noun == nothing)
+					<<Disrobe self>>;
+			WearX:
+				if (noun == nothing)
+					<<Wear self>>;
+		],
+		before [;
+		],
+		after [;
+		],
+		capacity_size 3,
+		size 4,
+ has	clothing container female open worn;
 
 
 !!==============================================================================
@@ -61,6 +142,33 @@ Room	obj_TERRAZA "Terraza"
 		 n_to	obj_PLAYA,
 		 s_to	obj_COCINA,
 		 w_to	obj_TALLER;
+
+Atrezzo	"aro de baloncesto" obj_TERRAZA
+ with	name_f	'canasta',
+		name_m	'aro',
+		gender	G_MASCULINO,
+		adjectives 'baloncesto',
+		before [;
+			Use:
+				if (~~IndirectlyContains(player, obj_pelotaBaloncesto))
+					"No puede jugar sin un balón.";
+				print "Se coloca frente a la canasta y se prepara para 
+				lanzar un tiro libre...^";
+				switch (self.free_throw()) {
+				0:	"^¡Encesta!";
+				1:	"^La pelota da en el aro y sale rebotada sin entrar.";
+				default: "^Falla el tiro.";
+				}
+		],
+ private
+		free_throw [ x;
+			x = AimAndFire();
+			if (x == -2 || x == -1) return random(0,1,2,3,4);
+			if (x < 3) return 0;
+			if (x < 8) return 1;
+			return 2;
+		],
+ has	male;
 
 
 !!==============================================================================
@@ -116,10 +224,29 @@ Room	obj_RECIBIDOR "Recibidor"
 Room	obj_PASILLO "Pasillo de la segunda planta"
  with	name	'pasillo',
 		description
-"Conecta el piso de abajo a través de las escaleras con el baño y el dormitorio del segundo piso. Colgadas en la pared hay viejas fotos enmarcadas, algunas de cuando era niña, con sus padres.",
+"Conecta el piso de abajo a través de las escaleras con una habitación multiusos al norte, el dormitorio principal al este, y un baño al noreste. Colgadas en la pared hay viejas fotos enmarcadas, algunas de cuando era niña, con sus padres.",
 		d_to	obj_RECIBIDOR,
-		n_to	obj_DORMITORIO,
-		nw_to	obj_BANNO;
+		e_to	obj_DORMITORIO,
+		n_to	obj_HABITACION,
+		ne_to	obj_BANNO;
+
+
+!!==============================================================================
+!!	HABITACION
+!!------------------------------------------------------------------------------
+
+Room	obj_HABITACION "Habitación"
+ with	name	'habitacion',
+		description
+"Su viejo dormitorio. Cuando dejó de vivir aquí, su padre lo cambió. Ahora hay una bicicleta estática en vez de una cama, un gran escritorio y un armario. Tiene una puerta al pasillo al sur.",
+		s_to	obj_PASILLO;
+
+Item	obj_pelotaBaloncesto "pelota de baloncesto" obj_HABITACION
+ with	name_f	'pelota',
+		name_m	'balon',
+		gender	G_FEMENINO,
+		adjectives 'baloncesto',
+ has	female;
 
 
 !!==============================================================================
@@ -129,20 +256,20 @@ Room	obj_PASILLO "Pasillo de la segunda planta"
 Room	obj_DORMITORIO "Dormitorio"
  with	name	'dormitorio' 'habitacion',
 		description
-"Es el dormitorio que siempre ha usado ella cuando ha venido a la casa. Aunque últimamente venía muy poco y no está segura de cuándo fue la última vez que se quedó a dormir visitando a su padre. Si que durmió aquí unos días después de que muriese, el año anterior, porque estuvo recogiendo y limpiando algunas cosas. En cualquier caso el dormitorio, aunque se puede considerar suyo, no tiene nada personal: simplemente una gran cama, un escritorio vacío y un armario con algo de ropa vieja. Hay también un reloj despertador con radio, y un balón de baloncesto. Tiene una puerta al pasillo y otra al baño el segundo piso.",
-		s_to	obj_PASILLO,
-		w_to	obj_BANNO;
+"Es el dormitorio de su padre. Estuvo recogiendo y limpiando el año anterior, unos días después de que muriese, pero no lo ha tocado mucho desde entonces. Tiene una gran cama, un armario y un reloj despertador. Comunica con el pasillo al oeste, y con un baño al norte.",
+		n_to	obj_BANNO,
+		w_to	obj_PASILLO;
 
 
 !!==============================================================================
-!!	BANNO
+!!	BAÑO
 !!------------------------------------------------------------------------------
 
 Room	obj_BANNO "Baño"
  with	name	'baño',
 		description
 "Es un pequeño baño con puertas al dormitorio y al pasillo. Tiene una bañera lo suficientemente grande como para entrar tumbado dentro, un espejo en el que Silvia podrá mirarse, y un armarito con algún producto de higiene y medicinas de su padre. Entre las medicinas hay una caja de Lexatin (vacía) y varias cajas de Diazepam.",
-		e_to	obj_DORMITORIO,
-		se_to	obj_PASILLO;
+		s_to	obj_DORMITORIO,
+		sw_to	obj_PASILLO;
 
 
