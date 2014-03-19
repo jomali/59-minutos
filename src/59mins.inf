@@ -65,7 +65,7 @@ Release 0; Serial "140311";		! 1.0 - 2014/03/11
 !Constant Checking 1;			! Código de la versión del relato
 !Release 0; Serial "140311";	! 1.0 - 2014/03/11
 
-!Constant NO_MULTIMEDIA;			! No se incluyen contenidos multimedia
+Constant NO_MULTIMEDIA;			! No se incluyen contenidos multimedia
 
 !! TODO - en lugar de establecer un límite al máximo número de objetos que 
 !! puede llevar el personaje en mano, sería interesante considerar el inv. del 
@@ -251,10 +251,13 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 	EraseWindow();				! Borra la ventana
 	lookmode = 2;				! Modo de las descripciones de localidad autom.
 
-	!! Comprobaciones multimedia:
 	#Ifdef TARGET_GLULX;
 	#Ifndef NO_MULTIMEDIA;
+	!! Oculta la ventana gráfica de la interfaz:
 	HideGraphicWindow();
+	!! Inicializa parámetros del gestor del sistema de apuntado:
+	AimingManager.set_status_window(statusBar.winid);
+	!! Comprobaciones de audio:
 	if (~~Damusix.TestAudio()) {
 		print (strong) "ADVERTENCIA:", " Esta aplicación incluye contenidos
 		gráficos y de audio, pero tu intérprete GLULX no los soporta

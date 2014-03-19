@@ -100,7 +100,7 @@ Object	AimingManager "(Aiming Manager)"
 		!!		milisegundos de espera tras detener la animación
 		!!----------------------------------------------------------------------
 		get_delay_value [;
-			return self.delay;
+			return self.delay_value;
 		],
 		!!----------------------------------------------------------------------
 		!! Retorna el tipo de movimiento de la animación establecido.
@@ -155,7 +155,7 @@ Object	AimingManager "(Aiming Manager)"
 			else {
 				self.draw_aiming_line();
 				self.counter++;
-				if (self.counter > self.delay) {
+				if (self.counter > self.delay_value) {
 					glk(214, 0); ! glk_request_timer_events(0);
 					self.counter = 0;
 					self.end_flag = false;
@@ -170,7 +170,7 @@ Object	AimingManager "(Aiming Manager)"
 		!!		milisegundos de espera tras detener la animación
 		!!----------------------------------------------------------------------
 		set_delay_value [ delay;
-			self.delay = delay;
+			self.delay_value = delay;
 		],
 		!!----------------------------------------------------------------------
 		!! Establece el tipo de movimiento de la animación de apuntado.
@@ -349,7 +349,7 @@ Object	AimingManager "(Aiming Manager)"
 		counter 0,
 		!! Cantidad de milisegundos que se sigue mostrando la posición final de 
 		!! la retícula después de haber sido detenida la animación:
-		delay 100,
+		delay_value 100,
 		!! Indica que el jugador ha detenido la animación de la retícula:
 		end_flag false,
 		!! Retícula de apuntado:

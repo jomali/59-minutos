@@ -2632,10 +2632,8 @@ Default GRAMMATICAL_INFLECTION 2;
 		}
 
 	Yes:
-		switch (GRAMMATICAL_INFLECTION) {
-		1,2,3:	"Es bueno ser positivo.";
-		4,5,6:	"Era bueno ser positivo.";
-		}
+		!! -- Es bueno ser positivo.
+		print_ret (parser) "La orden 'si' no tiene sentido en esta situación.";
 
 ];
 
