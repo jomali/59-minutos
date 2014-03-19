@@ -12,13 +12,17 @@
 !!	Language:		ES (Castellano)
 !!	System:			Inform-INFSP 6
 !!	Platform:		Máquina-Z / GLULX
-!!	Version:		3.1
-!!	Released:		2014/02/06
+!!	Version:		4.0
+!!	Released:		2014/03/19
 !!
 !!------------------------------------------------------------------------------
 !!
 !!	# HISTORIAL DE VERSIONES
 !!
+!!	4.0: 2014/03/19	El objeto controlador ahora permite al usuario especificar 
+!!					diferentes parámetros, como la ventana en que imprimir la 
+!!					animación de apuntado y el tipo de movimiento de la 
+!!					retícula, por ejemplo.
 !!	3.1: 2014/02/06	Modo de depuración.
 !!	3.0: 2012/07/05	Versión preliminar de la rutina updateGridPosition_SHM() 
 !!					para mover la retícula con las ecuaciones del Movimiento 
@@ -60,89 +64,239 @@
 !!
 !!------------------------------------------------------------------------------
 System_file;
+Message "Incluyendo sistema de apuntado y disparo [aimAndFire 4.0]";
 
 !! Descomentar para obtener información de depuración:
 !Constant DEBUG_AIMANDFIRE;
 
+!! Tipos de movimiento de la animación de apuntado:
+Constant LINEAR_MOTION 1;
+Constant SIMPLE_HARMONIC_MOTION 2;
+
 
 !!==============================================================================
-!!	Objeto gestor del sistema de apuntado.
+!!	Objeto gestor del sistema de apuntado. Implementa la siguiente interfaz:
+!!	 *	get_delay_value(): return integer
+!!	 *	get_motion_type(): return integer
+!!	 *	get_status_window(): return status_window
+!!	 *	get_timer_frequency(): return integer
+!!	 *	run()
+!!	 *	set_delay_value(delay:integer)
+!!	 *	set_motion_type(motion_type:integer)
+!!	 *	set_status_window(status_win)
+!!	 *	set_timer_frequency(freq:integer)
+!!	 *	start(flag:boolean)
+!!	 *	stop(): return integer
 !!------------------------------------------------------------------------------
 
-#Ifdef	TARGET_GLULX;
-Object	AimingManager
+#Ifdef TARGET_GLULX;
+Object	AimingManager "(Aiming Manager)"
  with	!!----------------------------------------------------------------------
-		!! Atributos:
+		!! Retorna la cantidad de milisegundos que se sigue mostrando la 
+		!! posición final de la retícula después de que el jugador haya 
+		!! detenido la animación:
+		!!
+		!!	@return integer
+		!!		milisegundos de espera tras detener la animación
 		!!----------------------------------------------------------------------
-		timer_frequency	10,		! Freq. de los eventos del timer glk
-		delay			100,	! Retraso tras detener la animación
-		counter			0,		! Contador
-		end_flag		false,	! Indica el final de la operación de apuntado
-		width			0,		! Ancho de la línea de apuntado
-		grid			"[+]",	! Retícula de apuntado
-		grid_length		3,		! Longitud (en caracteres) de la retícula
-		grid_position	0,		! Guarda la posición de la retícula
-		grid_direction	0,		! Guarda el sentido de movimiento de la retícula
-		activado		false,
+		get_delay_value [;
+			return self.delay;
+		],
+		!!----------------------------------------------------------------------
+		!! Retorna el tipo de movimiento de la animación establecido.
+		!!
+		!!	@return integer
+		!!		código del tipo de movimiento
+		!!----------------------------------------------------------------------
+		get_motion_type [;
+			return self.motion_type;
+		],
+		!!----------------------------------------------------------------------
+		!! Retorna la ventana de estado sobre la que se dibuja la animación de 
+		!! apuntado.
+		!!
+		!!	@return status_window
+		!!----------------------------------------------------------------------
+		get_status_window [;
+			return self.status_window;
+		],
+		!!----------------------------------------------------------------------
+		!! Retorna la frecuencia con la que el gestor activa el temporizador 
+		!! glk (valor en milisegundos).
+		!!
+		!!	@return integer
+		!!		frecuencia (en milisegundos)
+		!!----------------------------------------------------------------------
+		get_timer_frequency [;
+			return self.timer_frequency;
+		],
 		!!----------------------------------------------------------------------
 		!! Operación principal del controlador. Invocada en cada ciclo del 
-		!! reloj glk. Imprime la animación de la retícula de apuntado y su 
-		!! posición final una vez detenida.
+		!! temporizador glk. Imprime la animación de la retícula de apuntado y 
+		!! su posición final una vez detenida por el jugador.
 		!!----------------------------------------------------------------------
 		run [;
-			if (~~self.activado) return false;
-			!! Obtiene el ancho de la ventana de estado:
-			glk($0025, statusBar.winid, gg_arguments, gg_arguments+4);
-			self.width = gg_arguments-->0;
-			!! Apuntado finalizado. Muestra el resultado durante unos instantes:
-			if (self.end_flag) self.finalDelay(); 
-			!! Calcula posición de retícula e imprime la animación:
+			if (self.status_window == 0) {
+				glk(214, 0); ! glk_request_timer_events(0);
+				return false;
+			}
+			!! Se calcula el ancho de la ventana de estado (debe calcularse a 
+			!! cada evento del temporizador por si la ventana ha sido 
+			!! redimensionada por el jugador):
+			glk($0025, self.status_window, gg_arguments, gg_arguments + 4);
+			self.status_window_width = gg_arguments-->0;
+			!! Mientras la animación no sea detenida, se imprime:
+			if (~~self.end_flag) {
+				self.update_grid_position(self.motion_type);
+				self.draw_aiming_line();
+			}
+			!! Tras ser detenida, la posición final de la retícula aún se 
+			!! muestra en la ventana de estado durante unos instantes:
 			else {
-				self.updateGridPosition_LM(); ! Linear Motion
-				self.drawAimingLine();
+				self.draw_aiming_line();
+				self.counter++;
+				if (self.counter > self.delay) {
+					glk(214, 0); ! glk_request_timer_events(0);
+					self.counter = 0;
+					self.end_flag = false;
+					DrawStatusLine();
+				}
 			}
 		],
 		!!----------------------------------------------------------------------
-		!! Inicializa los atributos y lanza los eventos de reloj glk. Se se 
-		!! invoca sin el parámetro flag (con con flag==false), la animación de 
-		!! de la retícula comenzará desde el punto y en el sentido en que fue 
-		!! detenida la última vez. En caso contrario, la animación comenzará 
-		!! desde el extremo izquierdo de la ventana de estado y moviéndose 
-		!! hacia la derecha.
-		!!	@param flag
+		!! Establece los milisegundos de espera tras detener la animación.
+		!!
+		!!	@param delay:integer
+		!!		milisegundos de espera tras detener la animación
 		!!----------------------------------------------------------------------
-		initialize [ flag;
-			if (flag) {
-				self.grid_position  = 0;
+		set_delay_value [ delay;
+			self.delay = delay;
+		],
+		!!----------------------------------------------------------------------
+		!! Establece el tipo de movimiento de la animación de apuntado.
+		!!
+		!!	@param type:integer
+		!!		código del tipo de movimiento
+		!!----------------------------------------------------------------------
+		set_motion_type [ type;
+			self.motion_type = type;
+		],
+		!!----------------------------------------------------------------------
+		!! Establece la ventana de estado sobre la que se dibuja la animación 
+		!! de apuntado.
+		!!
+		!!	@param status_win
+		!!		ventana de estado sobre la que dibujar la animación de apuntado
+		!!----------------------------------------------------------------------
+		set_status_window [ status_win;
+			self.status_window = status_win;
+		],
+		!!----------------------------------------------------------------------
+		!! Establece la frecuencia con la que el gestor activa el temporizador 
+		!! glk (valor en milisegundos).
+		!!
+		!!	@param freq:integer
+		!!		frecuencia (en milisegundos)
+		!!----------------------------------------------------------------------
+		set_timer_frequency [ freq;
+			self.timer_frequency = freq;
+		],
+		!!----------------------------------------------------------------------
+		!! Inicia una operación de apuntado. Se encarga de inicializar los 
+		!! atributos del sistema y lanzar los eventos del temporizador glk. 
+		!! Puede invocarse con un parámetro opcional *flag*, que permite 
+		!! establecer el punto de inicio de la retícula en la animación de 
+		!! apuntado; si es falso la retícula comienza a moverse hacia la 
+		!! derecha desde el extremo izquierdo de la ventana de estado, en caso 
+		!! contrario, la retícula empieza desde el lugar y en el sentido que 
+		!! tenía al detener la animación la última vez que se invocó el sistema.
+		!!
+		!!	@param flag:boolean (opcional)
+		!!		establece el punto de inicio y sentido del movimiento de la 
+		!!		retícula en la animación de apuntado
+		!!----------------------------------------------------------------------
+		start [ flag;
+			!! Establece el punto de inicio y sentido del movimiento de la ret.:
+			if (~~flag) {
 				self.grid_direction = 0;
+				self.grid_position = 0;
 			}
+			!! Se asegura que los otros atributos del gestor estén 
+			!! correctamente inicializados:
 			self.counter = 0;
 			self.end_flag = false;
-			self.activado = true;
-			!! Lanza los eventos de reloj glk
+			!! Inicia el temporizador glk:
 			glk(214, self.timer_frequency); ! glk_request_timer_events(t_freq);
 		],
 		!!----------------------------------------------------------------------
-		!! Retorna la posición de la retícula.
-		!!	@return int grid_position
+		!! Detiene la animación de apuntado y retorna el resultado.
+		!!
+		!!	@return result:int
+		!!		distancia entre el centro de la ventana de estado y el punto en 
+		!!		el que se detiene la retícula
 		!!----------------------------------------------------------------------
-		getGridPosition [; return self.grid_position; ],
+		stop [ result;
+			self.end_flag = true;
+			result = self.grid_position + 1 - (self.status_window_width / 2);
+			if (result < 0) result = -result;
+			#Ifdef DEBUG_AIMANDFIRE;
+			print "** Posición de la retícula: ";
+			print self.grid_position, " / ", self.status_window_width, " **^";
+			print "** Resultado: ", result, " **^";
+			#Endif; ! DEBUG_AIMANDFIRE;
+			
+			return result;
+		],
+ private
 		!!----------------------------------------------------------------------
-		!! Retorna el ancho de la barra de apuntado.
-		!!	@return int width
+		!! Dibuja la animación de apuntado.
 		!!----------------------------------------------------------------------
-		getAimingLineWidth [; return self.width; ],
+		draw_aiming_line [;
+			!! Si no está definida no se intenta dibujar en la ventana de estado:
+			if (self.status_window == 0) {
+				#Ifdef DEBUG_AIMANDFIRE;
+				print "** AimingManager: No hay ventana de estado. **^";
+				#Endif; ! DEBUG_AIMANDFIRE;
+				return;
+			}
+			! set_window
+			glk($002F, self.status_window);
+			StatusLineHeight(gg_statuswin_size); !! TODO
+			! window_clear
+			glk($002A, self.status_window);
+			!! Se imprimen las guías:
+			! window_move_cursor
+			glk($002B, self.status_window, (self.status_window_width/2)-3, 0);
+			print "·";
+			! window_move_cursor
+			glk($002B, self.status_window, (self.status_window_width/2)+3, 0);
+			print "·";
+			!! Se imprime la retícula:
+			! window_move_cursor
+			glk($002B, self.status_window, self.grid_position, 0);
+			print (string) self.grid;
+			! set_window
+			glk($002F, gg_mainwin);
+		],
 		!!----------------------------------------------------------------------
-		!! Indica el final de la operación de apuntado.
+		!! Actualiza la posición de la retícula.
 		!!----------------------------------------------------------------------
-		aimingEnded [; self.end_flag = true; ],
+		update_grid_position [ motion_type;
+			switch (motion_type) {
+				SIMPLE_HARMONIC_MOTION:
+					self.update_grid_position_SHM();
+				default:
+					self.update_grid_position_LM();
+			}
+		],
 		!!----------------------------------------------------------------------
-		!! Calcula la posición de la retícula (Movimiento Rectilíneo Uniforme)
+		!! Actualiza la pos. de la retícula (Movimiento Rectilíneo Uniforme).
 		!!----------------------------------------------------------------------
-		updateGridPosition_LM [; ! Linear Motion
+		update_grid_position_LM [; ! Linear Motion
 			!! Sentido del movimiento: hacia la derecha
 			if (self.grid_direction == 0) {
-				if (self.grid_position < self.width - (self.grid_length+1)) {
+				if (self.grid_position < self.status_window_width 
+					- (self.grid_length + 1)) {
 					self.grid_position++;
 				}
 				else {
@@ -162,11 +316,15 @@ Object	AimingManager
 			}
 		],
 		!!----------------------------------------------------------------------
-		!! Calcula la posición de la retícula (Movimiento Armónico Simple). 
-		!! XXX - NOTA #1: En el estado actual, la animación no se imprime 
-		!! correctamente, por eso la rutina está comentada.
+		!! Actualiza la pos. de la retícula (Movimiento Armónico Simple). 
+		!! XXX - NOTA #1: NO USAR. La lógica de la rutina está programada a 
+		!! modo de prueba y no produce una animación adecuada. Además utiliza 
+		!! operaciones de coma flotante que requieren un compilador GLULX 
+		!! que las soporte (por esta razón se ha decidido dejar el código 
+		!! comentado).
 		!!----------------------------------------------------------------------
-!		updateGridPosition_SHM [ i ini sini aux gp; ! Simple Harmonic Motion
+		update_grid_position_SHM [ i ini sini aux gp; ! Simple Harmonic Motion
+			i = ini + sini + aux + gp;
 !			aux = WIN_WIDTH/2;
 !			@numtof aux ini; ! ini: centro de la ventana
 !			@numtof GRID_COUNTER i; ! i: contador
@@ -183,82 +341,79 @@ Object	AimingManager
 !				if (GRID_MOVEMENT == 0) GRID_MOVEMENT = 1;
 !				else GRID_MOVEMENT = 0;
 !			}
-!		],
-		!!----------------------------------------------------------------------
-		!! Dibuja la animación de apuntado
-		!!----------------------------------------------------------------------
-		drawAimingLine [;
-			! If we have no status window, we must not try to redraw it.
-			if (statusBar.winid == 0) {
-				print "** AimingManager error. No hay ventana de estado. **^";
-				return;
-			}
-			glk($002F, statusBar.winid); ! set_window
-			StatusLineHeight(gg_statuswin_size);
-			glk($002A, statusBar.winid); ! window_clear
-			! Se imprimen las guías:
-			glk($002B, statusBar.winid, (self.width/2)-3, 0); ! window_move_cursor
-			print "·";
-			glk($002B, statusBar.winid, (self.width/2)+3, 0); ! window_move_cursor
-			print "·";
-			! Se imprime la retícula:
-			glk($002B, statusBar.winid, self.getGridPosition(), 0);
-			print (string) self.grid;
-			glk($002F, gg_mainwin); ! set_window
 		],
 		!!----------------------------------------------------------------------
-		!! Una vez detenida la animación de apuntado aún se muestra la posición 
-		!! final de la retícula durante unos momentos (tiempo establecido por 
-		!! el atributo delay). Al cabo, se detienen los eventos del timer y se 
-		!! imprime la barra de estado normal.
+		!! Atributos:
 		!!----------------------------------------------------------------------
-		finalDelay [;
-			self.drawAimingLine();
-			self.counter++;
-			if (self.counter > self.delay) {
-				glk(214, 0); ! glk_request_timer_events(0);
-				self.activado = false;
-				DrawStatusLine();
-			}
-		],
+		!! Contador:
+		counter 0,
+		!! Cantidad de milisegundos que se sigue mostrando la posición final de 
+		!! la retícula después de haber sido detenida la animación:
+		delay 100,
+		!! Indica que el jugador ha detenido la animación de la retícula:
+		end_flag false,
+		!! Retícula de apuntado:
+		grid "[+]",
+		!! Sentido del movimiento de la retícula:
+		grid_direction 0,
+		!! Longitud en caracteres de la retícula:
+		grid_length 3,
+		!! Posición de la retícula:
+		grid_position 0,
+		!! Código del tipo de movimiento de la animación de apuntado:
+		motion_type 0,
+		!! Ventana de estado sobre la que se dibuja la animación de apuntado:
+		status_window 0,
+		!! Guarda el ancho de la ventana de estado:
+		status_window_width 0,
+		!! Frecuencia con que se activa el temporizador glk:
+		timer_frequency 10,
 ;
-#Endif;	! TARGET_GLULX;
-
+#Endif; ! TARGET_GLULX;
 
 !!==============================================================================
-!!	Lanza el sistema de apuntado y disparo:
-!!	@return int: 
-!!		-2, (respuesta del sistema en Máquina-Z), 
-!!		-1, (fallo),
-!!		result (distancia entre la retícula y el centro).
+!!	Rutina encargada de lanzar el sistema de apuntado y disparo. Puede 
+!!	invocarse con el siguiente parámetro opcional:
+!!
+!!	 *	flag: (true/false) si se invoca con el parámetro activado, la animación 
+!!		comenzará desde el extremo izquierdo de la ventana de estado, y 
+!!		moviéndose hacia la derecha. En caso contrario, la animación comenzará 
+!!		desde el punto y con el sentido que tenía en el último momento en que 
+!!		fue invocada.
+!!
+!!	Retorna la distancia entre la retícula, una vez se haya detenido, y el 
+!!	centro de la ventana de estado, -2 si se invoca desde Máquina-Z, y -1 en 
+!!	caso de producirse algún error.
 !!------------------------------------------------------------------------------
-!! TODO: controlar errores relativos a distintos anchos de ventana
 
-[ AimAndFire grid_pos width result;
-	#Ifdef	TARGET_ZCODE;
+[ AimAndFire flag		result;
+	#Ifdef TARGET_ZCODE;
 
-	grid_pos = 0; width = 0; result = 0; ! Suprime advertencias del compilador
 	#Ifdef DEBUG_AIMANDFIRE;
-	print "** AimAndFire: Apuntado y disparo para máquina-Z. **^";
+	print "** AimAndFire: apuntado y disparo sobre Máquina-Z. **^";
 	#Endif; ! DEBUG_AIMANDFIRE;
-	return -2;
+	!! Establece el resultado de la operación en Máquina-Z:
+	result = -2;
 
-	#Ifnot;	! TARGET_GLULX;
+	#Ifnot; ! TARGET_GLULX;
 
-	AimingManager.initialize();
-	KeyCharPrimitive(); ! Pulsación de tecla. Fin de la animación
-	AimingManager.aimingEnded();
-	grid_pos = AimingManager.getGridPosition() + 1;
-	width	 = AimingManager.getAimingLineWidth();
 	#Ifdef DEBUG_AIMANDFIRE;
-	print "** Posición de la retícula: ", grid_pos, "/", width, " **^";
-	print "** ", grid_pos, " - ", (width/2), ", = ", grid_pos-(width/2), " **^";
+	print "** AimAndFire: apuntado y disparo sobre Glulx. **^";
 	#Endif; ! DEBUG_AIMANDFIRE;
-	result = grid_pos - (width/2);
-	if (result < 0 ) return -result;
-	else return result;
+	!! Comprobaciones previas sobre el gestor del sistema de apuntado y disparo:
+	if (AimingManager.get_motion_type() == 0)
+		AimingManager.set_motion_type(LINEAR_MOTION);
+	if (AimingManager.get_status_window() == 0)
+		AimingManager.set_status_window(gg_statuswin);
+	!! Se inicia el sistema de apuntado y disparo:
+	AimingManager.start(flag);
+	!! La animación de apuntado se detiene cuando el jugador pulsa una tecla:
+	KeyCharPrimitive();
+	result = AimingManager.stop();
 
-	#Endif;	! TARGET_
+	#Endif; ! TARGET_
+
+	return result;
 ];
 
 
