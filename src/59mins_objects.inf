@@ -149,6 +149,9 @@ Atrezzo	"aro de baloncesto" obj_TERRAZA
 		gender	G_MASCULINO,
 		adjectives 'baloncesto',
 		before [;
+			DefaultAction:
+				if (self has described)
+					<<Use self>>;
 			Use:
 				if (~~IndirectlyContains(player, obj_pelotaBaloncesto))
 					"No puede jugar sin un balón.";

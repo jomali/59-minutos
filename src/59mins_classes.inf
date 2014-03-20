@@ -64,9 +64,11 @@
 !!------------------------------------------------------------------------------
 
 !!------------------------------------------------------------------------------
-!! Marca un objeto como destacado
+!! Marca un objeto como destacado. El jugador puede utilizar la acción 
+!! ##RemarkableObjects para obtener un listado de objetos destacados a su 
+!! alcance con los que puede interactuar de una forma especial.
 !!------------------------------------------------------------------------------
-Attribute	remarkable;
+Attribute remarkable;
 
 !!------------------------------------------------------------------------------
 !! Representa un objeto localidad dentro del modelo de mundo.
@@ -138,6 +140,11 @@ Class	Item
 				5:	"que hubieses visto antes.";
 				6:	"que hubiese visto antes.";
 			}
+		],
+		before [;
+			DefaultAction:
+				if ((self has described) && (parent(self) ~= player))
+					<<Take self>>;
 		];
 
 !!------------------------------------------------------------------------------
@@ -185,6 +192,11 @@ Class	NPC
 			Answer, Ask, AskFor, Order, Tell:
 				print_ret (parser) "Para iniciar una conversación usa 
 				simplemente la orden HABLA (a/con) PERSONAJE.";
+		],
+		before [;
+			DefaultAction:
+				if (self has described)
+					<<TalkTo self>>;
 		],
  has	animate;
 

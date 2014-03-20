@@ -148,8 +148,8 @@
       <keyword>Prompt</keyword>
     </context>
 
-	<!-- Acciones definidas en la extensión SpanishEG.h -->
     <context id="custom_actions" style-ref="actions">
+      <!-- Acciones definidas en la extensión SpanishEG.h -->
       <keyword>Dance</keyword>
       <keyword>GoDown</keyword>
       <keyword>GoUp</keyword>
@@ -166,6 +166,23 @@
       <keyword>Use</keyword>
       <keyword>Write</keyword>
       <keyword>Xyzzy</keyword>
+      <!-- Otras acciones definidas aparte -->
+      <keyword>Audio</keyword>
+      <keyword>AudioOn</keyword>
+      <keyword>AudioOff</keyword>
+      <keyword>CloseX</keyword>
+      <keyword>DefaultAction</keyword>
+      <keyword>DisrobeX</keyword>
+      <keyword>GNA</keyword>
+      <keyword>Graphics</keyword>
+      <keyword>GraphicsOn</keyword>
+      <keyword>GraphicsOff</keyword>
+      <keyword>NoSuchVerb</keyword>
+      <keyword>OpenX</keyword>
+      <keyword>RemarkableObjects</keyword>
+      <keyword>TalkOn</keyword>
+      <keyword>TopicInventory</keyword>
+      <keyword>WearX</keyword>
     </context>
 
     <context id="attributes" style-ref="attributes">
@@ -201,6 +218,7 @@
       <keyword>workflag</keyword>
       <keyword>worn</keyword>
 	  <!-- Custom attributes -->
+	  <keyword>described</keyword>
 	  <keyword>remarkable</keyword>
     </context>
 

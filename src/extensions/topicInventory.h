@@ -14,7 +14,7 @@
 !!	System:			Inform-INFSP 6
 !!	Platform:		Z-Machine / Glulx
 !!	Version:		0.2
-!!	Released:		2014/02/12
+!!	Released:		2014/03/20
 !!
 !!------------------------------------------------------------------------------
 !!
@@ -148,7 +148,9 @@
 !!	Para usar la librería únicamente hay que incluir la siguiente línea en la 
 !!	rutina BeforeParsing (crearla si no existe):
 !!
-!!		ConversationManager.try();
+!!		[ BeforeParsing;
+!!			ConversationManager.run();
+!!		];
 !!
 !!
 !!	# LIMITACIONES Y POSIBLES MEJORAS
@@ -485,7 +487,7 @@ Class	Conversation
 !!		conversación se activa correctamente, falso si la conversación no es 
 !!		válida o está marcada como finalizada.
 !!
-!!	 *	end() - Quita del gestor la conversación activa.
+!!	 *	stop() - Quita del gestor la conversación activa.
 !!
 !!	 *	is_running(conv:Conversation) - Retorna verdadero si la conversación 
 !!		pasada como parámetro está activada en el gestor. Si no se pasan 
@@ -543,7 +545,7 @@ Object ConversationManager "(Conversation Manager)"
 			self.show_topic_inventory();
 			return true;
 		], 
-		end [;
+		stop [;
 			self.current_conversation = 0;
 			return true;
 		], 
@@ -608,7 +610,7 @@ Object ConversationManager "(Conversation Manager)"
 !			new_line;
 !			return true;
 !		],
-		try [ o o_tmp_hits;
+		run [ o o_tmp_hits;
 			if (self.current_conversation) {
 
 				!! A) Inicializaciones del método:

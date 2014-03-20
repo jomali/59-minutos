@@ -303,6 +303,29 @@ Array	_AlmacenDeTexto_ -> 160 + WORDSIZE;
 
 
 !!==============================================================================
+!! Rutina para obtener la descripción de un objeto. Es idéntica a la rutina 
+!! original implementada en *parserm.h* con una salvedad: al examinar un objeto 
+!! por primera vez se le da el nuevo atributo *described*.
+!! [Sobreescribe a parserm.h]
+!!------------------------------------------------------------------------------
+Attribute described; ! Indica si un objeto ha sido descrito al jugador
+
+[ ExamineSub i;
+    if (location == thedark) return L__M(##Examine, 1);
+	if (noun hasnt described) give noun described;
+    i = noun.description;
+    if (i == 0) {
+        if (noun has container) <<Search noun>>;
+        if (noun has switchable) { L__M(##Examine, 3, noun); rfalse; }
+        return L__M(##Examine, 2, noun);
+    }
+    PrintOrRun(noun, description);
+    if (noun has switchable) L__M(##Examine, 3, noun);
+    if (AfterRoutines() == 1) rtrue;
+];
+
+
+!!==============================================================================
 !! Determines the gender-number-animation of the short name of the given object
 !! obj. Returns the GNA, which is a number between 0 and 11. See table of GNA 
 !! values in THE INFORM DESIGNER'S MANUAL Ch.34. Si se invoca con el parámetro 

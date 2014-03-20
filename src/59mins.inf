@@ -65,7 +65,7 @@ Release 0; Serial "140311";		! 1.0 - 2014/03/11
 !Constant Checking 1;			! Código de la versión del relato
 !Release 0; Serial "140311";	! 1.0 - 2014/03/11
 
-Constant NO_MULTIMEDIA;			! No se incluyen contenidos multimedia
+!Constant NO_MULTIMEDIA;		! No se incluyen contenidos multimedia
 
 !! TODO - en lugar de establecer un límite al máximo número de objetos que 
 !! puede llevar el personaje en mano, sería interesante considerar el inv. del 
@@ -91,6 +91,7 @@ Constant PARSER_SUFIX "]";		! Define texto final de los mens. del parser
 Replace AttemptToTakeObject;	! Intento de transferir un objeto al jugador
 Replace Banner;					! Créditos generales de la aplicación
 Replace DrawStatusLine;			! Dibuja la barra de estado
+Replace ExamineSub;				! Rutina para la acción ##Examine
 Replace GetGNAOfObject;			! Rutina para obtener el GNA de un objeto
 Replace InvSub;					! Rutinas para tomar INVENTARIO del personaje
 Replace InvTallSub;				! Rutinas para tomar INVENTARIO del personaje
@@ -215,7 +216,7 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 !!	Manipula la entrada del usuario antes de que sea analizada por la librería.
 !!------------------------------------------------------------------------------
 [ BeforeParsing;
-	ConversationManager.try();
+	ConversationManager.run();
 ];
 
 !!------------------------------------------------------------------------------
@@ -302,9 +303,11 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 !!	Foco del jugador.
 !!------------------------------------------------------------------------------
 [ InScope person item;
+	!! La localidad actual siempre está en el foco del jugador:
+	PlaceInScope(real_location);
 	!! En la oscuridad, se mueven al foco del jugador todos aquellos objetos
-	!! que hayan sido ya manipulados previamente por el personaje
-	if ( person == player && location == thedark ) {
+	!! que hayan sido ya manipulados previamente por el personaje:
+	if ((person == player) && (location == thedark)) {
 		objectloop(item in parent(player))
 			if (item has moved) PlaceInScope(item);
 	}
@@ -367,14 +370,14 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 ];
 
 !!------------------------------------------------------------------------------
-!!	Rutinas y definiciones requeridas para lanzar la acción ##Examine sobre un
-!!	objeto tecleando únicamente su nombre. Sigue la implementación propuesta en
-!!	<http://rec.arts.int-fiction.narkive.com/Cz9j184N/inform-6-parser-question>
-!!	con modificaciones para que sólo se intente lanzar la acción sobre objetos
-!!	que realmente existen y están presentes dentro del foco del jugador. De
-!!	otra forma, siempre se intentaría lanzar la acción ##Examine, aún cuando la
-!!	intención del jugador no fuese examinar un objeto si no utilizar una acción
-!!	que no está definida.
+!! Rutinas y definiciones requeridas para lanzar una acción por defecto sobre 
+!! un objeto tecleando sólo su nombre. Sigue la implementación propuesta en 
+!! <http://rec.arts.int-fiction.narkive.com/Cz9j184N/inform-6-parser-question>
+!! con modificaciones para que únicamente se intente lanzar la acción sobre 
+!! objetos que realmente existen y están presentes dentro del foco del jugador. 
+!! De otra forma, siempre se intentaría lanzar la acción ##DefaultAction, aún 
+!! cuando la intención del jugador no fuese minupular un objeto sino utilizar 
+!! una acción que no está definida.
 !!------------------------------------------------------------------------------
 [ UnknownVerb word obj;
 	objectloop(obj) {
@@ -400,8 +403,6 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 	return false;
 ];
 
-Verb 'no.verb' * noun -> Examine;
-
 
 !!==============================================================================
 !!	Gramática estándar y extendida
@@ -409,6 +410,7 @@ Verb 'no.verb' * noun -> Examine;
 !!	Acciones añadidas:
 !!	 *	##Audio, ##AudioOn, ##AudioOff
 !!	 *	##CloseX
+!!	 *	##DefaultAction
 !!	 *	##DisrobeX
 !!	 *	##GNA (sólo en modo de depuración)
 !!	 *	##Graphics, ##GraphicsOn, ##GraphicsOff
@@ -478,6 +480,22 @@ Extend	only 'corre' replace
 	pueden abrir y cerrar.)";
 	new_line; new_line;
 	<<Close noun second>>;
+];
+
+!!------------------------------------------------------------------------------
+!! ##DefaultAction
+!!------------------------------------------------------------------------------
+Verb 'no.verb' * noun -> DefaultAction;
+
+[ DefaultActionSub;
+	if (noun has described) {
+		if (noun has openable && noun has open) <<Close noun>>;
+		if (noun has openable && noun hasnt open) <<Open noun>>;
+		if (noun has switchable && noun has on) <<SwitchOff noun>>;
+		if (noun has switchable && noun hasnt on) <<SwitchOn noun>>;
+		if (noun has clothing && noun hasnt worn) <<Wear noun>>;
+	}
+	<<Examine noun>>;
 ];
 
 !!------------------------------------------------------------------------------
