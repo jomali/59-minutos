@@ -83,6 +83,8 @@ Constant PARSER_STYLE _IST_;	! Selecciona estilo de los mensajes del parser
 Constant PARSER_PREFIX "[";		! Define texto inicial de los mens. del parser
 Constant PARSER_SUFIX "]";		! Define texto final de los mens. del parser
 
+Global hyperlink_st = _BST_;	! Selecciona estilo de los hipervínculos
+
 
 !!==============================================================================
 !!	Reemplazos de rutinas utilizadas por la librería Inform
@@ -119,6 +121,8 @@ Include ">59mins_lib.inf";		! Personalizaciones de la librería Inform
 Include ">59mins_langLM.inf";	! Mensajes de la librería
 Include ">59mins_langOM.inf";	! Mensajes de los objetos
 
+Include ">makinaimo.inf";
+
 #Ifdef TARGET_GLULX;
 #Ifndef NO_MULTIMEDIA;
 Include "gwincls.h";			! GWindows; Window Class Framework
@@ -133,9 +137,28 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 #Ifdef TARGET_GLULX;
 #Ifdef NO_MULTIMEDIA;
 
-[ HandleGlkEvent ev; 
-	if (ev-->0 == 1) ! evtype_Timer
+[ HandleGlkEvent ev context abortres
+	i;
+	!! Se gestiona el evento glk:
+	switch (ev-->0) {
+	0:	! evtype_None        - none
+	1:	! evtype_Timer       - event repeated at fixed intervals
 		AimingManager.run();
+	2:	! evtype_CharInput   - keystroke input in a window
+	3:	! evtype_LineInput   - full line of input in a window
+	4:	! evtype_MouseInput  - mouse input in a window
+	5:	! evtype_Arrange     - some windows sizes have changed
+	6:	! evtype_Redraw      - graphic windows need redrawing
+	7:	! evtype_SoundNotify - sound finished playing
+	8:	! evtype_Hyperlink   - selection of a hyperlink in a window
+		glk_request_hyperlink_event(gg_mainwin);
+		glk_cancel_line_event(gg_mainwin, 0);
+		get_name_buffer(ev-->2); ! ev--> 2 es el valor del enlace. Un obj.
+		for (i = 0 : i <= name_buffer-->0 : i++) {
+			abortres-->i = name_buffer-->i;
+		}
+		return 2;
+	}
 ];
 
 #Ifnot;
@@ -154,7 +177,8 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 !!------------------------------------------------------------------------------
 !! Controlador de eventos Glk con la librería GWindows.
 !!------------------------------------------------------------------------------
-[ GWindowsGlkEvent ev context abortres;
+[ GWindowsGlkEvent ev context abortres
+	i;
 	!! Se notifica el efecto de fade de Tiempo Real
 	Damusix.NotificarFade(ev);
 	!! Se gestiona el evento glk:
@@ -169,6 +193,13 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 	6:	! evtype_Redraw      - graphic windows need redrawing
 	7:	! evtype_SoundNotify - sound finished playing
 	8:	! evtype_Hyperlink   - selection of a hyperlink in a window
+		glk_request_hyperlink_event(gg_mainwin);
+		glk_cancel_line_event(gg_mainwin, 0);
+		get_name_buffer(ev-->2); ! ev--> 2 es el valor del enlace. Un obj.
+		for (i = 0 : i <= name_buffer-->0 : i++) {
+			abortres-->i = name_buffer-->i;
+		}
+		return 2;
 	}
 	ev = context + abortres; ! (para evitar alertas del compilador)
 ];
@@ -182,6 +213,7 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 !!------------------------------------------------------------------------------
 
 #Ifdef TARGET_GLULX;
+Include "infglk.h";				! Acceso sencillo a las funciones Glk
 #Ifndef NO_MULTIMEDIA;
 Include "damusix.h";			! Administrador unificado de sonido en Glulx
 Include "gwindows.h";			! GWindows: Remplazos de la librería
@@ -199,76 +231,44 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 
 
 !!==============================================================================
-!!	Puntos de entrada y otras rutinas
-!!------------------------------------------------------------------------------
-!!	Rutinas implementadas:
-!!	 *	BeforeParsing()
-!!	 *	EraseWindow()
-!!	 *	HorizontalRule()
-!!	 *	Initialise()
-!!	 *	InScope()
-!!	 *	MainMenu()
-!!	 *	PressAnyKey()
-!!	 *	UnknownVerb(), PrintVerb()
+!!	Puntos de entrada
 !!------------------------------------------------------------------------------
 
 !!------------------------------------------------------------------------------
-!!	Manipula la entrada del usuario antes de que sea analizada por la librería.
+!! Permite manipular la entrada de usuario antes de que sea analizada por la 
+!! librería. Es llamada después de que el sistema haya leído la entrada de 
+!! texto y haya definido ya las tablas *buffer* y *parser*, pero aún no ha 
+!! hecho nada más salvo establecer el contador de palabras *wn* a 1. La rutina 
+!! puede manipular estas tablas libremente mientras permanezcan consistentes la 
+!! una con la otra, y puede dejar el contador de palabras en cualquier punto. 
+!! No retorna ningún valor.
 !!------------------------------------------------------------------------------
-[ BeforeParsing;
+[ BeforeParsing obj i;
 	ConversationManager.run();
+	ParsingPreprocessor.run();
 ];
 
 !!------------------------------------------------------------------------------
-!!	Deja la ventana en blanco.
-!!------------------------------------------------------------------------------
-[ EraseWindow;
-    #Ifdef TARGET_ZCODE;
-    @erase_window -1;
-    #Ifnot; ! TARGET_GLULX
-    if (gg_quotewin) {
-		glk($0024, gg_quotewin, 0); ! close_window
-		gg_quotewin = 0;
-    }
-    glk($002A, gg_mainwin); ! window_clear
-    if (gg_statuswin) glk($002A, gg_statuswin); ! window_clear
-    #Endif;
-];
-
-!!------------------------------------------------------------------------------
-!!	Imprime una regla horizontal centrada en pantalla.
-!!------------------------------------------------------------------------------
-[ HorizontalRule;
-	monospaced_style();
-	spaces (ScreenWidth()-1-7) / 2;
-	print "*  *  *^";
-	roman_style();
-];
-
-!!------------------------------------------------------------------------------
-!! Inicialización del relato.
+!! Inicialización del relato. Esta rutina es obligatoria y desempeña siempre 
+!! una tarea obligatoria: establecer la localidad inicial del jugador (o el 
+!! objeto accesible sobre o dentro el que empieza el jugador). Retorna *true* 
+!! o *false* para continuar con la ejecución normal, o el valor 2 para suprimir 
+!! la impresión de los créditos de la aplicación, que de otra manera se 
+!! imprimirían inmediatamente después de llamar a la rutina.
 !!------------------------------------------------------------------------------
 [ Initialise;
-	EraseWindow();				! Borra la ventana
+	erase_window();				! Borra la ventana
+	check_interpreter();		! Comprobaciones del intérprete
 	lookmode = 2;				! Modo de las descripciones de localidad autom.
 
 	#Ifdef TARGET_GLULX;
+	!! Establece la escucha de eventos glk para el uso de hiperenlaces:
+	glk_request_hyperlink_event(gg_mainwin);
 	#Ifndef NO_MULTIMEDIA;
 	!! Oculta la ventana gráfica de la interfaz:
 	HideGraphicWindow();
 	!! Inicializa parámetros del gestor del sistema de apuntado:
 	AimingManager.set_status_window(statusBar.winid);
-	!! Comprobaciones de audio:
-	if (~~Damusix.TestAudio()) {
-		print (strong) "ADVERTENCIA:", " Esta aplicación incluye contenidos
-		gráficos y de audio, pero tu intérprete GLULX no los soporta
-		adecuadamente. El programa se iniciará con parte o la totalidad de sus
-		recursos multimedia desactivados.^";
-		new_line;
-		print (parser) "Pulse una tecla para continuar.";
-		PressAnyKey();
-		EraseWindow();
-	}
 	#Endif; ! NO_MULTIMEDIA;
 	#Endif; ! TARGET_GLULX;
 
@@ -279,28 +279,31 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 	contenidos (en especial los textos) mostrados a continuación pueden no
 	ajustarse necesariamente a los de la versión final.^";
 	new_line;
-	print (parser) "Pulse una tecla para continuar.";
-	PressAnyKey();
-	EraseWindow();
+	print (parser) "Pulsa una tecla para continuar.";
+	press_any_key();
+	erase_window();
 	#Endif; ! DEMO_RELEASE;
 
-	MainMenu();					! Menú principal. Establece la localidad inicial
+	main_menu();				! Menú principal. Establece la localidad inicial
 
 	return 2;
 ];
 
-!!------------------------------------------------------------------------------
-!!	Inicializaciones del relato (en modo depuración)
-!!------------------------------------------------------------------------------
-#Ifdef DEBUG;
+!! Inicializaciones del relato (en modo de depuración):
 [ InitialiseDebug;
+	#Ifdef DEBUG;
 	move obj_pelotaBaloncesto to obj_Silvia;
 	location = obj_TERRAZA;
+	#Endif; ! DEBUG;
 ];
-#Endif; ! DEBUG;
 
 !!------------------------------------------------------------------------------
-!!	Foco del jugador.
+!! Foco del jugador. Ofrece una oportunidad para cambiar en el sistema la 
+!! definición de lo que está al alcance del jugador. Utiliza las rutinas de la 
+!! librería *ScopeWithin* y *PlaceInScope* para establecer cuál debería ser el 
+!! foco. Retorna *false* para indicar al sistema que añada todos los objetos 
+!! que suelen estar por defecto al alcance, o *true* para indicar que no se 
+!! debe añadir nada más al foco. 
 !!------------------------------------------------------------------------------
 [ InScope person item;
 	!! La localidad actual siempre está en el foco del jugador:
@@ -315,13 +318,176 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 ];
 
 !!------------------------------------------------------------------------------
-!!	Menús (menú principal y menú con el índice de escenas).
+!! Permite cambiar el verbo que imprime el sistema al hacer preguntas al 
+!! jugador del tipo "¿Qué quieres <lo que sea>?", en caso de que se haya 
+!! definido algún verbo inusual por medio de la rutina *UnknownVerb(word)*. 
+!! *word* es la dirección de diccionario del verbo. Retorna *true* para indicar 
+!! al parser que se ha imprimido el verbo, o *false* para continuar con la 
+!! ejecucción normal y que el sistema imprima el verbo de la forma habitual.
 !!------------------------------------------------------------------------------
-[ MainMenu i key;
-	EraseWindow();
+[ PrintVerb word;
+	if (word == 'no.verb') {
+		print "hacer algo con";
+		return true;
+	}
+	if (word == 'teleport.verb') {
+		print "desplazarte a";
+		return true;
+	}
+	return false;
+];
+
+!!------------------------------------------------------------------------------
+!! Invocada por el parser cuando se encuentra con un verbo desconocido, de 
+!! forma que pueda cambiarse por uno definido en el relato. *word* es el valor 
+!! de diccionario del verbo desconocido. Retorna *false* para permitir que el 
+!! parser continúe con su ejecucción normal e imprima un mensaje de error, o un 
+!! valor de diccionario del verbo a utilizar en lugar del verbo desconocido. Se 
+!! utiliza para contemplar las siguientes situaciones:
+!!
+!! 1) Desplazarse automáticamente a una localidad tecleando únicamente su 
+!! nombre.
+!!
+!! 2) Lanzar una acción por defecto sobre un objeto cuando se teclea únicamente 
+!! su nombre. En este caso se sigue la implementación propuesta en 
+!! <http://rec.arts.int-fiction.narkive.com/Cz9j184N/inform-6-parser-question>
+!! con modificaciones para que sólo se intente lanzar la acción sobre objetos 
+!! que realmente existen y están presentes dentro del foco del jugador. De otra 
+!! forma, siempre se intentaría lanzar la acción ##DefaultAction, aún cuando la 
+!! intención del jugador no fuese manipular un objeto sino utilizar una acción 
+!! que no está definida. (Tenemos que asegurarnos que la localidad actual se 
+!! encuentra dentro del foco del jugador para que pueda referirse a ella. Ver 
+!! rutina *InScope()*).
+!!------------------------------------------------------------------------------
+[ UnknownVerb word
+	obj adjacent_location;
+	objectloop (obj in Compass) {
+		if (real_location.(obj.door_dir) 
+		== ParsingPreprocessor.get_selected_object()) {
+			verb_wordnum = 0;
+			return 'teleport.verb';
+		}
+	}
+	if (ParsingPreprocessor.get_selected_object() ~= 0) {
+		verb_wordnum = 0;
+		return 'no.verb';
+	}
+
+	return false;
+];
+
+
+!!==============================================================================
+!!	Otras rutinas
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!! Comprueba las funcionalidades del intérprete.
+!!------------------------------------------------------------------------------
+[ check_interpreter;
+	#Ifdef TARGET_GLULX;
+	!! Comprobaciones de Tiempo Real:
+	if (~~glk_gestalt(gestalt_Timer, 0)) {
+		print (strong) "ERROR:", " Esta aplicación utiliza eventos de tiempo 
+		real, pero tu intérprete GLULX no los soporta. Para ejecutar la 
+		aplicación necesitarás un intérprete adecuado.^";
+		new_line;
+		print (parser) "Pulsa una tecla para salir.";
+		press_any_key();
+		quit;
+	}
+	#IfNdef NO_MULTIMEDIA;
+	!! Comprobaciones de Gráficos y Audio:
+	if (~~(glk_gestalt(gestalt_Sound, 0) && glk_gestalt(gestalt_SoundMusic, 0)
+		&& glk_gestalt(gestalt_Graphics, 0))) {
+		print (strong) "ADVERTENCIA:", " Esta aplicación incluye contenidos
+		gráficos y de audio, pero tu intérprete GLULX no los soporta
+		adecuadamente. El programa se iniciará con parte o la totalidad de sus
+		recursos multimedia desactivados.^";
+		new_line;
+		print (parser) "Pulsa una tecla para continuar.";
+		press_any_key();
+		erase_window();
+	}
+	#Endif; ! NO_MULTIMEDIA;
+	#Endif; ! TARGET_GLULX;
+];
+
+!!------------------------------------------------------------------------------
+!! Deja la ventana en blanco.
+!!------------------------------------------------------------------------------
+[ erase_window;
+    #Ifdef TARGET_ZCODE;
+    @erase_window -1;
+    #Ifnot; ! TARGET_GLULX
+    if (gg_quotewin) {
+		glk($0024, gg_quotewin, 0); ! close_window
+		gg_quotewin = 0;
+    }
+    glk($002A, gg_mainwin); ! window_clear
+    if (gg_statuswin) glk($002A, gg_statuswin); ! window_clear
+    #Endif;
+];
+
+!!------------------------------------------------------------------------------
+!! Imprime una regla horizontal centrada en pantalla.
+!!------------------------------------------------------------------------------
+[ horizontal_rule;
+	monospaced_style();
+	spaces (ScreenWidth()-1-7) / 2;
+	print "*  *  *^";
+	roman_style();
+];
+
+!!------------------------------------------------------------------------------
+!! Inicia estilo de texto de los hipervínculos.
+!!------------------------------------------------------------------------------
+[ hyperlink_style;
+	switch (hyperlink_st) {
+	_RST_:	roman_style();
+	_IST_:	italic_style();
+	_BST_:	bold_style();
+	_MST_:	monospaced_style();
+	}
+];
+
+!!------------------------------------------------------------------------------
+!! Indica el punto de inicio/fin de un hipervínculo.
+!!------------------------------------------------------------------------------
+[ link obj;
+	#Ifdef TARGET_GLULX;
+	get_name_buffer(obj);
+!	print "*";
+!	for (obj=0 : obj < name_buffer-->0 : obj++) {
+!		print (char) name_buffer->(obj+WORDSIZE);
+!	}
+!	print "*";
+	if ((name_buffer-->0 ~= 4) || ~~(name_buffer->(0+WORDSIZE) == 'n' 
+		&& name_buffer->(1+WORDSIZE) == 'a' && name_buffer->(2+WORDSIZE) == 'd'
+		&& name_buffer->(3+WORDSIZE) == 'a')) {
+		hyperlink_style();
+		glk_set_hyperlink(obj);
+!		print "*";
+!		for (obj=0 : obj < name_buffer-->0 : obj++) {
+!			print (char) name_buffer->(obj+WORDSIZE);
+!		}
+!		print "*";
+	}
+	else {
+		roman_style();
+		glk_set_hyperlink(0);
+	}
+	#Endif; !TARGET_GLULX;
+];
+
+!!------------------------------------------------------------------------------
+!! Menús (menú principal y menú con el índice de escenas).
+!!------------------------------------------------------------------------------
+[ main_menu i key;
+	erase_window();
 	Banner();
 	new_line;
-	HorizontalRule();
+	horizontal_rule();
 	new_line;
 	monospaced_style();
 	print "  Empezar la demostración  ";
@@ -345,19 +511,19 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 	#Endif; ! DEBUG;
 
 	switch (key) {
-		'R', 'r': EraseWindow(); print "Cargando partida...^"; <<Restore>>;
+		'R', 'r': erase_window(); print "Cargando partida...^"; <<Restore>>;
 		'Q', 'q': quit;
 	}
 
-	EraseWindow();
+	erase_window();
 ];
 
 !!------------------------------------------------------------------------------
-!!	Espera una pulsación de tecla o, si se introduce un valor, a que pase una
-!!	cantidad delay de décimas de segundo antes de continuar. Retorna verdadero
-!!	si la tecla pulsada es 'q' o 'Q', falso en caso contrario.
+!! Espera una pulsación de tecla o, si se introduce un valor, a que pase una
+!! cantidad delay de décimas de segundo antes de continuar. Retorna verdadero
+!! si la tecla pulsada es 'q' o 'Q', falso en caso contrario.
 !!------------------------------------------------------------------------------
-[ PressAnyKey delay char;
+[ press_any_key delay char;
 	#Ifdef TARGET_GLULX;
 	#Ifndef NO_MULTIMEDIA;
 	if (Damusix.EnFade()) delay = 0;
@@ -370,44 +536,42 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 ];
 
 !!------------------------------------------------------------------------------
-!! Rutinas y definiciones requeridas para lanzar una acción por defecto sobre 
-!! un objeto tecleando sólo su nombre. Sigue la implementación propuesta en 
-!! <http://rec.arts.int-fiction.narkive.com/Cz9j184N/inform-6-parser-question>
-!! con modificaciones para que únicamente se intente lanzar la acción sobre 
-!! objetos que realmente existen y están presentes dentro del foco del jugador. 
-!! De otra forma, siempre se intentaría lanzar la acción ##DefaultAction, aún 
-!! cuando la intención del jugador no fuese minupular un objeto sino utilizar 
-!! una acción que no está definida.
+!! 
 !!------------------------------------------------------------------------------
-[ UnknownVerb word obj;
-	objectloop(obj) {
-		if (TestScope(obj, player)) {
-			if ((WordInProperty(word, obj, name))
-				|| (WordInProperty(word, obj, name_m))
-				|| (WordInProperty(word, obj, name_f))
-				|| (WordInProperty(word, obj, name_mp))
-				|| (WordInProperty(word, obj, name_fp))) {
-				verb_wordnum = 0;
-				return 'no.verb';
-			}
-		}
-	}
-	return false;
+Constant NAME_BUFFER_STREAM_ID = 666;	! Cualquier stream libre.
+Constant NAME_BUFFER_SIZE = 256;		! Ajustar el tamaño máximo.
+Array name_buffer --> NAME_BUFFER_SIZE;
+
+[ get_name_buffer obj
+	old_stream;
+	#Ifdef TARGET_GLULX;
+	!! Se cambia el flujo de salida a un array de memoria:
+	old_stream = glk_stream_get_current();
+	glk_stream_set_current(glk_stream_open_memory(name_buffer + WORDSIZE, 
+		NAME_BUFFER_SIZE, filemode_Write, NAME_BUFFER_STREAM_ID));
+	!! Se escribe en el array:
+	print (name) obj;
+	!! Se vuelve al flujo de salida original:
+	glk_stream_close(glk_stream_get_current(), gg_arguments);
+	glk_stream_set_current(old_stream);
+	name_buffer-->0 = gg_arguments-->1;
+	#Endif; ! TARGET_GLULX;
 ];
 
-[ PrintVerb word;
-	if (word == 'no.verb') {
-		print "hacer algo con";
-		return true;
-	}
-	return false;
+[ print_name_buffer
+	tmp len;
+	#Ifdef TARGET_GLULX;
+	len = name_buffer-->0;
+	tmp = name_buffer + WORDSIZE;
+	glk_put_buffer(tmp, len);
+	#Endif; ! TARGET_GLULX;
 ];
 
 
 !!==============================================================================
 !!	Gramática estándar y extendida
 !!------------------------------------------------------------------------------
-!!	Acciones añadidas:
+!!	Acciones añadidas o reempazadas:
 !!	 *	##Audio, ##AudioOn, ##AudioOff
 !!	 *	##CloseX
 !!	 *	##DefaultAction
@@ -419,6 +583,7 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 !!	 *	##OpenX
 !!	 *	##RemarkableObjects
 !!	 *	##TalkOn, ##TalkTo
+!!	 *	##Teleport
 !!	 *	##TopicInventory
 !!	 *	##Wear
 !!	 *	##WearX
@@ -485,16 +650,12 @@ Extend	only 'corre' replace
 !!------------------------------------------------------------------------------
 !! ##DefaultAction
 !!------------------------------------------------------------------------------
-Verb 'no.verb' * noun -> DefaultAction;
+
+Verb 'no.verb'
+	* noun							-> DefaultAction
+;
 
 [ DefaultActionSub;
-	if (noun has described) {
-		if (noun has openable && noun has open) <<Close noun>>;
-		if (noun has openable && noun hasnt open) <<Open noun>>;
-		if (noun has switchable && noun has on) <<SwitchOff noun>>;
-		if (noun has switchable && noun hasnt on) <<SwitchOn noun>>;
-		if (noun has clothing && noun hasnt worn) <<Wear noun>>;
-	}
 	<<Examine noun>>;
 ];
 
@@ -747,6 +908,44 @@ Verb	'conversa' 'platica'
 			print "él";
 		".";
 	}
+];
+
+!!------------------------------------------------------------------------------
+!! ##Teleport
+!!------------------------------------------------------------------------------
+
+[ TeleportScope obj adjacent_location;
+	switch (scope_stage) {
+		1:	return false;
+		2:	objectloop (obj in Compass) {
+				adjacent_location = real_location.(obj.door_dir);
+				if (adjacent_location ~= 0)
+					PlaceInScope(adjacent_location);
+			}
+			return true;
+		3:	print_ret (parser) "No puedes llegar hasta ahí desde donde estás en 
+			estos momentos.";
+	}
+];
+
+Extend 've' last
+	* scope=TeleportScope			-> Teleport
+	* 'a//' scope=TeleportScope		-> Teleport
+	* 'hacia' scope=TeleportScope	-> Teleport
+;
+
+Extend 'entra' last
+	* scope=TeleportScope			-> Teleport
+	* 'a//' scope=TeleportScope		-> Teleport
+	* 'en' scope=TeleportScope		-> Teleport
+;
+
+Verb 'teleport.verb'
+	* scope=TeleportScope			-> Teleport
+;
+
+[ TeleportSub;
+	PlayerTo(noun, 2);
 ];
 
 !!------------------------------------------------------------------------------

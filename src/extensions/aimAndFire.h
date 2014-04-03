@@ -64,7 +64,6 @@
 !!
 !!------------------------------------------------------------------------------
 System_file;
-Message "Incluyendo sistema de apuntado y disparo [aimAndFire 4.0]";
 
 !! Descomentar para obtener información de depuración:
 !Constant DEBUG_AIMANDFIRE;

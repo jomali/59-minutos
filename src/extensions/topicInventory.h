@@ -13,18 +13,20 @@
 !!	Language:		ES (Castellano)
 !!	System:			Inform-INFSP 6
 !!	Platform:		Z-Machine / Glulx
-!!	Version:		0.2
-!!	Released:		2014/03/20
+!!	Version:		2.0
+!!	Released:		2014/04/03
 !!
 !!------------------------------------------------------------------------------
 !!
 !!	# HISTORIAL DE VERSIONES
 !!
-!!	0.2: 2014/02/10	Versión preliminar de la versión 2.0. Mejora la gestión del 
-!!					cambio de distintas conversaciones y añade temas con 
-!!					presencia temporizada, temas relacionados (análogos a los 
-!!					subtopics, pero a la inversa; se eliminan al eliminar un 
-!!					tema), y otras pequeñas modificaciones.
+!!	2.0: 2014/04/03	Mejora la gestión del cambio de distintas conversaciones y 
+!!					añade temas con presencia temporizada, temas relacionados 
+!!					(análogos a los subtopics, pero a la inversa; se eliminan 
+!!					al eliminar un tema), y otras pequeñas modificaciones. 
+!!					Envuelve la rutina *CompareWord(num_word_prompt, dictword)* 
+!!					entre #Ifdefs; para evitar que se incluya si ya se ha 
+!!					definido previamente en algún archivo externo.
 !!	1.8: 2014/02/05	Cambiado el nombre de la clase *ConversationEntry* por 
 !!					*ConversationTopic* y otras pequeñas correcciones.
 !!	1.7: 2014/01/29	Cambiados los nombres de las clases y pequeñas correcciones.
@@ -165,9 +167,6 @@ System_file;
 !! Descomentar para obtener información de depuración:
 !Constant DEBUG_TOPICINVENTORY;
 
-!! Vector para guardar palabras temporalmente:
-Array tmp_text -> 64;
-
 !! Estilo y textos por defecto de la extensión:
 Default CONVERSATION_STYLE	1; ! (0-3)
 Default CONVERSATION_PREFIX	"(";
@@ -180,27 +179,9 @@ Default CONVERSATION_NO_MSG	"No hay temas que tratar";
 !! Objeto de apoyo para reordenar los temas de una conversación:
 Object	TopicBag "(Topic Bag)";
 
-!!==============================================================================
-!!	Funciones de depuración
-!!------------------------------------------------------------------------------
 
-#Ifdef DEBUG_TOPICINVENTORY;
-
-!! Función para pintar un String Array
-[ PrintStringArray the_array i;
-	print "(", the_array-->0, ")";
-	for (i = WORDSIZE : i < (the_array-->0) + WORDSIZE : i++) 
-		print (char) the_array->i;
-];
-
-!! Función para pintar una palabra del Prompt de entrada del jugador
-[ PrintPromptWord num_word dir i;
-	dir = WordAddress(num_word);
-	for (i = 0 : i < WordLength(num_word) : i++)
-		print (char) dir->i;
-];
-
-#Endif; ! DEBUG_TOPICINVENTORY;
+#Ifndef COMPARE_WORD; ! No se hace nada si ya se ha incluido
+Constant COMPARE_WORD;
 
 !!==============================================================================
 !!	Compara una palabra de la entrada del usuario con una de las palabras de 
@@ -212,13 +193,16 @@ Object	TopicBag "(Topic Bag)";
 !!	Se retorna 1 si las palabras son iguales, o 0 si son diferentes
 !!------------------------------------------------------------------------------
 
+!! Vector para guardar palabras temporalmente:
+Array tmp_text -> 64;
+
 [ CompareWord num_word_prompt dictword i len;
 
 	!! A) Se vuelca la palabra de diccionario a un array:
 
 	#Ifdef TARGET_ZCODE;
 	@output_stream 3 tmp_text;
-	print (address)dictword;
+	print (address) dictword;
 	@output_stream -3;
 	#Ifnot;	! TARGET_GLULX;
 	tmp_text->(WORDSIZE-1) = PrintAnyToArray(tmp_text+WORDSIZE, 60, dictword);
@@ -260,6 +244,30 @@ Object	TopicBag "(Topic Bag)";
 	!! Las palabras son iguales:
 	return 1;
 ];
+
+!!==============================================================================
+!!	Funciones de depuración
+!!------------------------------------------------------------------------------
+
+#Ifdef DEBUG_TOPICINVENTORY;
+
+!! Función para pintar un String Array
+[ PrintStringArray the_array i;
+	print "(", the_array-->0, ")";
+	for (i = WORDSIZE : i < (the_array-->0) + WORDSIZE : i++) 
+		print (char) the_array->i;
+];
+
+!! Función para pintar una palabra del Prompt de entrada del jugador
+[ PrintPromptWord num_word dir i;
+	dir = WordAddress(num_word);
+	for (i = 0 : i < WordLength(num_word) : i++)
+		print (char) dir->i;
+];
+
+#Endif; ! DEBUG_TOPICINVENTORY;
+
+#Endif; ! COMPARE_WORD;
 
 !!==============================================================================
 !!	Representa un tema sobre el que se puede hablar en una conversación.
@@ -501,7 +509,7 @@ Class	Conversation
 !!		*show_topic_inventory(flag)* de la conversación activa para imprimir el 
 !!		inventario de temas.
 !!
-!!	 *	try() - Función principal del gestor. Comprueba si la entrada de 
+!!	 *	run() - Función principal del gestor. Comprueba si la entrada de 
 !!		usuario se refiere a alguno de los temas disponibles en la conversación 
 !!		activa  y lanza la acción adecuada para tratarlo si es así. Debe 
 !!		invocarse desde el punto de entrada *BeforeParsing()*.

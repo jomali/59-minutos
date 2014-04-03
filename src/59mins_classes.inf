@@ -140,11 +140,6 @@ Class	Item
 				5:	"que hubieses visto antes.";
 				6:	"que hubiese visto antes.";
 			}
-		],
-		before [;
-			DefaultAction:
-				if ((self has described) && (parent(self) ~= player))
-					<<Take self>>;
 		];
 
 !!------------------------------------------------------------------------------
@@ -473,7 +468,8 @@ Class	TextSequence
 					else if (metaclass(self.&description-->i) == Routine)
 						indirect(self.&description-->i);
 					else break;
-					if ((self hasnt general) && ~~(flag)) flag = PressAnyKey();
+					if ((self hasnt general) && ~~(flag))
+						flag = press_any_key();
 				}
 			}
 		],

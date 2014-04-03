@@ -307,7 +307,7 @@ Default GRAMMATICAL_INFLECTION 2;
 		}
 
 !! TODO - Probar acción
-	Enter: ! [infsp] GoIn (Meterse) se cambio por Enter.
+	Enter: ! [infsp] GoIn (Meterse) se cambió por Enter.
 		!! CUIDADO. La acción Meterse se genera en muy diversas
 		!! circunstancias: VETE HACIA EL PUENTE, VETE AL PUENTE, VETE POR
 		!! EL PUENTE, PASA POR EL PUENTE, ENTRA EN EL PUENTE, ENTRA AL
@@ -349,9 +349,12 @@ Default GRAMMATICAL_INFLECTION 2;
 		switch (n) {
 			!! -- "Pero si ya estás sobre/en ", (the) x1, ".";
 			1:	switch (GRAMMATICAL_INFLECTION) {
-				1,4:	print "Ya estaba ";
-				2,5:	print "Ya estabas ";
-				3,6:	print "Ya estaba ";
+				1:	print "Ya estoy ";
+				2:	print "Ya estás ";
+				3:	print "Ya está ";
+				4:	print "Ya estaba ";
+				5:	print "Ya estabas ";
+				6:	print "Ya estaba ";
 				}
 				if (x1 has supporter) print "sobre "; else print "en ";
 				print_ret (the) x1, ".";

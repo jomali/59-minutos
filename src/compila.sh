@@ -67,7 +67,7 @@ elif [ "$op" = "2" ]; then
 	$bresc_location/bres $gameFile
 	inform +include_path=,/usr/share/inform/include/,/usr/share/inform/module/,/usr/share/inform/6.31/include/,/usr/share/inform/6.31/module/,/usr/share/inform/6.31/include/gwindows/,/usr/share/inform/6.31/include/other/ -G $gameFile.inf
 	$bresc_location/bresc $gameFile
-	mv $gameFile.blb ../$gameFile\_em.blb
+	mv $gameFile.blb ../$gameFile.blb
 	rm $gameFile.ulx
 
 	echo " "
@@ -79,7 +79,7 @@ elif [ "$op" = "2" ]; then
 	if [ "$key" = "Q" ]; then exit 0;
 	fi
 	cd .. 
-	$glulx_interpreter $gameFile\_em.blb
+	$glulx_interpreter $gameFile.blb
 
 #===============================================================================
 # Compilar el relato para MÁQUINA-Z

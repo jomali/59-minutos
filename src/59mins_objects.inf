@@ -43,15 +43,17 @@
 !!------------------------------------------------------------------------------
 
 Room	obj_LIMBO "En algún lugar"
- with	name	'limbo' 'lugar' 'sueno' 'vacio',
+ with	name_m	'limbo' 'lugar' 'sueno' 'vacio',
+		gender	G_MASCULINO,
 		description [; return O__M(self, 1); ],
-		clarification 0;
+		clarification 0,
+ has	male;
 
 !!	 *	FIXME - adjectives
 Atrezzo	"paredes" 
  with	found_in
-			obj_BANNO obj_COCINA obj_DORMITORIO obj_PASILLO obj_RECIBIDOR 
-			obj_SALON obj_TALLER obj_TERRAZA,
+			obj_BANNO obj_COCINA obj_DORMITORIO obj_HABITACION obj_PASILLO 
+			obj_RECIBIDOR obj_SALON obj_TALLER obj_TERRAZA,
 		name_m	'muro',
 		name_mp	'muros',
 		name_f	'pared' 'esquina',
@@ -80,28 +82,20 @@ Atrezzo	"paredes"
 		], 
  has	female pluralname;
 
-NPC		obj_Silvia "Silvia" obj_LIMBO
+Object	obj_Silvia "Silvia" obj_LIMBO
  with	name_f	'silvia',
 		name_m	'personaje',
 		gender	G_FEMENINO,
 		description [; return L__M(##Miscellany, 19); ],
- has	female proper;
+ has	animate female proper;
 
-!!	 *	FIXME - nombres
-!!	 *	FIXME - adjectives
-!!	 *	FIXME - description
-!!	 *	FIXME - rutinas before y after
 Item	obj_ropa "ropa" obj_Silvia
  class	Receptacle
  with	name_f	'ropa',
 		gender	G_FEMENINO,
 		article	 "su",
 		adjectives 'brown' 'olive' 'green',
-		description [;
-			"A tasteful ensemble from Ann Taylor in muted browns and olive 
-			greens (she has been an automn person since she was old enough to 
-			match her own socks).";
-		],
+		description [; return O__M(self, 1); ],
 		react_before [;
 			DisrobeX:
 				if (noun == nothing)
@@ -124,11 +118,12 @@ Item	obj_ropa "ropa" obj_Silvia
 !!------------------------------------------------------------------------------
 
 Room	obj_COCINA "Cocina"
- with	name	'cocina',
-		description
-"Grande y espaciosa, como el resto de habitaciones de la casa, con ventanas a la playa. Tiene una amplia encimera en la que hay un aparato radiocasete y una cafetera italiana. Hay también una nevera (con algo de comida dentro), y un mechero por alguna parte. Tiene salidas al salón y a una terraza trasera, con acceso directo a la playa.",
-		 e_to	obj_SALON,
-		 n_to	obj_TERRAZA;
+ with	name_f	'cocina',
+		gender	G_FEMENINO,
+		description [; return O__M(self, 1); ],
+		e_to	obj_SALON,
+		n_to	obj_TERRAZA,
+ has	female;
 
 
 !!==============================================================================
@@ -136,14 +131,16 @@ Room	obj_COCINA "Cocina"
 !!------------------------------------------------------------------------------
 
 Room	obj_TERRAZA "Terraza"
- with	name	'terraza' 'patio',
-		description
-"Una terraza trasera con acceso a la casa, a un pequeño taller (una construcción anexa a la casa para guardar trastos y herramientas) y a la playa (a través de una pequeña pasarela cerrada con una portilla). Hay una mesa y algunas sillas de exterior, deterioradas ya por el tiempo y el salitre, un aro de baloncesto sin red colgado a la fachada de la casa y un caballete para lienzos a un lado (de su padre).",
-		 n_to	obj_PLAYA,
-		 s_to	obj_COCINA,
-		 w_to	obj_TALLER;
+ with	name_f	'terraza',
+		name_m	'patio',
+		gender	G_FEMENINO,
+		description [; return O__M(self, 1); ],
+		n_to	obj_PLAYA,
+		s_to	obj_COCINA,
+		w_to	obj_TALLER,
+ has	female;
 
-Atrezzo	"aro de baloncesto" obj_TERRAZA
+Atrezzo	obj_aro "aro de baloncesto" obj_TERRAZA
  with	name_f	'canasta',
 		name_m	'aro',
 		gender	G_MASCULINO,
@@ -155,18 +152,40 @@ Atrezzo	"aro de baloncesto" obj_TERRAZA
 			Use:
 				if (~~IndirectlyContains(player, obj_pelotaBaloncesto))
 					"No puede jugar sin un balón.";
-				print "Se coloca frente a la canasta y se prepara para 
-				lanzar un tiro libre...^";
-				print "Velocidad: ", self.speed, "^";
-				switch (self.free_throw()) {
-				0:	if (self.speed > 2) self.speed = self.speed -2;
-					"^¡Encesta!";
-				1:	self.speed = self.start_speed;
-					"^La pelota da en el aro y sale rebotada sin entrar.";
-				default:
-					self.speed = self.start_speed;
-					"^Falla el tiro.";
+				switch (self.counter) {
+					0:
+						print "Se coloca justo bajo el aro y se prepara para 
+						lanzar...^";
+					1:
+						print "Se coloca a un paso del aro y se prepara para 
+						lanzar...^";
+					7:
+						print "Nunca ha sido capaz de meterla desde tan lejos. 
+						Se prepara para tirar desde ", (number) self.counter, 
+						" pasos de distancia del aro...^";
+					default:
+						print "Se coloca a ", (number) self.counter, " pasos 
+						de la canasta y se prepara para lanzar un tiro 
+						libre...^";
 				}
+				print "Vel: ", self.speed;
+				press_any_key();
+				switch (self.free_throw()) {
+					0:
+						if (self.speed > 2) {
+							self.speed = self.speed - 2;
+							self.counter++;
+						}
+						"^^¡Encesta!";
+					1:
+						print "^^La pelota da en el aro y sale rebotada sin 
+						entrar.^";
+					default:
+						print "^^Falla el tiro.^";
+				}
+				self.speed = self.start_speed;
+				self.counter = 0;
+				return true;
 		],
  private
 		free_throw [ x;
@@ -177,6 +196,7 @@ Atrezzo	"aro de baloncesto" obj_TERRAZA
 			if (x < 8) return 1;
 			return 2;
 		],
+		counter 0,
 		speed 20,
 		start_speed 20,
  has	male;
@@ -187,10 +207,12 @@ Atrezzo	"aro de baloncesto" obj_TERRAZA
 !!------------------------------------------------------------------------------
 
 Room	obj_TALLER "Pequeño taller"
- with	name	'taller',
-		description
-"Poco más que un trastero lleno de herramientas. Todo lo que hay aquí dentro eran cosas de su padre, y está prácticamente tal y como lo dejó él antes de morir: se puede aprovechar para hablar de él y de la relación que tenían. Hay pinturas y disolventes y algunos lienzos (al padre le gustaba pintar). Si el jugador rebusca entre los trastos, puede encontrar también un rifle de caza escondido. Nunca hubiese imaginado que su padre pudiese tener un arma.",
-		e_to	obj_TERRAZA;
+ with	name_m	'taller',
+		gender	G_MASCULINO,
+		adjectives 'pequeno',
+		description [; return O__M(self, 1); ],
+		e_to	obj_TERRAZA,
+ has	male;
 
 
 !!==============================================================================
@@ -198,10 +220,11 @@ Room	obj_TALLER "Pequeño taller"
 !!------------------------------------------------------------------------------
 
 Room	obj_PLAYA "Playa"
- with	name	'playa',
-		description
-"Una playa completamente desierta. Para bajar desde la terraza se quita antes las zapatillas. Nunca le ha gustado ir a la playa en la ciudad, saturada siempre de gente tostándose al sol. Pero esta si. Es agradable sentir la arena entre los pies y el penetrante olor del mar.",
-		s_to	obj_TERRAZA;
+ with	name_f	'playa',
+		gender	G_FEMENINO,
+		description [; return O__M(self, 1); ],
+		s_to	obj_TERRAZA,
+ has	female;
 
 
 !!==============================================================================
@@ -209,11 +232,13 @@ Room	obj_PLAYA "Playa"
 !!------------------------------------------------------------------------------
 
 Room	obj_SALON "Salón"
- with	name	'salon' 'sala' 'comedor',
-		description
-"La habitación más grande de la casa. Es un lugar agradable, con un par de estanterías repletas de libros, un par de sofás y varios sillones, un mueble bar ---dentro del que hay solamente una botella de güisqui casi vacía y un puñado de trofeos de certámenes de fotografía y pintura locales, cosa de su padre--- y un antiguo escritorio de madera oscura. Hay también un televisor con reproductor de DVD y, sobre la mesa, su bolso, en el que hay un montón de exámenes sin corregir de sus alumnos de primero de bachillerato de literatura. Está conectada con la cocina y el recibidor.",
+ with	name_f	'sala',
+		name_m	'salon' 'comedor',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
 		s_to	obj_RECIBIDOR,
-		w_to	obj_COCINA;
+		w_to	obj_COCINA,
+ has	male;
 
 
 !!==============================================================================
@@ -221,11 +246,12 @@ Room	obj_SALON "Salón"
 !!------------------------------------------------------------------------------
 
 Room	obj_RECIBIDOR "Recibidor"
- with	name	'recibidor',
-		description
-"El mueble más destacado es una cómoda junto a la puerta principal de la casa. Sobre ella hay un teléfono, y dentro de uno de los cajones se puede encontrar una cajetilla de tabaco, de su padre. Desde el recibidor se puede ir al salón o subir por las escaleras hacia el segundo piso.",
+ with	name_m	'recibidor',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
 		n_to	obj_SALON,
-		u_to	obj_PASILLO;
+		u_to	obj_PASILLO,
+ has	male;
 
 
 !!==============================================================================
@@ -233,24 +259,28 @@ Room	obj_RECIBIDOR "Recibidor"
 !!------------------------------------------------------------------------------
 
 Room	obj_PASILLO "Pasillo de la segunda planta"
- with	name	'pasillo',
-		description
-"Conecta el piso de abajo a través de las escaleras con una habitación multiusos al norte, el dormitorio principal al este, y un baño al noreste. Colgadas en la pared hay viejas fotos enmarcadas, algunas de cuando era niña, con sus padres.",
+ with	name_m	'pasillo',
+		gender	G_MASCULINO,
+		adjectives 'segunda' 'planta',
+		description [; return O__M(self, 1); ],
 		d_to	obj_RECIBIDOR,
 		e_to	obj_DORMITORIO,
 		n_to	obj_HABITACION,
-		ne_to	obj_BANNO;
+		ne_to	obj_BANNO,
+ has	male;
 
 
 !!==============================================================================
 !!	HABITACION
 !!------------------------------------------------------------------------------
 
-Room	obj_HABITACION "Habitación"
- with	name	'habitacion',
-		description
-"Su viejo dormitorio. Cuando dejó de vivir aquí, su padre lo cambió. Ahora hay una bicicleta estática en vez de una cama, un gran escritorio y un armario. Tiene una puerta al pasillo al sur.",
-		s_to	obj_PASILLO;
+Room	obj_HABITACION "Habitación multiusos"
+ with	name_f	'habitacion',
+		gender	G_FEMENINO,
+		adjectives 'multiusos',
+		description [; return O__M(self, 1); ],
+		s_to	obj_PASILLO,
+ has	female;
 
 Item	obj_pelotaBaloncesto "pelota de baloncesto" obj_HABITACION
  with	name_f	'pelota',
@@ -265,11 +295,13 @@ Item	obj_pelotaBaloncesto "pelota de baloncesto" obj_HABITACION
 !!------------------------------------------------------------------------------
 
 Room	obj_DORMITORIO "Dormitorio"
- with	name	'dormitorio' 'habitacion',
-		description
-"Es el dormitorio de su padre. Estuvo recogiendo y limpiando el año anterior, unos días después de que muriese, pero no lo ha tocado mucho desde entonces. Tiene una gran cama, un armario y un reloj despertador. Comunica con el pasillo al oeste, y con un baño al norte.",
+ with	name_f	'habitacion',
+		name_m	'dormitorio',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
 		n_to	obj_BANNO,
-		w_to	obj_PASILLO;
+		w_to	obj_PASILLO,
+ has	male;
 
 
 !!==============================================================================
@@ -277,10 +309,11 @@ Room	obj_DORMITORIO "Dormitorio"
 !!------------------------------------------------------------------------------
 
 Room	obj_BANNO "Baño"
- with	name	'baño',
-		description
-"Es un pequeño baño con puertas al dormitorio y al pasillo. Tiene una bañera lo suficientemente grande como para entrar tumbado dentro, un espejo en el que Silvia podrá mirarse, y un armarito con algún producto de higiene y medicinas de su padre. Entre las medicinas hay una caja de Lexatin (vacía) y varias cajas de Diazepam.",
+ with	name_m	'bano',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
 		s_to	obj_DORMITORIO,
-		sw_to	obj_PASILLO;
+		sw_to	obj_PASILLO,
+ has	male;
 
 

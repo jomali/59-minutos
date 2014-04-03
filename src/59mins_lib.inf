@@ -212,12 +212,13 @@ Global GRAMMATICAL_INFLECTION = SECOND_PERSON_PRESENT;
 		#IfV5; style bold; #Endif;
 		print (string) Story;
 		#IfV5; style roman; #Endif;
+		print (emph) " - ed. reducida Z";
 		#Ifnot; ! TARGET_GLULX;
 		glk($0086, 3); ! set header style
 		print (string) Story;
 		glk($0086, 0); ! set normal style
-		#Ifndef NO_MULTIMEDIA;
-		print (emph) " - ed. multimedia";
+		#Ifdef NO_MULTIMEDIA;
+		print (emph) " - ed. reducida G";
 		#Endif; ! NO_MULTIMEDIA;
 		#Endif; ! TARGET_
 		new_line;
@@ -594,9 +595,10 @@ Attribute described; ! Indica si un objeto ha sido descrito al jugador
 !! y los valores "madera" y "caoba" en el campo "adjectives", ParseNoun 
 !! aceptaría las cadenas "caja", "caja de madera", "caja de madera de caoba", 
 !! "madera", "caoba",... para referirse al objeto. Con la rutina modificada se 
-!! altera el comportamiento de ParseNoun para que las cadenas "madera" y 
-!! "caoba" no sean cadenas válidas, de manera que sea precisa la existencia de 
-!! al menos una coincidencia con los valores de los campos "name" del objeto.
+!! permite hacer parseado estricto de forma que las cadenas "madera" y "caoba" 
+!! no sean cadenas válidas. Es decir, de manera que sea precisa la existencia 
+!! de al menos una coincidencia con los valores de los campos "name" del 
+!! objeto.
 !!
 !! [Sobreescribe a SpanishG.h]
 !!------------------------------------------------------------------------------
@@ -724,13 +726,16 @@ Attribute described; ! Indica si un objeto ha sido descrito al jugador
 
 	! Si el matcheo fue por adjectives, entonces gen = 5 y "nombresusado" no 
 	! se han puesto
-	if (gen<5) give obj nombreusado;
+	if (gen < 5) give obj nombreusado;
 
 	#ifdef DEBUG;
 	debug_flag=aux;
 	#endif;
 
-	if (m==0) return 0;
+	! En caso de que estemos usando parseado estricto, despreciamos el objeto 
+	! si no ha sido referenciado al menos por uno de sus nombres
+	if (m == 0) return 0;
+
 	return n; ! Se retorna número de palabras reconocidas
 ];
 

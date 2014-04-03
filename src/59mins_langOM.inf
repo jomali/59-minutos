@@ -17,8 +17,6 @@
 !!
 !!------------------------------------------------------------------------------
 !!
-!!	Copyright (c) 2014, J. Francisco Martín
-!!
 !!	Este archivo forma parte de 59 MINUTOS.
 !!
 !!	59 MINUTOS es software libre: usted puede redistribuirlo y/o
@@ -35,6 +33,8 @@
 !!	junto a 59 MINUTOS. En caso contrario, consulte
 !!	<http://www.gnu.org/licenses/>.
 !!
+!!	Copyright (c) 2014, J. Francisco Martín
+!!
 !!------------------------------------------------------------------------------
 
 [ LanguageOM obj n x1;
@@ -43,12 +43,80 @@
 	switch (obj) {
 
 !!------------------------------------------------------------------------------
+obj_BANNO: switch (n) {
+1:	! description
+"Es un pequeño baño con puertas al ", (link) obj_DORMITORIO, "dormitorio", (link) 0, " y al ", (link) obj_PASILLO, "pasillo", (link) 0, ". Tiene una bañera lo suficientemente grande como para entrar tumbado dentro, un espejo en el que Silvia podrá mirarse, y un armarito con algún producto de higiene y medicinas de su padre. Entre las medicinas hay una caja de Lexatin (vacía) y varias cajas de Diazepam.";
+}
+
+!!------------------------------------------------------------------------------
+obj_COCINA: switch (n) {
+1:	! description
+"Grande y espaciosa, como el resto de habitaciones de la casa, con ventanas a la playa. Tiene una amplia encimera en la que hay un aparato radiocasete y una cafetera italiana. Hay también una nevera (con algo de comida dentro), y un mechero por alguna parte. Tiene salidas al ", (link) obj_SALON, "salón", (link) 0, " y a una ", (link) obj_TERRAZA, "terraza", (link) 0, " trasera, con acceso directo a la playa.";
+}
+
+!!------------------------------------------------------------------------------
+obj_DORMITORIO: switch (n) {
+1:	! description
+"Es el dormitorio de su padre. Estuvo recogiendo y limpiando el año anterior, unos días después de que muriese, pero no lo ha tocado mucho desde entonces. Tiene una gran cama, un armario y un reloj despertador. Comunica con el ", (link) obj_PASILLO, "pasillo", (link) 0, " y el ", (link) obj_BANNO, "baño", (link) 0, ".";
+}
+
+!!------------------------------------------------------------------------------
+obj_HABITACION: switch (n) {
+1:	! description
+"Su viejo dormitorio. Cuando dejó de vivir aquí, su padre lo cambió. Ahora hay una bicicleta estática en vez de una cama, un gran escritorio y un armario. Tiene una puerta al ", (link) obj_PASILLO, "pasillo", (link) 0, ".";
+}
+
+!!------------------------------------------------------------------------------
 obj_LIMBO: switch (n) {
 1:	! description
 print "Más allá de la barrera casi insuperable que separa la realidad de todo lo demás. Un lugar etéreo, donde la vida, la materia y la vitalidad no son necesariamente constantes; un lugar donde el tiempo y el espacio no existen tal y como los capta nuestro ser despierto..."; 
 if (obj hasnt visited) print (emph) " ¿Qué? ¿Cómo?... ¿cómo he llegado aquí?";
 new_line;
 return true;
+}
+
+!!------------------------------------------------------------------------------
+obj_PASILLO: switch (n) {
+1:	! description
+"Conecta el ", (link) obj_RECIBIDOR, "piso de abajo", (link) 0, " a través de las escaleras con una ", (link) obj_HABITACION, "habitación", (link) 0, " multiusos, el ", (link) obj_DORMITORIO, "dormitorio", (link) 0, " principal y un ", (link) obj_BANNO, "baño", (link) 0, ". Colgadas en la pared hay viejas fotos enmarcadas, algunas de cuando era niña, con sus padres.";
+}
+
+!!------------------------------------------------------------------------------
+obj_PLAYA: switch (n) {
+1:	! description
+"Una playa completamente desierta. Para bajar desde la ", (link) obj_TERRAZA, "terraza", (link) 0, " se quita antes las zapatillas. Nunca le ha gustado ir a la playa en la ciudad, saturada siempre de gente tostándose al sol. Pero esta si. Es agradable sentir la arena entre los pies y el penetrante olor del mar.";
+}
+
+!!------------------------------------------------------------------------------
+obj_RECIBIDOR: switch (n) {
+1:	! description
+"El mueble más destacado es una cómoda junto a la puerta principal de la casa. Sobre ella hay un teléfono, y dentro de uno de los cajones se puede encontrar una cajetilla de tabaco, de su padre. Desde el recibidor se puede ir al ", (link) obj_SALON, "salón", (link) 0, " o subir por las escaleras hacia el ", (link) obj_PASILLO, "segundo piso", (link) 0, ".";
+}
+
+!!------------------------------------------------------------------------------
+obj_ropa: switch (n) {
+1:	! description
+"A tasteful ensemble from Ann Taylor in muted browns and olive greens (she has been an automn person since she was old enough to match her own socks).";
+}
+
+!!------------------------------------------------------------------------------
+obj_SALON: switch (n) {
+1:	! description
+"La habitación más grande de la casa. Es un lugar agradable, con un par de estanterías repletas de libros, un par de sofás y varios sillones, un mueble bar ---dentro del que hay solamente una botella de güisqui casi vacía y un puñado de trofeos de certámenes de fotografía y pintura locales, cosa de su padre--- y un antiguo escritorio de madera oscura. Hay también un televisor con reproductor de DVD y, sobre la mesa, su bolso, en el que hay un montón de exámenes sin corregir de sus alumnos de primero de bachillerato de literatura. Está conectada con la ", (link) obj_COCINA, "cocina", (link) 0, " y el ", (link) obj_RECIBIDOR, "recibidor", (link) 0, ".";
+}
+
+!!------------------------------------------------------------------------------
+obj_TALLER: switch (n) {
+1:	! description
+"Poco más que un trastero lleno de herramientas. Todo lo que hay aquí dentro eran cosas de su padre, y está prácticamente tal y como lo dejó él antes de morir: se puede aprovechar para hablar de él y de la relación que tenían. Hay pinturas y disolventes y algunos lienzos (al padre le gustaba pintar). Si el jugador rebusca entre los trastos, puede encontrar también un rifle de caza escondido. Nunca hubiese imaginado que su padre pudiese tener un arma.
+^^
+Tiene una puerta a la ", (link) obj_TERRAZA, "terraza", (link) 0, ".";
+}
+
+!!------------------------------------------------------------------------------
+obj_TERRAZA: switch (n) {
+1:	! description
+"Una terraza trasera con acceso a la ", (link) obj_COCINA, "casa", (link) 0, ", a un pequeño ", (link) obj_TALLER, "taller", (link) 0, " (una construcción anexa a la casa para guardar trastos y herramientas) y a la ", (link) obj_PLAYA, "playa", (link) 0, " (a través de una pequeña pasarela cerrada con una portilla). Hay una mesa y algunas sillas de exterior, deterioradas ya por el tiempo y el salitre, un ", (link) obj_aro, "aro", (link) 0, " de baloncesto sin red colgado a la fachada de la casa y un caballete para lienzos a un lado (de su padre).";
 }
 
 	}
