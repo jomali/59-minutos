@@ -392,7 +392,7 @@ Object	AimingManager "(Aiming Manager)"
 	print "** AimAndFire: apuntado y disparo sobre Máquina-Z. **^";
 	#Endif; ! DEBUG_AIMANDFIRE;
 	!! Establece el resultado de la operación en Máquina-Z:
-	result = -2;
+	flag = result = -2;
 
 	#Ifnot; ! TARGET_GLULX;
 

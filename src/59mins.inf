@@ -21,6 +21,12 @@
 !!
 !!------------------------------------------------------------------------------
 !!
+!!	# HISTORIAL DE VERSIONES
+!!
+!!	0.1: 2014/03/05	Inicio del desarrollo.
+!!
+!!------------------------------------------------------------------------------
+!!
 !!	Este archivo forma parte de 59 MINUTOS.
 !!
 !!	59 MINUTOS es software libre: usted puede redistribuirlo y/o
@@ -40,10 +46,32 @@
 !!	Copyright (c) 2014, J. Francisco Martín
 !!
 !!------------------------------------------------------------------------------
+!!
+!!	# TABLA DE CONTENIDOS:
+!!
+!!	1.	Constantes y variables globales del relato.
+!!	2.	Reemplazos de rutinas utilizadas por la librería Inform.
+!!	3.	Librerías y extensiones (Parte 1 de 2).
+!!	4.	Puntos de entrada para Glk (sólo en Glulx).
+!!	5.	Librerías y extensiones (Parte 2 de 2).
+!!	6.	Puntos de entrada.
+!!	7.	Otras rutinas.
+!!	8.	Gramática estándar y extendida.
+!!	9.	Definición de atributos, clases y objetos.
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	# TODO:
+!!
+!!	 *	En lugar de establecer un límite al máximo número de objetos que puede 
+!!		llevar la protagonista en mano, sería interesante considerar el 
+!!		inventario como un contenedor más, con límites de peso, tamaño,...
+!!
+!!------------------------------------------------------------------------------
 
 
 !!==============================================================================
-!!	Constantes y variables globales del relato
+!!	1.	Constantes y variables globales del relato.
 !!------------------------------------------------------------------------------
 
 Constant Story "59 MINUTOS";
@@ -67,11 +95,6 @@ Release 0; Serial "140311";		! 1.0 - 2014/03/11
 
 !Constant NO_MULTIMEDIA;		! No se incluyen contenidos multimedia
 
-!! TODO - en lugar de establecer un límite al máximo número de objetos que 
-!! puede llevar el personaje en mano, sería interesante considerar el inv. del 
-!! personaje como un contenedor más, con límites de peso, tamaño,... ¿Creando 
-!! un objeto personaje e invocando a la rutina de cambio de personaje?
-
 Constant MANUAL_PRONOUNS;		! Los pronoms. refieren a objetos ya mencionados
 Constant MAX_CARRIED 2;			! Máx. objetos que se pueden llevar en mano
 Constant NO_PLACES;				! Acciones LUGARES y OBJETOS desactivadas
@@ -83,11 +106,12 @@ Constant PARSER_STYLE _IST_;	! Selecciona estilo de los mensajes del parser
 Constant PARSER_PREFIX "[";		! Define texto inicial de los mens. del parser
 Constant PARSER_SUFIX "]";		! Define texto final de los mens. del parser
 
-Global hyperlink_st = _BST_;	! Selecciona estilo de los hipervínculos
+Global highlight_st = _BST_;	! Selecciona estilo de texto resaltado
+Global highlight_flag = true;	! Indica si el estilo resaltado está activado
 
 
 !!==============================================================================
-!!	Reemplazos de rutinas utilizadas por la librería Inform
+!!	2.	Reemplazos de rutinas utilizadas por la librería Inform.
 !!------------------------------------------------------------------------------
 
 Replace AttemptToTakeObject;	! Intento de transferir un objeto al jugador
@@ -107,7 +131,7 @@ Replace WearSub;				! Rutina para la acción ##Wear
 
 
 !!==============================================================================
-!!	Librerías y extensiones (Parte 1 de 2)
+!!	3.	Librerías y extensiones (Parte 1 de 2).
 !!------------------------------------------------------------------------------
 
 #Ifdef TARGET_GLULX;
@@ -121,8 +145,6 @@ Include ">59mins_lib.inf";		! Personalizaciones de la librería Inform
 Include ">59mins_langLM.inf";	! Mensajes de la librería
 Include ">59mins_langOM.inf";	! Mensajes de los objetos
 
-Include ">makinaimo.inf";
-
 #Ifdef TARGET_GLULX;
 #Ifndef NO_MULTIMEDIA;
 Include "gwincls.h";			! GWindows; Window Class Framework
@@ -131,7 +153,7 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 
 
 !!==============================================================================
-!!	Puntos de entrada para Glk (sólo en Glulx)
+!!	4.	Puntos de entrada para Glk (sólo en Glulx).
 !!------------------------------------------------------------------------------
 
 #Ifdef TARGET_GLULX;
@@ -153,7 +175,7 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 	8:	! evtype_Hyperlink   - selection of a hyperlink in a window
 		glk_request_hyperlink_event(gg_mainwin);
 		glk_cancel_line_event(gg_mainwin, 0);
-		get_name_buffer(ev-->2); ! ev--> 2 es el valor del enlace. Un obj.
+		read_name_buffer(ev-->2); ! ev--> 2 es el valor del enlace. Un obj.
 		for (i = 0 : i <= name_buffer-->0 : i++) {
 			abortres-->i = name_buffer-->i;
 		}
@@ -195,7 +217,7 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 	8:	! evtype_Hyperlink   - selection of a hyperlink in a window
 		glk_request_hyperlink_event(gg_mainwin);
 		glk_cancel_line_event(gg_mainwin, 0);
-		get_name_buffer(ev-->2); ! ev--> 2 es el valor del enlace. Un obj.
+		read_name_buffer(ev-->2); ! ev--> 2 es el valor del enlace. Un obj.
 		for (i = 0 : i <= name_buffer-->0 : i++) {
 			abortres-->i = name_buffer-->i;
 		}
@@ -209,7 +231,7 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 
 
 !!==============================================================================
-!!	Librerías y extensiones (Parte 2 de 2)
+!!	5.	Librerías y extensiones (Parte 2 de 2).
 !!------------------------------------------------------------------------------
 
 #Ifdef TARGET_GLULX;
@@ -223,6 +245,7 @@ Include ">59mins_gui.inf";		! Definición de la interfaz gráfica
 #Endif; ! TARGET_GLULX;
 
 Include "aimAndFire.h";			! Sistema de apuntado y disparo QTE
+Include "pPreprocessor.h";		! Preprocesador del analizador
 Include "receptacles.h";		! Contenedores (con capacidad limitada)
 Include "topicInventory.h";		! Sistema de conversación con inv. de temas
 Include "types.h";				! Rutinas para modificar estilo de los textos
@@ -231,7 +254,13 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 
 
 !!==============================================================================
-!!	Puntos de entrada
+!!	6. Puntos de entrada.
+!!------------------------------------------------------------------------------
+!!	 *	BeforeParsing()
+!!	 *	Initialise()
+!!	 *	InScope()
+!!	 *	PrintVerb()
+!!	 *	UnknownVerb()
 !!------------------------------------------------------------------------------
 
 !!------------------------------------------------------------------------------
@@ -243,7 +272,7 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 !! una con la otra, y puede dejar el contador de palabras en cualquier punto. 
 !! No retorna ningún valor.
 !!------------------------------------------------------------------------------
-[ BeforeParsing obj i;
+[ BeforeParsing;
 	ConversationManager.run();
 	ParsingPreprocessor.run();
 ];
@@ -292,7 +321,6 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 !! Inicializaciones del relato (en modo de depuración):
 [ InitialiseDebug;
 	#Ifdef DEBUG;
-	move obj_pelotaBaloncesto to obj_Silvia;
 	location = obj_TERRAZA;
 	#Endif; ! DEBUG;
 ];
@@ -345,8 +373,8 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 !! valor de diccionario del verbo a utilizar en lugar del verbo desconocido. Se 
 !! utiliza para contemplar las siguientes situaciones:
 !!
-!! 1) Desplazarse automáticamente a una localidad tecleando únicamente su 
-!! nombre.
+!! 1) Desplazarse automáticamente a una localidad adyacente a la localidad 
+!! actual tecleando únicamente su nombre.
 !!
 !! 2) Lanzar una acción por defecto sobre un objeto cuando se teclea únicamente 
 !! su nombre. En este caso se sigue la implementación propuesta en 
@@ -359,18 +387,22 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 !! encuentra dentro del foco del jugador para que pueda referirse a ella. Ver 
 !! rutina *InScope()*).
 !!------------------------------------------------------------------------------
-[ UnknownVerb word
-	obj adjacent_location;
+[ UnknownVerb
+	obj;
 	objectloop (obj in Compass) {
-		if (real_location.(obj.door_dir) 
-		== ParsingPreprocessor.get_selected_object()) {
+		if ((ParsingPreprocessor.get_selected_object() ~= 0) 
+		&& (real_location.(obj.door_dir) 
+		== ParsingPreprocessor.get_selected_object())) {
 			verb_wordnum = 0;
 			return 'teleport.verb';
 		}
 	}
-	if (ParsingPreprocessor.get_selected_object() ~= 0) {
-		verb_wordnum = 0;
-		return 'no.verb';
+	objectloop (obj ofclass Object) {
+		if ((TestScope(obj, player)) 
+		&& (obj == ParsingPreprocessor.get_selected_object())) {
+			verb_wordnum = 0;
+			return 'no.verb';
+		}
 	}
 
 	return false;
@@ -378,7 +410,16 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 
 
 !!==============================================================================
-!!	Otras rutinas
+!!	7. Otras rutinas.
+!!------------------------------------------------------------------------------
+!!	 *	check_interpreter()
+!!	 *	erase_window()
+!!	 *	highlight_style()
+!!	 *	horizontal_rule()
+!!	 *	link(obj)
+!!	 *	main_menu()
+!!	 *	press_any_key(delay:int)
+!!	 *	read_object_name(obj)
 !!------------------------------------------------------------------------------
 
 !!------------------------------------------------------------------------------
@@ -430,6 +471,20 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 ];
 
 !!------------------------------------------------------------------------------
+!! Inicia el estilo de texto resaltado.
+!!------------------------------------------------------------------------------
+[ highlight_style;
+	if (highlight_flag) {
+		switch (highlight_st) {
+		_RST_:	roman_style();
+		_IST_:	italic_style();
+		_BST_:	bold_style();
+		_MST_:	monospaced_style();
+		}
+	}
+];
+
+!!------------------------------------------------------------------------------
 !! Imprime una regla horizontal centrada en pantalla.
 !!------------------------------------------------------------------------------
 [ horizontal_rule;
@@ -440,44 +495,32 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 ];
 
 !!------------------------------------------------------------------------------
-!! Inicia estilo de texto de los hipervínculos.
-!!------------------------------------------------------------------------------
-[ hyperlink_style;
-	switch (hyperlink_st) {
-	_RST_:	roman_style();
-	_IST_:	italic_style();
-	_BST_:	bold_style();
-	_MST_:	monospaced_style();
-	}
-];
-
-!!------------------------------------------------------------------------------
-!! Indica el punto de inicio/fin de un hipervínculo.
+!! En Glulx: establece el punto de inicio/final de un hipervínculo relacionado 
+!! al objeto pasado como parámetro (si se trata de un objeto válido, se 
+!! establece el punto de inicio del hipervínculo, en caso contrario, el punto 
+!! final). Además, tanto en Máquina-Z como en Glulx: si el objeto tiene el 
+!! atributo *remarkable*, se inicia/finaliza el estilo de texto resaltado.
 !!------------------------------------------------------------------------------
 [ link obj;
-	#Ifdef TARGET_GLULX;
-	get_name_buffer(obj);
-!	print "*";
-!	for (obj=0 : obj < name_buffer-->0 : obj++) {
-!		print (char) name_buffer->(obj+WORDSIZE);
-!	}
-!	print "*";
-	if ((name_buffer-->0 ~= 4) || ~~(name_buffer->(0+WORDSIZE) == 'n' 
+	read_name_buffer(obj);
+
+	if ((obj ofclass Object) 
+		&& ((name_buffer-->0 ~= 4) || ~~(name_buffer->(0+WORDSIZE) == 'n' 
 		&& name_buffer->(1+WORDSIZE) == 'a' && name_buffer->(2+WORDSIZE) == 'd'
-		&& name_buffer->(3+WORDSIZE) == 'a')) {
-		hyperlink_style();
+		&& name_buffer->(3+WORDSIZE) == 'a'))) {
+		#Ifdef TARGET_GLULX;
 		glk_set_hyperlink(obj);
-!		print "*";
-!		for (obj=0 : obj < name_buffer-->0 : obj++) {
-!			print (char) name_buffer->(obj+WORDSIZE);
-!		}
-!		print "*";
+		#Endif; ! TARGET_GLULX;
+!		if (obj has remarkable)
+			highlight_style();
 	}
 	else {
-		roman_style();
+		#Ifdef TARGET_GLULX;
 		glk_set_hyperlink(0);
+		#Endif; ! TARGET_GLULX;
+		roman_style();
+		if (obj ofclass String) print (string) obj;
 	}
-	#Endif; !TARGET_GLULX;
 ];
 
 !!------------------------------------------------------------------------------
@@ -536,15 +579,23 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 ];
 
 !!------------------------------------------------------------------------------
-!! 
+!! Escribe en un array el nombre de un objeto pasado como parámetro.
 !!------------------------------------------------------------------------------
-Constant NAME_BUFFER_STREAM_ID = 666;	! Cualquier stream libre.
-Constant NAME_BUFFER_SIZE = 256;		! Ajustar el tamaño máximo.
+Constant NAME_BUFFER_STREAM_ID = 666;	! Cualquier stream libre
+Constant NAME_BUFFER_SIZE = 64;
 Array name_buffer --> NAME_BUFFER_SIZE;
 
-[ get_name_buffer obj
+[ read_name_buffer obj
 	old_stream;
-	#Ifdef TARGET_GLULX;
+	#Ifdef TARGET_ZCODE;
+	old_stream = NAME_BUFFER_STREAM_ID; ! por evitar advertencias del compilador
+	!! Se cambia el fujo de salida a un array de memoria:
+	@output_stream 3 name_buffer;
+	!! Se escribe en el array:
+	print (name) obj;
+	!! Se vuelve al flujo de salida original:
+	@output_stream -3;
+	#Ifnot; ! TARGET_GLULX;
 	!! Se cambia el flujo de salida a un array de memoria:
 	old_stream = glk_stream_get_current();
 	glk_stream_set_current(glk_stream_open_memory(name_buffer + WORDSIZE, 
@@ -554,39 +605,43 @@ Array name_buffer --> NAME_BUFFER_SIZE;
 	!! Se vuelve al flujo de salida original:
 	glk_stream_close(glk_stream_get_current(), gg_arguments);
 	glk_stream_set_current(old_stream);
-	name_buffer-->0 = gg_arguments-->1;
-	#Endif; ! TARGET_GLULX;
+	name_buffer --> 0 = gg_arguments --> 1;
+	#Endif; ! TARGET_
 ];
 
-[ print_name_buffer
-	tmp len;
-	#Ifdef TARGET_GLULX;
-	len = name_buffer-->0;
-	tmp = name_buffer + WORDSIZE;
-	glk_put_buffer(tmp, len);
-	#Endif; ! TARGET_GLULX;
-];
+!!	[ print_name_buffer
+!!		tmp len;
+!!		len = name_buffer-->0;
+!!		tmp = name_buffer + WORDSIZE;
+!!		#Ifdef TARGET_ZCODE;
+!!		@print_table tmp len;
+!!		#Ifnot; ! TARGET_GLULX;
+!!		glk_put_buffer(tmp, len);
+!!		#Endif; ! TARGET_
+!!	];
 
 
 !!==============================================================================
-!!	Gramática estándar y extendida
+!!	8.	Gramática estándar y extendida.
 !!------------------------------------------------------------------------------
-!!	Acciones añadidas o reempazadas:
+!!	Acciones añadidas o reemplazadas:
 !!	 *	##Audio, ##AudioOn, ##AudioOff
 !!	 *	##CloseX
 !!	 *	##DefaultAction
 !!	 *	##DisrobeX
 !!	 *	##GNA (sólo en modo de depuración)
-!!	 *	##Graphics, ##GraphicsOn, ##GraphicsOff
+!!	 *	##Graphics, ##GraphicsOn, ##GraphicsOff TODO - REVISAR
+!!	 *	##Highlight
 !!	 *	##LMode2
-!!	 *	##NoSuchVerb
+!!	 *	##NoSuchVerb (permite eliminar acciones)
 !!	 *	##OpenX
-!!	 *	##RemarkableObjects
+!!	 *	##RemarkableObjects TODO - REVISAR
 !!	 *	##TalkOn, ##TalkTo
 !!	 *	##Teleport
 !!	 *	##TopicInventory
 !!	 *	##Wear
 !!	 *	##WearX
+!!
 !!	Acciones eliminadas:
 !!	 *	##Sorry
 !!	 *	##Swim
@@ -598,8 +653,10 @@ Include	"SpanishEG.h";		! Gramática española extendida
 !!------------------------------------------------------------------------------
 !! ##Audio, ##AudioOn, ##AudioOff
 !!------------------------------------------------------------------------------
+
 #Ifdef TARGET_GLULX;
 #Ifndef NO_MULTIMEDIA;
+
 Verb meta 'audio' 'music' 'musica' 'sonido' 'sonidos'
 	*								-> Audio
 	* 'on' / 'si'					-> AudioOn
@@ -628,12 +685,14 @@ VerboIrregular "establecer la reproducción de audio"
 	Damusix.DesactivarAudio();
 	print_ret (parser) "Reproducción de audio desactivada.";
 ];
+
 #Endif; ! NO_MULTIMEDIA;
 #Endif; ! TARGET_GLULX;
 
 !!------------------------------------------------------------------------------
 !! ##CloseX
 !!------------------------------------------------------------------------------
+
 Extend	only 'corre' replace
 	* noun							-> CloseX
 ;
@@ -665,6 +724,7 @@ Verb 'no.verb'
 !! manera que un objeto "clothing" pueda capturar la acción ##DisrobeX en su
 !! rutina "react_before" y lanzar la acción ##Disrobe sobre sí mismo.
 !!------------------------------------------------------------------------------
+
 Verb	'desnuda' 'desviste'
 	*								-> DisrobeX
 	* '-te'/'-me'					-> DisrobeX
@@ -682,7 +742,9 @@ VerboIrregular "desvestir" with imperativo 'desnuda' 'desviste';
 !!------------------------------------------------------------------------------
 !! ##GNA (sólo en modo de depuración)
 !!------------------------------------------------------------------------------
+
 #Ifdef	DEBUG;
+
 Verb meta 'gna'
 	* multi							-> GNA
 ;
@@ -716,13 +778,16 @@ Verb meta 'gna'
 	end_parser_style();
 	new_line;
 ];
+
 #Endif; ! DEBUG;
 
 !!------------------------------------------------------------------------------
 !! ##Graphics, ##GraphicsOn, ##GraphicsOff
 !!------------------------------------------------------------------------------
+
 #Ifdef TARGET_GLULX;
 #Ifndef NO_MULTIMEDIA;
+
 Verb meta 'grafico' 'graficos' 'graphic' 'graphics'
 	*								-> Graphics
 	* 'on'/'si'						-> GraphicsOn
@@ -756,12 +821,64 @@ VerboIrregular "establecer ventana gráfica"
 	HideGraphicWindow();
 	print_ret (parser) "Ventana gráfica cerrada.";
 ];
+
 #Endif; ! NO_MULTIMEDIA;
 #Endif; ! TARGET_GLULX;
 
 !!------------------------------------------------------------------------------
+!! ##Highlight
+!!------------------------------------------------------------------------------
+
+Verb meta 'highlight' 'resaltado'
+	*								-> Highlight
+	* number						-> Highlight
+	* 'on'/'si'						-> HighlightOn
+	* 'encendido'/'activado'		-> HighlightOn
+	* 'off'/'no'					-> HighlightOff
+	* 'apagado'/'desactivado'		-> HighlightOff
+;
+VerboIrregular "establecer estilo de texto resaltado"
+	with imperativo 'highlight' 'resaltado';
+
+[ HighlightSub;
+	if (noun == nothing) {
+		if (highlight_flag) <<HighlightOff>>;
+		else <<HighlightOn>>;
+	}
+	switch (noun) {
+		1:	highlight_st = _RST_;
+			print_ret (parser) "Estilo de texto resaltado: ~romana~.";
+		2:	highlight_st = _IST_;
+			print_ret (parser) "Estilo de texto resaltado: ~itálica~.";
+		3:	highlight_st = _BST_;
+			print_ret (parser) "Estilo de texto resaltado: ~negrita~.";
+		4:	highlight_st = _MST_;
+			print_ret (parser) "Estilo de texto resaltado: ~monoespaciada~.";
+		default:
+			print_ret (parser) "El estilo de texto introducido no es válido. 
+			Los estilos permitidos son: 1) romana, 2) itálica, 3) negrita y 4) 
+			monoespaciada.";
+	}
+];
+
+[ HighlightOnSub;
+	if (highlight_flag)
+		print_ret (parser) "El resaltado de objetos ya estaba activado.";
+	highlight_flag = true;
+	print_ret (parser) "Resaltado de objetos activado.";
+];
+
+[ HighlightOffSub;
+	if (~~highlight_flag)
+		print_ret (parser) "El resaltado de objetos ya estaba desactivado.";
+	highlight_flag = false;
+	print_ret (parser) "Resaltado de objetos desactivado.";
+];
+
+!!------------------------------------------------------------------------------
 !! ##LMode2
 !!------------------------------------------------------------------------------
+
 Extend only 'normal' replace
     *								-> LMode2
 ;
@@ -771,7 +888,8 @@ Extend only 'normal' replace
 !! Permite eliminar acciones definidas automáticamente por la librería Inform.
 !! Código extraído de <http://www.firthworks.com/roger/informfaq/vv.html#6>.
 !!------------------------------------------------------------------------------
-[ Anything; ! Ignore the remaining input line
+
+[ Anything; ! Se ignora el resto de la entrada de usuario
 	while (NextWordStopped() ~= -1);
 	return GPR_PREPOSITION;
 ];
@@ -789,6 +907,7 @@ Extend	'nada' replace
 !!------------------------------------------------------------------------------
 !! ##OpenX
 !!------------------------------------------------------------------------------
+
 Verb	'descorre'
 	* noun							-> OpenX
 ;
@@ -805,15 +924,19 @@ Verb	'descorre'
 !!------------------------------------------------------------------------------
 !! ##RemarkableObjects
 !!------------------------------------------------------------------------------
+
 Verb	meta 'objetos' 'objs'
 	*								-> RemarkableObjects
 ;
 VerboIrregular "mostrar objetos clave" with imperativo 'objetos' 'objs';
 
 Global remarkableObjectsCount;
+
 [ CountRemarkableObjects obj;
-	if (obj has remarkable) remarkableObjectsCount++;
+	if (obj has remarkable && ~~(obj ofclass Room))
+		remarkableObjectsCount++;
 ];
+
 [ PrintRemarkableObjects obj;
 	if (obj has remarkable) {
 		PronounNotice(obj);
@@ -842,6 +965,7 @@ Global remarkableObjectsCount;
 !!------------------------------------------------------------------------------
 !! ##TalkOn, ##TalkTo
 !!------------------------------------------------------------------------------
+
 Extend	'habla' replace
 	* noun							-> TalkTo
 	* 'a'/'con' noun				-> TalkTo
@@ -951,6 +1075,7 @@ Verb 'teleport.verb'
 !!------------------------------------------------------------------------------
 !! ##TopicInventory
 !!------------------------------------------------------------------------------
+
 Verb	meta 'temas' 't//'
 	*								-> TopicInventory
 ;
@@ -962,11 +1087,13 @@ VerboIrregular "mostrar inventario de temas" with imperativo 'temas' 't//';
 	ConversationManager.show_topic_inventory(true);
 ];
 
+
 !!------------------------------------------------------------------------------
 !! ##Wear
 !! Basada en la implementación de *verblibm.h*. Si el objeto no está en
 !! posesión del jugador, se le intenta pasar a su inventario automáticamente.
 !!------------------------------------------------------------------------------
+
 Extend	'ponte' replace
 	* noun							-> Wear
 	* 'con' noun					-> Wear
@@ -992,6 +1119,7 @@ Extend	'ponte' replace
 !! acción ##WearX en su rutina "react_before" y lanzar la acción ##Wear sobre
 !! sí mismo.
 !!------------------------------------------------------------------------------
+
 Extend	only 'vistete' 'vestirse' 'vestirte' 'vestirme' 'visteme' replace
 	*								-> WearX
 	* noun							-> WearX
@@ -1008,7 +1136,7 @@ VerboIrregular "vestir" with imperativo
 
 
 !!==============================================================================
-!!	Definición de atributos, clases y objetos
+!!	9.	Definición de atributos, clases y objetos.
 !!------------------------------------------------------------------------------
 
 Include ">59mins_classes.inf";

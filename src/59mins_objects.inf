@@ -36,10 +36,219 @@
 !!	Copyright (c) 2014, J. Francisco Martín
 !!
 !!------------------------------------------------------------------------------
+!!
+!!	# TABLA DE CONTENIDOS:
+!!
+!!	 *	BAÑO: Baño.
+!!	 *	COCINA: Cocina.
+!!	 *	DORMITORIO: Dormitorio.
+!!	 *	HABITACION: Habitación multiusos.
+!!	 *	LIMBO: En algún lugar.
+!!	 *	PASILLO: Pasillo de la segunda planta.
+!!	 *	PLAYA: Playa.
+!!	 *	RECIBIDOR: Recibidor.
+!!	 *	SALON: Salón.
+!!	 *	TALLER: Pequeño taller.
+!!	 *	TERRAZA: Terraza.
+!!
+!!------------------------------------------------------------------------------
 
 
 !!==============================================================================
-!!	LIMBO: En algún lugar
+!!	BAÑO: Baño.
+!!------------------------------------------------------------------------------
+
+Room	obj_BANNO "Baño"
+ with	name_m	'bano',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+		s_to	obj_DORMITORIO,
+		sw_to	obj_PASILLO,
+ has	male;
+
+Atrezzo	-> obj_armario_BANNO "armarito"
+ with	name_m	'armario' 'armarito' 'mueble',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	male;
+
+Atrezzo	-> obj_bannera "bañera"
+ with	name_f	'banera',
+		gender	G_FEMENINO,
+		description [; return O__M(self, 1); ],
+ has	female;
+
+Atrezzo	-> obj_espejo "espejo"
+ with	name_m	'espejo' 'reflejo',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	male;
+
+Atrezzo	-> obj_medicinas "medicinas"
+ with	name_f	'medicina',
+		name_fp	'medicinas',
+		name_m	'tranquilizante',
+		name_mp	'tranquilizantes',
+		gender	G_FEMENINO + G_PLURAL,
+		description [; return O__M(self, 1); ],
+ has	female pluralname;
+
+
+!!==============================================================================
+!!	COCINA: Cocina.
+!!------------------------------------------------------------------------------
+
+Room	obj_COCINA "Cocina"
+ with	name_f	'cocina',
+		gender	G_FEMENINO,
+		description [; return O__M(self, 1); ],
+		e_to	obj_SALON,
+		n_to	obj_TERRAZA,
+ has	female;
+
+Atrezzo	-> obj_encimera "encimera"
+ with	name_f	'encimera',
+		name_m	'aparador',
+		gender	G_FEMENINO,
+		description [; return O__M(self, 1); ],
+ has	female supporter;
+
+Atrezzo	-> -> obj_cafetera "cafetera italiana"
+ with	name_f	'cafetera',
+		gender	G_FEMENINO,
+		adjectives 'italiana',
+		description [; return O__M(self, 1); ],
+ has	female;
+
+Atrezzo	-> -> obj_radiocasete "aparato radiocasete"
+ with	name_f	'radio',
+		name_m	'radiocasete',
+		gender	G_MASCULINO,
+		adjectives 'aparato',
+		description [; return O__M(self, 1); ],
+ has	male;
+
+Atrezzo	-> obj_mesa_cocina "mesa"
+ with	name_f	'mesa',
+		gender	G_FEMENINO,
+		adjectives 'cocina',
+		description [; return O__M(self, 1); ],
+ has	female supporter;
+
+Item	-> -> obj_mechero "mechero"
+ with	name_m	'encendedor' 'mechero',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	male;
+
+Item	-> -> obj_periodico "periódico"
+ with	name_f	'prensa',
+		name_m	'periodico',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	male;
+
+Atrezzo	-> obj_nevera "nevera"
+ with	name_f	'nevera',
+		name_m	'refrigerador',
+		gender	G_FEMENINO,
+		adjectives 'aparato',
+		description [; return O__M(self, 1); ],
+ has	female;
+
+
+!!==============================================================================
+!!	DORMITORIO: Dormitorio.
+!!------------------------------------------------------------------------------
+
+Room	obj_DORMITORIO "Dormitorio"
+ with	name_f	'habitacion',
+		name_m	'dormitorio',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+		n_to	obj_BANNO,
+		w_to	obj_PASILLO,
+ has	male;
+
+Atrezzo	-> obj_cama "cama"
+ with	name_f	'cama',
+		gender	G_FEMENINO,
+		description [; return O__M(self, 1); ],
+ has	female remarkable;
+
+Atrezzo	-> obj_despertador "reloj despertador"
+ with	name_m	'despertador' 'reloj',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	male remarkable;
+
+
+!!==============================================================================
+!!	HABITACION: Habitación multiusos.
+!!------------------------------------------------------------------------------
+
+Room	obj_HABITACION "Habitación multiusos"
+ with	name_f	'habitacion',
+		gender	G_FEMENINO,
+		adjectives 'multiusos',
+		description [; return O__M(self, 1); ],
+		s_to	obj_PASILLO,
+ has	female;
+
+Atrezzo	-> obj_armario_HABITACION "armario"
+ with	name_m	'armario' 'mueble' 'mobilario',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	male ~open openable;
+
+Atrezzo	-> obj_bicicletaEstatica "bicicleta estática"
+ with	name_f	'bici' 'bicicleta',
+		gender	G_FEMENINO,
+		adjectives 'estatica',
+		description [; return O__M(self, 1); ],
+ has	female;
+
+Atrezzo	-> obj_escritorio "escritorio"
+ with	name_f	'mesa',
+		name_m	'escritorio',
+		gender	G_MASCULINO,
+		adjectives 'madera' 'oscura' 'oscuro',
+		description [; return O__M(self, 1); ],
+ has	male supporter;
+
+Item	-> -> obj_bolso "bolso"
+ with	name_m	'bolso',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	container male;
+
+Item	-> -> -> obj_cuaderno "cuaderno de ~El Principito~"
+ with	name_f	'libreta',
+		name_m	'cuaderno',
+		gender	G_MASCULINO,
+		adjectives 'moleskine' 'motivos' 'principito' 'tematizado',
+		description [; return O__M(self, 1); ],
+ has	male ~open openable;
+
+Item	-> -> -> obj_examenes "exámenes sin corregir"
+ with	name_m	'examen',
+		name_mp	'examenes',
+		gender	G_FEMENINO,
+		adjectives 'corregir' 'sin',
+		description [; return O__M(self, 1); ],
+ has	male pluralname;
+
+Item	-> obj_balonBaloncesto "balón de baloncesto"
+ with	name_f	'pelota',
+		name_m	'balon',
+		gender	G_MASCULINO,
+		adjectives 'baloncesto',
+		description [; return O__M(self, 1); ],
+ has	male;
+
+
+!!==============================================================================
+!!	LIMBO: En algún lugar.
 !!------------------------------------------------------------------------------
 
 Room	obj_LIMBO "En algún lugar"
@@ -49,7 +258,6 @@ Room	obj_LIMBO "En algún lugar"
 		clarification 0,
  has	male;
 
-!!	 *	FIXME - adjectives
 Atrezzo	"paredes" 
  with	found_in
 			obj_BANNO obj_COCINA obj_DORMITORIO obj_HABITACION obj_PASILLO 
@@ -82,11 +290,38 @@ Atrezzo	"paredes"
 		], 
  has	female pluralname;
 
+Atrezzo	obj_ventanas "ventanas"
+ with	found_in
+			obj_BANNO obj_COCINA obj_DORMITORIO obj_HABITACION obj_RECIBIDOR 
+			obj_SALON obj_TALLER obj_TERRAZA,
+		name_m	'ventanal',
+		name_mp	'ventanales',
+		name_f	'ventana',
+		name_fp	'ventanas',
+		gender	G_FEMENINO, 
+		description [; return O__M(self, 1); ],
+		before [;
+			Examine, Search:
+				return false;
+			default:
+				switch (GRAMMATICAL_INFLECTION) {
+					1: "No creo que sea necesario preocuparme por ";
+					2: "No es necesario que te preocupes por ";
+					3: "No es necesario que se preocupe por ";
+					4: "No creí que fuese necesario preocuparme por ";
+					5: "No era necesario que te preocupases por ";
+					6: "No era necesario que se preocupase por ";
+				}
+				SpanishNominativePronoun(self);
+				".";
+		],
+ has	female pluralname;	
+
 Object	obj_Silvia "Silvia" obj_LIMBO
  with	name_f	'silvia',
 		name_m	'personaje',
 		gender	G_FEMENINO,
-		description [; return L__M(##Miscellany, 19); ],
+		description [; return O__M(self, 1); ],
  has	animate female proper;
 
 Item	obj_ropa "ropa" obj_Silvia
@@ -114,20 +349,223 @@ Item	obj_ropa "ropa" obj_Silvia
 
 
 !!==============================================================================
-!!	COCINA
+!!	PASILLO: Pasillo de la segunda planta.
 !!------------------------------------------------------------------------------
 
-Room	obj_COCINA "Cocina"
- with	name_f	'cocina',
+Room	obj_PASILLO "Pasillo de la segunda planta"
+ with	name_m	'pasillo',
+		gender	G_MASCULINO,
+		adjectives 'segunda' 'planta',
+		description [; return O__M(self, 1); ],
+		d_to	obj_RECIBIDOR,
+		e_to	obj_DORMITORIO,
+		n_to	obj_HABITACION,
+		ne_to	obj_BANNO,
+ has	male;
+
+Atrezzo	-> obj_fotografia_01 "foto de su madre de joven"
+ with	name_f	'fotografia' 'foto',
+		gender	G_FEMENINO,
+		adjectives 'joven' 'madre' 'su',
+		description [; return O__M(self, 1); ],
+ has	female;
+
+Atrezzo	-> obj_fotografia_02 "foto de su décimo cumpleaños"
+ with	name_f	'fotografia' 'foto',
+		gender	G_FEMENINO,
+		adjectives 'anos' 'cumpleanos' 'decimo' 'diez' 'su',
+		description [; return O__M(self, 1); ],
+ has	female;
+
+Atrezzo	-> obj_fotografia_03 "foto de carnavales en el colegio"
+ with	name_f	'fotografia' 'foto',
+		gender	G_FEMENINO,
+		adjectives 'carnaval' 'carnavales' 'cole' 'colegio' 'en',
+		description [; return O__M(self, 1); ],
+ has	female;
+
+Atrezzo	-> obj_fotografia_04 "foto de niña con su padre"
+ with	name_f	'fotografia' 'foto',
+		gender	G_FEMENINO,
+		adjectives 'con' 'nina' 'padre' 'su',
+		description [; return O__M(self, 1); ],
+ has	female;
+
+Atrezzo	-> obj_fotografias "viejas fotografías"
+ with	name_fp	'fotografias' 'fotos',
+		gender	G_FEMENINO + G_PLURAL,
+		adjectives 'viejas',
+		description [; return O__M(self, 1); ],
+ has	female pluralname;
+
+
+!!==============================================================================
+!!	PLAYA: Playa.
+!!------------------------------------------------------------------------------
+
+Room	obj_PLAYA "Playa"
+ with	name_f	'playa',
 		gender	G_FEMENINO,
 		description [; return O__M(self, 1); ],
-		e_to	obj_SALON,
-		n_to	obj_TERRAZA,
+		s_to	obj_TERRAZA,
+ has	female;
+
+Atrezzo	-> obj_casa "casa"
+ with	name_f	'casa',
+		name_m	'edificio',
+		gender	G_FEMENINO,
+		description [; return O__M(self, 1); ],
+ has	female;
+
+Atrezzo	-> obj_mar "mar"
+ with	name_f	'mar',
+		gender	G_FEMENINO,
+		description [; return O__M(self, 1); ],
  has	female;
 
 
 !!==============================================================================
-!!	TERRAZA
+!!	RECIBIDOR: Recibidor.
+!!------------------------------------------------------------------------------
+
+Room	obj_RECIBIDOR "Recibidor"
+ with	name_m	'recibidor',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+		n_to	obj_SALON,
+		u_to	obj_PASILLO,
+ has	male;
+
+Atrezzo	-> obj_comoda "cómoda"
+ with	name_f	'comoda',
+		gender	G_FEMENINO,
+		description [; return O__M(self, 1); ],
+ has	female supporter;
+
+Atrezzo	-> -> obj_comoda_cajon "cajón"
+ with	name_f	'gaveta',
+		name_m	'cajon',
+		gender	G_MASCULINO,
+ has	male openable ~open;
+
+Item	-> -> -> obj_cajetilla "cajetilla de tabaco"
+ with	name_f	'cajetilla',
+		name_m	'tabaco',
+		gender	G_FEMENINO,
+		description [; return O__M(self, 1); ],
+ has	female;
+
+Atrezzo	-> -> obj_telefono "teléfono"
+ with	name_m	'auricular' 'telefono' 'telf' 'tlf',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	male;
+
+
+!!==============================================================================
+!!	SALON: Salón.
+!!------------------------------------------------------------------------------
+
+Room	obj_SALON "Salón"
+ with	name_f	'sala',
+		name_m	'salon' 'comedor',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+		s_to	obj_RECIBIDOR,
+		w_to	obj_COCINA,
+ has	male;
+
+Atrezzo	-> obj_DVD "reproductor de DVD"
+ with	name_m	'reproductor' 'dvd',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	male;
+
+Atrezzo	-> obj_libros "libros"
+ with	name_m	'libro',
+		name_mp	'libros',
+		gender	G_MASCULINO + G_PLURAL,
+		description [; return O__M(self, 1); ],
+ has	male pluralname;
+
+Atrezzo	-> obj_muebleBar "mueble bar"
+ with	name_m	'bar' 'mueble',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	male;
+
+Atrezzo	-> obj_televisor "televisor"
+ with	name_f	'tele' 'tv',
+		name_m	'televisor',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	male;
+
+
+!!==============================================================================
+!!	TALLER: Pequeño taller.
+!!------------------------------------------------------------------------------
+
+Room	obj_TALLER "Pequeño taller"
+ with	name_m	'taller',
+		gender	G_MASCULINO,
+		adjectives 'pequeno',
+		description [; return O__M(self, 1); ],
+		e_to	obj_TERRAZA,
+ has	male;
+
+Atrezzo	-> obj_dibujo "dibujo enmarcado"
+ with	name_m	'dibujo',
+		gender	G_MASCULINO,
+		adjectives 'enmarcado',
+		description [; return O__M(self, 1); ],
+ has	male;
+
+Atrezzo	-> obj_disolventes "disolventes"
+ with	name_m	'disolvente',
+		name_mp	'disolventes',
+		gender	G_MASCULINO + G_PLURAL,
+		before [; return obj_pinturas.before(); ],
+ has	male pluralname;
+
+Atrezzo	-> obj_lienzo "lienzo inacabado"
+ with	name_m	'lienzo',
+		gender	G_MASCULINO,
+		adjectives 'inacabado',
+		description [; return O__M(self, 1); ],
+ has	male;
+
+Atrezzo	-> obj_lienzos "lienzos"
+ with	name_mp	'lienzos',
+		gender	G_MASCULINO + G_PLURAL,
+		description [; return O__M(self, 1); ],
+ has	male pluralname;
+
+Atrezzo	-> obj_pinceles "pinceles"
+ with	name_m	'pincel',
+		name_mp	'pinceles',
+		gender	G_MASCULINO + G_PLURAL,
+		before [; return obj_pinturas.before(); ],
+ has	male pluralname;
+
+Atrezzo	-> obj_pinturas "pinturas"
+ with	name_f	'pintura',
+		name_fp	'pinturas',
+		gender	G_FEMENINO + G_PLURAL,
+		description [; return O__M(self, 1); ],
+ has	female pluralname;
+
+Item	-> obj_rifle "rifle de caza"
+ with	name_f	'arma',
+		name_m	'rifle',
+		gender	G_MASCULINO,
+		adjectives 'caza',
+		description [; return O__M(self, 1); ],
+ has	male;
+
+
+!!==============================================================================
+!!	TERRAZA: Terraza.
 !!------------------------------------------------------------------------------
 
 Room	obj_TERRAZA "Terraza"
@@ -140,17 +578,18 @@ Room	obj_TERRAZA "Terraza"
 		w_to	obj_TALLER,
  has	female;
 
-Atrezzo	obj_aro "aro de baloncesto" obj_TERRAZA
+Atrezzo	-> obj_aroBaloncesto "aro de baloncesto"
  with	name_f	'canasta',
 		name_m	'aro',
 		gender	G_MASCULINO,
 		adjectives 'baloncesto',
+		description [; return O__M(self, 1); ],
 		before [;
 			DefaultAction:
 				if (self has described)
 					<<Use self>>;
 			Use:
-				if (~~IndirectlyContains(player, obj_pelotaBaloncesto))
+				if (~~IndirectlyContains(player, obj_balonBaloncesto))
 					"No puede jugar sin un balón.";
 				switch (self.counter) {
 					0:
@@ -189,7 +628,9 @@ Atrezzo	obj_aro "aro de baloncesto" obj_TERRAZA
 		],
  private
 		free_throw [ x;
+			#Ifdef TARGET_GLULX;
 			AimingManager.set_timer_frequency(self.speed);
+			#Endif; ! TARGET_GLULX;
 			x = AimAndFire();
 			if (x == -2 || x == -1) return random(0,1,2,3,4);
 			if (x < 3) return 0;
@@ -201,119 +642,10 @@ Atrezzo	obj_aro "aro de baloncesto" obj_TERRAZA
 		start_speed 20,
  has	male;
 
-
-!!==============================================================================
-!!	TALLER
-!!------------------------------------------------------------------------------
-
-Room	obj_TALLER "Pequeño taller"
- with	name_m	'taller',
-		gender	G_MASCULINO,
-		adjectives 'pequeno',
-		description [; return O__M(self, 1); ],
-		e_to	obj_TERRAZA,
- has	male;
-
-
-!!==============================================================================
-!!	PLAYA
-!!------------------------------------------------------------------------------
-
-Room	obj_PLAYA "Playa"
- with	name_f	'playa',
-		gender	G_FEMENINO,
-		description [; return O__M(self, 1); ],
-		s_to	obj_TERRAZA,
- has	female;
-
-
-!!==============================================================================
-!!	SALON
-!!------------------------------------------------------------------------------
-
-Room	obj_SALON "Salón"
- with	name_f	'sala',
-		name_m	'salon' 'comedor',
+Atrezzo	-> obj_caballete "caballete"
+ with	name_m	'caballete',
 		gender	G_MASCULINO,
 		description [; return O__M(self, 1); ],
-		s_to	obj_RECIBIDOR,
-		w_to	obj_COCINA,
- has	male;
-
-
-!!==============================================================================
-!!	RECIBIDOR
-!!------------------------------------------------------------------------------
-
-Room	obj_RECIBIDOR "Recibidor"
- with	name_m	'recibidor',
-		gender	G_MASCULINO,
-		description [; return O__M(self, 1); ],
-		n_to	obj_SALON,
-		u_to	obj_PASILLO,
- has	male;
-
-
-!!==============================================================================
-!!	PASILLO
-!!------------------------------------------------------------------------------
-
-Room	obj_PASILLO "Pasillo de la segunda planta"
- with	name_m	'pasillo',
-		gender	G_MASCULINO,
-		adjectives 'segunda' 'planta',
-		description [; return O__M(self, 1); ],
-		d_to	obj_RECIBIDOR,
-		e_to	obj_DORMITORIO,
-		n_to	obj_HABITACION,
-		ne_to	obj_BANNO,
- has	male;
-
-
-!!==============================================================================
-!!	HABITACION
-!!------------------------------------------------------------------------------
-
-Room	obj_HABITACION "Habitación multiusos"
- with	name_f	'habitacion',
-		gender	G_FEMENINO,
-		adjectives 'multiusos',
-		description [; return O__M(self, 1); ],
-		s_to	obj_PASILLO,
- has	female;
-
-Item	obj_pelotaBaloncesto "pelota de baloncesto" obj_HABITACION
- with	name_f	'pelota',
-		name_m	'balon',
-		gender	G_FEMENINO,
-		adjectives 'baloncesto',
- has	female;
-
-
-!!==============================================================================
-!!	DORMITORIO
-!!------------------------------------------------------------------------------
-
-Room	obj_DORMITORIO "Dormitorio"
- with	name_f	'habitacion',
-		name_m	'dormitorio',
-		gender	G_MASCULINO,
-		description [; return O__M(self, 1); ],
-		n_to	obj_BANNO,
-		w_to	obj_PASILLO,
- has	male;
-
-
-!!==============================================================================
-!!	BAÑO
-!!------------------------------------------------------------------------------
-
-Room	obj_BANNO "Baño"
- with	name_m	'bano',
-		gender	G_MASCULINO,
-		description [; return O__M(self, 1); ],
-		s_to	obj_DORMITORIO,
-		sw_to	obj_PASILLO,
  has	male;
 
 

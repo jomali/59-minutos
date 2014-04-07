@@ -39,33 +39,159 @@
 
 [ LanguageOM obj n x1;
 	x1 = obj;
-
 	switch (obj) {
 
+
+!!==============================================================================
+!!	BAÑO: Baño.
 !!------------------------------------------------------------------------------
 obj_BANNO: switch (n) {
 1:	! description
-"Es un pequeño baño con puertas al ", (link) obj_DORMITORIO, "dormitorio", (link) 0, " y al ", (link) obj_PASILLO, "pasillo", (link) 0, ". Tiene una bañera lo suficientemente grande como para entrar tumbado dentro, un espejo en el que Silvia podrá mirarse, y un armarito con algún producto de higiene y medicinas de su padre. Entre las medicinas hay una caja de Lexatin (vacía) y varias cajas de Diazepam.";
+"Un pequeño baño con puertas al ", (link) obj_DORMITORIO, "dormitorio", (link) 0, " y al ", (link) obj_PASILLO, "pasillo", (link) 0, ". Tiene una ", (link) obj_bannera, "bañera", (link) 0, ", lo suficientemente grande como para que una persona pueda entrar tumbada dentro, un ", (link) obj_espejo, "espejo", (link) 0, " en el que Silvia puede mirarse, y un ", (link) obj_armario_BANNO, "armario", (link) 0, " auxiliar con algún producto de higiene y ", (link) obj_medicinas, "medicinas", (link) 0, " de su padre.";
 }
 
+!!------------------------------------------------------------------------------
+obj_armario_BANNO: switch (n) {
+1:	! description
+"Dentro hay algún producto de higiene y ", (link) obj_medicinas, "medicinas", (link) 0, " de su padre. Puede haber también un par de velas aromáticas (que se pueden encender con el mechero de la cocina).";
+}
+
+!!------------------------------------------------------------------------------
+obj_bannera: switch (n) {
+1:	! description
+"Es grande, lo suficiente como para que una persona pueda tumbarse por completo en su interior. Silvia puede utilizarla para darse un baño.";
+}
+
+!!------------------------------------------------------------------------------
+obj_espejo: switch (n) {
+1:	! description
+"Silvia puede mirarse en el espejo. Tiene 33 años (aprovechando la referencia bíblica) y sigue siendo muy atractiva. Aunque, a decir verdad, nunca se ha preocupado demasiado por su aspecto.";
+}
+
+!!------------------------------------------------------------------------------
+obj_medicinas: switch (n) {
+1:	! description
+"Entre las medicinas se pueden ver varias cajas de Lexatin y Diazepam. Tranquilizantes. En los últimos años de vida, su padre tenía problemas para dormir. Desde la muerte de su madre había ido arrastrando temporadas de depresión con mayor o menor frecuencia. Son necesarias para que el interlector pueda realizar la acción de dormir en la cama y, si se toman más de la cuenta, pueden provocar sobredosis y hacer que Silvia pierda el conocimiento y muera (aunque no sería necesario especificar si muere por culpa de la sobredosis, o porque se llega al final de la cuenta atrás de 59 minutos estando inconsciente).";
+}
+
+
+!!==============================================================================
+!!	COCINA: Cocina.
 !!------------------------------------------------------------------------------
 obj_COCINA: switch (n) {
 1:	! description
-"Grande y espaciosa, como el resto de habitaciones de la casa, con ventanas a la playa. Tiene una amplia encimera en la que hay un aparato radiocasete y una cafetera italiana. Hay también una nevera (con algo de comida dentro), y un mechero por alguna parte. Tiene salidas al ", (link) obj_SALON, "salón", (link) 0, " y a una ", (link) obj_TERRAZA, "terraza", (link) 0, " trasera, con acceso directo a la playa.";
+"Grande y espaciosa, como el resto de habitaciones de la casa, con ventanas a la playa. Tiene una amplia encimera sobre la que hay un ", (link) obj_radiocasete, "aparato radiocasete", (link) 0, " y una ", (link) obj_cafetera, "cafetera", (link) 0, " italiana. Hay también una ", (link) obj_nevera, "nevera", (link) 0, " (con algo de comida dentro), y una mesa. Tiene salidas al ", (link) obj_SALON, "salón", (link) 0, " y a una ", (link) obj_TERRAZA, "terraza", (link) 0, " trasera, desde la que se puede bajar hasta la playa.
+^^
+Sobre la mesa se puede ver un ", (link) obj_periodico, "periódico", (link) 0, " y un ", (link) obj_mechero, "mechero", (link) 0, ".";
 }
 
+!!------------------------------------------------------------------------------
+obj_cafetera: switch (n) {
+1:	! description
+"Una cafetera italiana. Puede utilizarla para prepararse un café.";
+}
+
+!!------------------------------------------------------------------------------
+obj_mechero: switch (n) {
+1:	! description
+"Se puede usar para encender los cigarrillos que hay en el recibidor (y, si se incluyen, también las velas que habría en el armario del baño).";
+}
+
+!!------------------------------------------------------------------------------
+obj_nevera: switch (n) {
+1:	! description
+"En la nevera y los armarios hay comida. Puede utilizarse para prepararse un sándwich o una última comida con alguno de sus platos favoritos. Además puede ser una oportunidad para tratar temas como el veganismo. --- Coppola incorpora una receta de cocina en cada una de sus películas de ~El Padrino~. Yo no tengo ni idea de cocina, pero podría ser una idea copiar a Coppola y aprovechar para incluir una receta aquí. Tengo que pensar en pedirle una receta a alguien que sepa cocinar mejor...";
+}
+
+!!------------------------------------------------------------------------------
+obj_periodico: switch (n) {
+1:	! description
+"Es de esta semana. Puede servir para aportar más pistas engañosas sobre el final y, además, como pretexto para hacer crítica sobre cierta prensa escrita. Se pueden destacar dos noticias; alguna manifestación en portada con titular sensacionalista acusando a los manifestantes de algún altercado, y otra, en páginas interiores, sobre cierta actividad solar inusual.";
+}
+
+!!------------------------------------------------------------------------------
+obj_radiocasete: switch (n) {
+1:	! description
+"Silvia puede intentar sintonizar la radio, sin embargo, descubrirá que las emisoras sólo emiten música; no hay ningún programa emitiendo en directo. Si se deja la radio encendida, unos minutos antes de que se cumpla la cuenta atrás, la música se cortará de pronto y pasarán a escucharse interferencias. Y, entre estas interferencias, tal vez se podría llegar a escuchar una voz entrecortada hablando de forma enigmática ---algo que pueda servir como pista falsa sobre qué es lo que ocurre al final del relato---.";
+}
+
+
+!!==============================================================================
+!!	DORMITORIO: Dormitorio.
 !!------------------------------------------------------------------------------
 obj_DORMITORIO: switch (n) {
 1:	! description
-"Es el dormitorio de su padre. Estuvo recogiendo y limpiando el año anterior, unos días después de que muriese, pero no lo ha tocado mucho desde entonces. Tiene una gran cama, un armario y un reloj despertador. Comunica con el ", (link) obj_PASILLO, "pasillo", (link) 0, " y el ", (link) obj_BANNO, "baño", (link) 0, ".";
+"Es el dormitorio de su padre. Lo estuvo recogiendo y limpiando un poco el año anterior, unos días después de que él muriese, pero sigue prácticamente tal y como lo dejó él antes de morir. Está dominado por una gran ", (link) obj_cama, "cama", (link) 0, ", y hay también un ", (link) obj_despertador, "reloj despertador", (link) 0, " sobre la mesilla de noche. Tiene puertas al ", (link) obj_PASILLO, "pasillo", (link) 0, " y al pequeño ", (link) obj_BANNO, "baño", (link) 0, " que hay en el segundo piso.";
 }
 
 !!------------------------------------------------------------------------------
-obj_HABITACION: switch (n) {
+obj_cama: switch (n) {
 1:	! description
-"Su viejo dormitorio. Cuando dejó de vivir aquí, su padre lo cambió. Ahora hay una bicicleta estática en vez de una cama, un gran escritorio y un armario. Tiene una puerta al ", (link) obj_PASILLO, "pasillo", (link) 0, ".";
+"Es la vieja cama de matrimonio de sus padres. Silvia puede echarse a dormir en ella. Antes, se da opción al interlector de que programe la alarma del despertador, de manera que el personaje pueda levantarse antes de que se cumpla la cuenta atrás. En caso que no se programe la alarma, o que se programe para después de que termine la cuenta atrás, el fin del mundo llegará con Silvia durmiendo. Si no utiliza las pastillas del baño, estará demasiado intranquila como para ser capaz de dormir.";
 }
 
+!!------------------------------------------------------------------------------
+obj_despertador: switch (n) {
+1:	! description
+"Será funcional; el interlector puede escoger dentro de cuántos minutos quiere que suene la alarma.";
+}
+
+
+!!==============================================================================
+!!	HABITACION: Habitación multiusos.
+!!------------------------------------------------------------------------------
+obj_HABITACION: switch (n) {
+1:	! description
+"Su antiguo dormitorio. Después de irse ella de casa su padre lo reformó: su cama ha sido sustituida por una ", (link) obj_bicicletaEstatica, "bicicleta estática", (link) 0, ", y hay un gran armario y un viejo escritorio de madera oscura que antes no estaban ahí. Su ", (link) obj_bolso, "bolso", (link) 0, " está sobre la mesa. Dentro tiene un ", (link) obj_cuaderno, "cuaderno", (link) 0, " (regalo de su ex-pareja) y un montón de ", (link) obj_examenes, "exámenes", (link) 0, " sin corregir de sus alumnos de literatura de primero de bachillerato. Tiene una puerta al ", (link) obj_PASILLO, "pasillo", (link) 0, ".
+^^
+Puede ver también un ", (link) obj_balonBaloncesto, "balón de baloncesto", (link) 0, ", en una esquina.";
+}
+
+!!------------------------------------------------------------------------------
+obj_armario_HABITACION: switch (n) {
+1:	! description
+"Un armario con ropa vieja. No tiene nada de especial.";
+}
+
+!!------------------------------------------------------------------------------
+obj_balonBaloncesto: switch (n) {
+1:	! description
+"Puede utilizarlo para jugar con él en la terraza.";
+}
+
+!!------------------------------------------------------------------------------
+obj_bicicletaEstatica: switch (n) {
+1:	! description
+"Cuando dejó de vivir aquí, su padre quitó su cama y utilizó la habitación como sala multiusos para guardar trastos y colocar su bicicleta estática. Silvia podría utilizarla. Es una forma horrible de gastar los últimos minutos de su vida, pero allá cada uno...";
+}
+
+!!------------------------------------------------------------------------------
+obj_bolso: switch (n) {
+1:	! description
+"Dentro tiene el cuaderno con motivos de El Principito y un montón de exámenes sin corregir.";
+}
+
+!!------------------------------------------------------------------------------
+obj_cuaderno: switch (n) {
+1:	! description
+"Es un cuaderno moleskine tematizado con motivos de El Principito, regalo de cumpleaños de Carmen ---por su 30 cumpleaños---. Al examinarlo se activa el recuerdo: Regalo de cumpleaños, en el que se narra el momento en el que la dio el regalo.";
+}
+
+!!------------------------------------------------------------------------------
+obj_escritorio: switch (n) {
+1:	! description
+"Un viejo escritorio de madera oscura. Sobre la mesa está su bolso, en el que hay un cuaderno (regalo de su ex-pareja) y un montón de exámenes sin corregir de sus alumnos de primero de bachillerato de literatura.";
+}
+
+!!------------------------------------------------------------------------------
+obj_examenes: switch (n) {
+1:	! description
+"Puede dedicarse a corregirlos. Aunque quizá parezca una tontería, siempre ha estado contenta con su trabajo y es bonito dedicar tu vida a trabajar en algo que te gusta. Se podría aprovechar para ponerse creativo y escribir algunos fragmentos de los exámenes que tiene que corregir; comentarios de texto y opinión personal de algún libro, por ejemplo.";
+}
+
+
+!!==============================================================================
+!!	LIMBO: En algún lugar.
 !!------------------------------------------------------------------------------
 obj_LIMBO: switch (n) {
 1:	! description
@@ -76,48 +202,219 @@ return true;
 }
 
 !!------------------------------------------------------------------------------
-obj_PASILLO: switch (n) {
-1:	! description
-"Conecta el ", (link) obj_RECIBIDOR, "piso de abajo", (link) 0, " a través de las escaleras con una ", (link) obj_HABITACION, "habitación", (link) 0, " multiusos, el ", (link) obj_DORMITORIO, "dormitorio", (link) 0, " principal y un ", (link) obj_BANNO, "baño", (link) 0, ". Colgadas en la pared hay viejas fotos enmarcadas, algunas de cuando era niña, con sus padres.";
-}
-
-!!------------------------------------------------------------------------------
-obj_PLAYA: switch (n) {
-1:	! description
-"Una playa completamente desierta. Para bajar desde la ", (link) obj_TERRAZA, "terraza", (link) 0, " se quita antes las zapatillas. Nunca le ha gustado ir a la playa en la ciudad, saturada siempre de gente tostándose al sol. Pero esta si. Es agradable sentir la arena entre los pies y el penetrante olor del mar.";
-}
-
-!!------------------------------------------------------------------------------
-obj_RECIBIDOR: switch (n) {
-1:	! description
-"El mueble más destacado es una cómoda junto a la puerta principal de la casa. Sobre ella hay un teléfono, y dentro de uno de los cajones se puede encontrar una cajetilla de tabaco, de su padre. Desde el recibidor se puede ir al ", (link) obj_SALON, "salón", (link) 0, " o subir por las escaleras hacia el ", (link) obj_PASILLO, "segundo piso", (link) 0, ".";
-}
-
-!!------------------------------------------------------------------------------
 obj_ropa: switch (n) {
 1:	! description
 "A tasteful ensemble from Ann Taylor in muted browns and olive greens (she has been an automn person since she was old enough to match her own socks).";
 }
 
 !!------------------------------------------------------------------------------
-obj_SALON: switch (n) {
+obj_Silvia: switch (n) {
 1:	! description
-"La habitación más grande de la casa. Es un lugar agradable, con un par de estanterías repletas de libros, un par de sofás y varios sillones, un mueble bar ---dentro del que hay solamente una botella de güisqui casi vacía y un puñado de trofeos de certámenes de fotografía y pintura locales, cosa de su padre--- y un antiguo escritorio de madera oscura. Hay también un televisor con reproductor de DVD y, sobre la mesa, su bolso, en el que hay un montón de exámenes sin corregir de sus alumnos de primero de bachillerato de literatura. Está conectada con la ", (link) obj_COCINA, "cocina", (link) 0, " y el ", (link) obj_RECIBIDOR, "recibidor", (link) 0, ".";
+return L__M(##Miscellany, 19);
 }
 
 !!------------------------------------------------------------------------------
+obj_ventanas: switch (n) {
+1:	! description
+switch (real_location) {
+obj_BANNO, obj_HABITACION:
+"Se puede ver la playa y el mar azul desde las ventanas.";
+obj_COCINA:
+"Las ventanas de la cocina dan a la playa, más allá del patio.";
+obj_DORMITORIO:
+"Desde las ventanas se pueden ver los prados y las verdes montañas de Cantabria, a lo lejos.";
+obj_RECIBIDOR:
+"Hay una ventana a la entrada de la casa. Ahí sólo está su coche, en el que ha venido hasta aquí.";
+obj_SALON:
+"Desde la ventana se puede ver la playa, en la parte de atrás de la casa.";
+obj_TALLER:
+"Hay una pequeña ventana por la que se filtra la luz del exterior.";
+obj_TERRAZA:
+"Se pueden ver las ventanas de la cocina y el salón.";
+}}
+
+
+!!==============================================================================
+!!	PASILLO: Pasillo de la segunda planta.
+!!------------------------------------------------------------------------------
+obj_PASILLO: switch (n) {
+1:	! description
+"Conecta el ", (link) obj_RECIBIDOR, "piso de abajo", (link) 0, " a través de las escaleras con el ", (link) obj_DORMITORIO, "dormitorio", (link) 0, " principal, una ", (link) obj_HABITACION, "habitación multiusos", (link) 0, " y el ", (link) obj_BANNO, "baño", (link) 0, " del segundo piso. Colgadas en la pared hay varias ", (link) obj_fotografias, "fotos", (link) 0, " antiguas enmarcadas, algunas de cuando era niña, con sus padres.";
+}
+
+!!------------------------------------------------------------------------------
+obj_fotografia_01: switch (n) {
+1:	! description
+"Es una foto de su madre antes de que ella naciese, muy joven, en el campo, mirando a la cámara con una expresión entre sonriente y acusadora (la foto está sacada por su padre). Piensa que resulta raro mirar esa foto porque es como ponerse en la piel de su padre y ver a su madre con sus ojos.";
+}
+
+!!------------------------------------------------------------------------------
+obj_fotografia_02: switch (n) {
+1:	! description
+"Una foto de ella el día de su décimo cumpleaños, junto a su madre, muy poco antes de que ella muriese. Tomada también por su padre. En el momento de la foto, su madre debía tener aproximadamente la edad que ella tiene ahora. Puede servir para activar el flashback titulado: ", (emph) "Volver a ver a mamá", ".";
+}
+
+!!------------------------------------------------------------------------------
+obj_fotografia_03: switch (n) {
+1:	! description
+"Una foto suya del colegio, unos carnavales, con unos cinco años, posando con sus compañeros de clase disfrazados. Ella, de caperucita roja, entre un cocinero y una sevillana. Hay uno disfrazado de yogur de fresa que le hace gracia. Y Fran, del que siempre ha dicho que fue su novio de los tres años, disfrazado de Robin Hood.";
+}
+
+!!------------------------------------------------------------------------------
+obj_fotografia_04: switch (n) {
+1:	! description
+"Una foto mal enfocada de ella junto a su padre, agachados los dos en la playa frente a la casa, mirando algo. Es la única foto en la que aparece sola con su padre. Una de las pocas que sacó su madre. Examinar esta foto activaría el flashback titulado: ", (emph) "El Erizo", ".";
+}
+
+!!------------------------------------------------------------------------------
+obj_fotografias: switch (n) {
+1:	! description
+"Se pueden examinar las fotografías en general, o alguna foto en concreto. Al examinar las ", (link) obj_fotografias, "fotos", (link) 0, ", usando el plural, se describen varias fotografías por encima, y se citan algunas de las fotos que se pueden examinar individualmente; por ejemplo una foto de su ", (link) obj_fotografia_01, "madre de joven", (link) 0, ", una de su ", (link) obj_fotografia_02, "décimo cumpleaños", (link) 0, ", una de ", (link) obj_fotografia_03, "carnavales en el colegio", (link) 0, ", u otra de ", (link) obj_fotografia_04, "niña junto a su padre", (link) 0, ".";
+}
+
+
+!!==============================================================================
+!!	PLAYA: Playa.
+!!------------------------------------------------------------------------------
+obj_PLAYA: switch (n) {
+1:	! description
+"Una playa completamente desierta. Para bajar desde la ", (link) obj_TERRAZA, "terraza", (link) 0, " se quita antes las zapatillas. Nunca le ha gustado ir a la playa en la ciudad, saturada siempre de gente tostándose al sol. Pero esta si. Es agradable sentir la arena entre los pies y el penetrante olor del ", (link) obj_mar, "mar", (link) 0, ".";
+}
+
+!!------------------------------------------------------------------------------
+obj_casa: switch (n) {
+1:	! description
+"Permite describir la casa desde el punto de vista de Silvia. Es el edificio en el que pasó su infancia, acompañada de sus padres, puede haber material suficiente para una descripción interesante.";
+}
+
+!!------------------------------------------------------------------------------
+obj_mar: switch (n) {
+1:	! description
+"Descripción del mar cantábrico desde el punto de vista de Silvia.";
+}
+
+
+!!==============================================================================
+!!	RECIBIDOR: Recibidor.
+!!------------------------------------------------------------------------------
+obj_RECIBIDOR: switch (n) {
+1:	! description
+"El mueble más destacado es una ", (link) obj_comoda, "cómoda", (link) 0, " junto a la puerta principal de la casa. Sobre ella hay un ", (link) obj_telefono, "teléfono", (link) 0, ", y dentro del único cajón del mueble se puede encontrar una ", (link) obj_cajetilla, "cajetilla de tabaco", (link) 0, ", de su padre. Desde el recibidor se puede ir al ", (link) obj_SALON, "salón", (link) 0, " o subir por las escaleras hacia el ", (link) obj_PASILLO, "segundo piso", (link) 0, ".";
+}
+
+!!------------------------------------------------------------------------------
+obj_cajetilla: switch (n) {
+1:	! description
+"Una cajetilla de tabaco empezada, de su padre. No sabía que había vuelto a fumar. A pesar de que ella no fuma, puede usar el mechero que hay en la cocina para encenderse un cigarrillo. Al hacerlo se activaría el flashback titulado ", (emph) "Humo y sonrisas", ".";
+}
+
+!!------------------------------------------------------------------------------
+obj_comoda: switch (n) {
+1:	! description
+"Es una vieja cómoda de madera oscura. Sobre ella hay un teléfono. Tiene un único cajón. Si lo abre, dentro puede encontrar una cajetilla de tabaco, entre varios trastos inservibles.";
+}
+
+!!------------------------------------------------------------------------------
+obj_telefono: switch (n) {
+1:	! description
+"Puede utilizarlo para intentar llamar por teléfono a Carmen, su ex-pareja. Aunque las líneas están ocupadas y no se puede llegar a hacer la llamada, la acción servirá para activar el flashback titulado ", (emph) "Discusión", ".";
+}
+
+
+!!==============================================================================
+!!	SALON: Salón.
+!!------------------------------------------------------------------------------
+obj_SALON: switch (n) {
+1:	! description
+"La habitación más grande de la casa. Es un lugar agradable, con varias estanterías repletas de ", (link) obj_libros, "libros", (link) 0, " y DVDs, un amplio sofá y varios sillones, un ", (link) obj_muebleBar, "mueble bar", (link) 0, " ---dentro del que hay solamente una botella de güisqui casi vacía y un puñado de trofeos de certámenes de fotografía y pintura locales, cosa de su padre---, y hay también un ", (link) obj_televisor, "televisor", (link) 0, " con ", (link) obj_DVD, "reproductor de DVD", (link) 0, ". Está conectado con la ", (link) obj_COCINA, "cocina", (link) 0, " y el ", (link) obj_RECIBIDOR, "recibidor", (link) 0, ".";
+}
+
+!!------------------------------------------------------------------------------
+obj_DVD: switch (n) {
+1:	! description
+"Puede ponerse una película en el DVD. Aquí, al igual que ocurre si se intenta leer un libro, se presente una elección que puede ser interesante: si va a ver una película, ¿escogería una que ya haya visto y que le guste especialmente? ¿o empezaría a ver algo que tuviese pendiente?. Por no saturar con elecciones de este tipo al usuario, se puede decidir una de las dos opciones para la película y, entonces, la contraria para el caso del libro. Es decir, si se inicia una película que ya ha visto en el DVD, se leerá un libro pendiente, y viceversa. En cualquier caso, Silvia se limitará a reproducir lo que fuese que esté ya dentro del DVD, y que probablemente sea lo último que hubiese visto su padre.";
+}
+
+!!------------------------------------------------------------------------------
+obj_libros: switch (n) {
+1:	! description
+"Puede empezar a leer alguno de los libros que hay en las estanterías, aunque en menos de una hora sepa que no va a avanzar gran cosa. Yo escogería uno de esos libros que siempre he querido leer pero que he ido dejando para otro momento, cuando tenga más tiempo, como En busca del tiempo perdido de Marcel Proust. Silvia podría hacer lo mismo. Antes de dejar el libro, porque el jugador quiera pasar a hacer alguna otra cosa o porque la cuenta atrás esté a punto de finalizar, pasaría a la última página para leer el final del libro.";
+}
+
+!!------------------------------------------------------------------------------
+obj_muebleBar: switch (n) {
+1:	! description
+"Dentro hay solamente una botella de güisqui casi vacía y un puñado de trofeos de certámenes de fotografía y pintura locales. Cosa de su padre. Puede beberse los cuatro dedos de güisqui que hay en la botella. Ella hubiese preferido vodka, pero ya que es el único licor que hay en toda la casa, tendrá que conformarse con ello.";
+}
+
+!!------------------------------------------------------------------------------
+obj_televisor: switch (n) {
+1:	! description
+"La televisión no tiene señal, en este caso NO por culpa de lo que sea que va a poner fin al mundo; su padre no haría mucho caso de la televisión y la antena estará caída o no se preocuparía de poner un aparato de TDT cuando se dejó de emitir en analógico.";
+}
+
+
+!!==============================================================================
+!!	TALLER: Pequeño taller.
+!!------------------------------------------------------------------------------
 obj_TALLER: switch (n) {
 1:	! description
-"Poco más que un trastero lleno de herramientas. Todo lo que hay aquí dentro eran cosas de su padre, y está prácticamente tal y como lo dejó él antes de morir: se puede aprovechar para hablar de él y de la relación que tenían. Hay pinturas y disolventes y algunos lienzos (al padre le gustaba pintar). Si el jugador rebusca entre los trastos, puede encontrar también un rifle de caza escondido. Nunca hubiese imaginado que su padre pudiese tener un arma.
+"Poco más que un trastero lleno de herramientas. Todo lo que hay aquí dentro eran cosas de su padre, y está prácticamente tal y como lo dejó él antes de morir (de forma que se puede aprovechar para hablar sobre él y sobre la relación que tenían). Hay ", (link) obj_pinturas, "pinturas", (link) 0, " y disolventes y algunos ", (link) obj_lienzos, "lienzos", (link) 0, " (al padre le gustaba pintar). Si el interlector rebusca entre los trastos, puede encontrar también un ", (link) obj_rifle, "rifle", (link) 0, " de caza escondido. Nunca se hubiese imaginado que su padre pudiese guardar un arma.
 ^^
 Tiene una puerta a la ", (link) obj_TERRAZA, "terraza", (link) 0, ".";
 }
 
 !!------------------------------------------------------------------------------
+obj_dibujo: switch (n) {
+1:	! description
+"Aunque hay un montón de pinturas de su padre tiradas por doquier, la única enmarcada y colgada en el taller es un dibujo de una mujer. Al verlo, Silvia se sorprende mucho. Esto activa el recuerdo interactivo titulado ", (emph) "El Dibujo", ", en el que se explica el porqué de la sorpresa.";
+}
+
+!!------------------------------------------------------------------------------
+obj_lienzo: switch (n) {
+1:	! description
+"De entre todos los lienzos que hay en el taller, uno está sin terminar ---se puede pensar que su padre murió antes de poderlo acabar---. Silvia puede coger algunas pinturas y seguir pintándolo en la terraza.";
+}
+
+!!------------------------------------------------------------------------------
+obj_lienzos: switch (n) {
+1:	! description
+"De entre todos los lienzos que hay en el taller, uno está sin terminar ---se puede pensar que su padre murió antes de poderlo acabar---. Silvia puede coger algunas pinturas y seguir pintándolo en la terraza. Los lienzos terminados pueden servir para aportar algo más de trasfondo sobre su padre.";
+}
+
+!!------------------------------------------------------------------------------
+obj_pinturas: switch (n) {
+1:	! description
+"De su padre. Las puede utilizar para pintar el lienzo inacabado en la terraza.";
+}
+
+!!------------------------------------------------------------------------------
+obj_rifle: switch (n) {
+1:	! description
+"Si rebusca entre los trastos del taller puede encontrar y coger el rifle ---no está a simple vista. Habría que esconderlo de alguna forma---. Luego puede utilizarlo para suicidarse con él.";
+}
+
+
+!!==============================================================================
+!!	TERRAZA: Terraza.
+!!------------------------------------------------------------------------------
 obj_TERRAZA: switch (n) {
 1:	! description
-"Una terraza trasera con acceso a la ", (link) obj_COCINA, "casa", (link) 0, ", a un pequeño ", (link) obj_TALLER, "taller", (link) 0, " (una construcción anexa a la casa para guardar trastos y herramientas) y a la ", (link) obj_PLAYA, "playa", (link) 0, " (a través de una pequeña pasarela cerrada con una portilla). Hay una mesa y algunas sillas de exterior, deterioradas ya por el tiempo y el salitre, un ", (link) obj_aro, "aro", (link) 0, " de baloncesto sin red colgado a la fachada de la casa y un caballete para lienzos a un lado (de su padre).";
+"Una terraza trasera con acceso a la ", (link) obj_COCINA, "casa", (link) 0, ", a un ", (link) obj_TALLER, "pequeño taller", (link) 0, " (una construcción anexa a la casa para guardar trastos y herramientas) y a la ", (link) obj_PLAYA, "playa", (link) 0, " (a través de una pequeña pasarela cerrada con una portilla). Hay una mesa y algunas sillas de exterior, deterioradas ya por el tiempo y el salitre, un ", (link) obj_aroBaloncesto, "aro", (link) 0, " de baloncesto sin red colgado a la fachada de la casa y un ", (link) obj_caballete, "caballete", (link) 0, " para lienzos a un lado (de su padre). ";
 }
+
+!!------------------------------------------------------------------------------
+obj_aroBaloncesto: switch (n) {
+1:	! description
+"Se puede jugar con la canasta (es necesario conseguir el balón de baloncesto primero). El juego con la canasta utiliza la mecánica de ", (emph) "apuntado y disparo", ". Silvia empieza lanzando pegada al aro, y cada vez que enceste, el siguiente tiro lo hará un paso más alejada, y la animación de apuntado se moverá más rápido. Al fallar, se repetirá la operación desde el primer punto. Si el jugador es capaz de encestar entre 5-8 canastas seguidas (cada una más difícil que la anterior), se considera ganado el minijuego. Habría que pensar en alguna forma de recompensar al interlector por ello.";
+}
+
+!!------------------------------------------------------------------------------
+obj_caballete: switch (n) {
+1:	! description
+"Se puede utilizar para pintar uno de los lienzos que hay dentro del taller (es necesario conseguir el lienzo y las pinturas).";
+}
+
 
 	}
 ];

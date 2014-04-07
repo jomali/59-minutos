@@ -1,7 +1,6 @@
 # 59 MINUTOS
 
 Diseño y programación: José Francisco Martín.
-
 Textos: Sebastián Armas y Ana María Río.
 
 -------

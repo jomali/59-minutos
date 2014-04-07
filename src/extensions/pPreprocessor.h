@@ -179,6 +179,8 @@ Object	ParsingPreprocessor "(Parsing preprocessor)"
 !				print "COINCIDENCIA: ";
 !				print (name) self.selected_object, ", ";
 !				print max_hits, " hits.^";
+!			} else {
+!				print "NO HAY COINCIDENCIAS.^";
 !			}
 
 		],
