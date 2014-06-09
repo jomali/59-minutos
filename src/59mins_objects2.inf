@@ -42,6 +42,13 @@
 !!	DISCUSIÓN
 !!------------------------------------------------------------------------------
 
+Memory	mem_discusion "Discusión"
+ with	name_f	'discusion',
+		gender	G_FEMENINO,
+		article	"la",
+		description "Recuerdo de la discusión con Carmen.",
+ has	female;
+
 
 !!==============================================================================
 !!	REGALO DE CUMPLEAÑOS

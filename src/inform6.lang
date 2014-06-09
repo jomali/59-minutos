@@ -376,6 +376,7 @@
       <keyword>name_fp</keyword>
 	  <!-- Custom properties -->
       <keyword>long_description</keyword>
+      <keyword>real_name</keyword>
       <keyword>short_description</keyword>
     </context>
 

@@ -49,21 +49,21 @@
 !!
 !!	# TABLA DE CONTENIDOS:
 !!
-!!	1.	Constantes y variables globales del relato.
-!!	2.	Reemplazos de rutinas utilizadas por la librería Inform.
-!!	3.	Librerías y extensiones (Parte 1 de 2).
-!!	4.	Puntos de entrada para Glk (sólo en Glulx).
-!!	5.	Librerías y extensiones (Parte 2 de 2).
-!!	6.	Puntos de entrada.
-!!	7.	Otras rutinas.
-!!	8.	Gramática estándar y extendida.
-!!	9.	Definición de atributos, clases y objetos.
+!!	1)	Constantes y variables globales del relato.
+!!	2)	Reemplazos de rutinas utilizadas por la librería Inform.
+!!	3)	Librerías y extensiones (Parte 1 de 2).
+!!	4)	Puntos de entrada para Glk (sólo en Glulx).
+!!	5)	Librerías y extensiones (Parte 2 de 2).
+!!	6)	Puntos de entrada.
+!!	7)	Otras rutinas.
+!!	8)	Gramática estándar y extendida.
+!!	9)	Definición de atributos, clases y objetos.
 !!
 !!------------------------------------------------------------------------------
 !!
 !!	# TODO:
 !!
-!!	 *	En lugar de establecer un límite al máximo número de objetos que puede 
+!!	 -	En lugar de establecer un límite al máximo número de objetos que puede 
 !!		llevar la protagonista en mano, sería interesante considerar el 
 !!		inventario como un contenedor más, con límites de peso, tamaño,...
 !!
@@ -71,7 +71,7 @@
 
 
 !!==============================================================================
-!!	1.	Constantes y variables globales del relato.
+!!	1)	Constantes y variables globales del relato.
 !!------------------------------------------------------------------------------
 
 Constant Story "59 MINUTOS";
@@ -99,7 +99,7 @@ Constant MANUAL_PRONOUNS;		! Los pronoms. refieren a objetos ya mencionados
 Constant MAX_CARRIED 2;			! Máx. objetos que se pueden llevar en mano
 Constant NO_PLACES;				! Acciones LUGARES y OBJETOS desactivadas
 Constant NO_SCORE;				! No se lleva conteo de puntuación
-Constant SACK_OBJECT obj_ropa;	! Contenedor principal para la librería
+Constant SACK_OBJECT X00_ropa;	! Contenedor principal para la librería
 Constant SIN_MENSAJES;			! Se omiten los mensajes por defecto de la lib.
 
 Constant PARSER_STYLE _IST_;	! Selecciona estilo de los mensajes del parser
@@ -111,7 +111,7 @@ Global highlight_flag = true;	! Indica si el estilo resaltado está activado
 
 
 !!==============================================================================
-!!	2.	Reemplazos de rutinas utilizadas por la librería Inform.
+!!	2)	Reemplazos de rutinas utilizadas por la librería Inform.
 !!------------------------------------------------------------------------------
 
 Replace AttemptToTakeObject;	! Intento de transferir un objeto al jugador
@@ -126,12 +126,13 @@ Replace LMode1Sub;				! Lookmode 1: Breve
 Replace LMode2Sub;				! Lookmode 2: Largo (establecido por defecto)
 Replace LMode3Sub;				! Lookmode 3: Superbreve
 Replace LookSub;				! Rutina para la acción ##Look
+Replace PSN__;					! Rutina para imprimir nombre corto de un obj.
 Replace VersionSub;				! Créditos detallados de la aplicación
 Replace WearSub;				! Rutina para la acción ##Wear
 
 
 !!==============================================================================
-!!	3.	Librerías y extensiones (Parte 1 de 2).
+!!	3)	Librerías y extensiones (Parte 1 de 2).
 !!------------------------------------------------------------------------------
 
 #Ifdef TARGET_GLULX;
@@ -141,6 +142,7 @@ Include "gwindefs.h";			! GWindows: Definiciones
 #Endif; ! TARGET_GLULX;
 
 Include "Parser.h";				! Decodifica la entrada del teclado
+Include "types.h";				! Rutinas para modificar estilo de los textos
 Include ">59mins_lib.inf";		! Personalizaciones de la librería Inform
 Include ">59mins_langLM.inf";	! Mensajes de la librería
 Include ">59mins_langOM.inf";	! Mensajes de los objetos
@@ -153,7 +155,7 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 
 
 !!==============================================================================
-!!	4.	Puntos de entrada para Glk (sólo en Glulx).
+!!	4)	Puntos de entrada para Glk (sólo en Glulx).
 !!------------------------------------------------------------------------------
 
 #Ifdef TARGET_GLULX;
@@ -231,7 +233,7 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 
 
 !!==============================================================================
-!!	5.	Librerías y extensiones (Parte 2 de 2).
+!!	5)	Librerías y extensiones (Parte 2 de 2).
 !!------------------------------------------------------------------------------
 
 #Ifdef TARGET_GLULX;
@@ -248,19 +250,18 @@ Include "aimAndFire.h";			! Sistema de apuntado y disparo QTE
 Include "pPreprocessor.h";		! Preprocesador del analizador
 Include "receptacles.h";		! Contenedores (con capacidad limitada)
 Include "topicInventory.h";		! Sistema de conversación con inv. de temas
-Include "types.h";				! Rutinas para modificar estilo de los textos
 
 Include "VerbLib.h";			! Define cómo trabajan las acciones
 
 
 !!==============================================================================
-!!	6. Puntos de entrada.
+!!	6) Puntos de entrada.
 !!------------------------------------------------------------------------------
-!!	 *	BeforeParsing()
-!!	 *	Initialise()
-!!	 *	InScope()
-!!	 *	PrintVerb()
-!!	 *	UnknownVerb()
+!!	 -	BeforeParsing()
+!!	 -	Initialise()
+!!	 -	InScope()
+!!	 -	PrintVerb()
+!!	 -	UnknownVerb()
 !!------------------------------------------------------------------------------
 
 !!------------------------------------------------------------------------------
@@ -290,6 +291,9 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 	check_interpreter();		! Comprobaciones del intérprete
 	lookmode = 2;				! Modo de las descripciones de localidad autom.
 
+	ChangePlayer(X00_Silvia);	! Personaje controlado por el jugador
+	SetGrammaticalInflection(THIRD_PERSON_PRESENT); ! Flexión gramatical lib.
+
 	#Ifdef TARGET_GLULX;
 	!! Establece la escucha de eventos glk para el uso de hiperenlaces:
 	glk_request_hyperlink_event(gg_mainwin);
@@ -313,17 +317,21 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 	erase_window();
 	#Endif; ! DEMO_RELEASE;
 
+	#Ifdef DEBUG;
+	InitialiseDebug();
+	#Ifnot; 
 	main_menu();				! Menú principal. Establece la localidad inicial
+	#Endif; ! DEBUG;
 
 	return 2;
 ];
 
 !! Inicializaciones del relato (en modo de depuración):
+#Ifdef DEBUG;
 [ InitialiseDebug;
-	#Ifdef DEBUG;
-	location = obj_TERRAZA;
-	#Endif; ! DEBUG;
+	location = H02_COCINA;
 ];
+#Endif; ! DEBUG;
 
 !!------------------------------------------------------------------------------
 !! Foco del jugador. Ofrece una oportunidad para cambiar en el sistema la 
@@ -346,20 +354,17 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 ];
 
 !!------------------------------------------------------------------------------
-!! Permite cambiar el verbo que imprime el sistema al hacer preguntas al 
-!! jugador del tipo "¿Qué quieres <lo que sea>?", en caso de que se haya 
-!! definido algún verbo inusual por medio de la rutina *UnknownVerb(word)*. 
-!! *word* es la dirección de diccionario del verbo. Retorna *true* para indicar 
-!! al parser que se ha imprimido el verbo, o *false* para continuar con la 
-!! ejecucción normal y que el sistema imprima el verbo de la forma habitual.
+!! Permite cambiar el verbo que imprime el sistema al hacer al usuario 
+!! preguntas del tipo: "Intenta de nuevo porque sólo se pudo entender que 
+!! quieres <lo que sea>.", en caso de que se haya definido algún verbo inusual 
+!! por medio de la rutina *UnknownVerb(word)*. *word* es la dirección de 
+!! diccionario del verbo. Retorna *true* para indicar al parser que se ha 
+!! imprimido el verbo, o *false* para continuar con la ejecución normal y que 
+!! el sistema imprima el verbo de la forma habitual.
 !!------------------------------------------------------------------------------
 [ PrintVerb word;
-	if (word == 'no.verb') {
+	if (word == 'no.verb' or 'teleport.verb') {
 		print "hacer algo con";
-		return true;
-	}
-	if (word == 'teleport.verb') {
-		print "desplazarte a";
 		return true;
 	}
 	return false;
@@ -389,20 +394,15 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 !!------------------------------------------------------------------------------
 [ UnknownVerb
 	obj;
-	objectloop (obj in Compass) {
-		if ((ParsingPreprocessor.get_selected_object() ~= 0) 
-		&& (real_location.(obj.door_dir) 
-		== ParsingPreprocessor.get_selected_object())) {
-			verb_wordnum = 0;
-			return 'teleport.verb';
-		}
+
+	obj = ParsingPreprocessor.get_selected_object();
+	if (obj ~= real_location && obj ofclass Room) {
+		verb_wordnum = 0;
+		return 'teleport.verb';
 	}
-	objectloop (obj ofclass Object) {
-		if ((TestScope(obj, player)) 
-		&& (obj == ParsingPreprocessor.get_selected_object())) {
-			verb_wordnum = 0;
-			return 'no.verb';
-		}
+	if (TestScope(obj, player)) {
+		verb_wordnum = 0;
+		return 'no.verb';
 	}
 
 	return false;
@@ -410,16 +410,17 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 
 
 !!==============================================================================
-!!	7. Otras rutinas.
+!!	7) Otras rutinas.
 !!------------------------------------------------------------------------------
-!!	 *	check_interpreter()
-!!	 *	erase_window()
-!!	 *	highlight_style()
-!!	 *	horizontal_rule()
-!!	 *	link(obj)
-!!	 *	main_menu()
-!!	 *	press_any_key(delay:int)
-!!	 *	read_object_name(obj)
+!!	 -	check_interpreter()
+!!	 -	erase_window()
+!!	 -	highlight_style()
+!!	 -	horizontal_rule()
+!!	 -	link(obj)
+!!	 -	main_menu()
+!!	 -	press_any_key(delay:int)
+!!	 -	read_object_name(obj)
+!!	 -	top_holder(obj)
 !!------------------------------------------------------------------------------
 
 !!------------------------------------------------------------------------------
@@ -495,31 +496,39 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 ];
 
 !!------------------------------------------------------------------------------
-!! En Glulx: establece el punto de inicio/final de un hipervínculo relacionado 
-!! al objeto pasado como parámetro (si se trata de un objeto válido, se 
-!! establece el punto de inicio del hipervínculo, en caso contrario, el punto 
-!! final). Además, tanto en Máquina-Z como en Glulx: si el objeto tiene el 
-!! atributo *remarkable*, se inicia/finaliza el estilo de texto resaltado.
+!! Imprime el nombre corto del objeto *obj* pasado como parámetro con estilo de 
+!! texto resaltado (siempre que el estilo resaltado esté activado y el objeto 
+!! cuente con el atributo *remarkable*) o, en caso de que se incluya uno, el 
+!! texto *text*. Además, sólo en GLULX: crea un hipervínculo asociado al objeto 
+!! *obj*.
 !!------------------------------------------------------------------------------
-[ link obj;
+[ link obj text
+	st;
 	read_name_buffer(obj);
 
 	if ((obj ofclass Object) 
 		&& ((name_buffer-->0 ~= 4) || ~~(name_buffer->(0+WORDSIZE) == 'n' 
 		&& name_buffer->(1+WORDSIZE) == 'a' && name_buffer->(2+WORDSIZE) == 'd'
 		&& name_buffer->(3+WORDSIZE) == 'a'))) {
+
 		#Ifdef TARGET_GLULX;
 		glk_set_hyperlink(obj);
 		#Endif; ! TARGET_GLULX;
-!		if (obj has remarkable)
-			highlight_style();
-	}
-	else {
+
+		st = current_style;
+		if (obj has remarkable) highlight_style();
+		if (metaclass(text) == String) print (string) text;
+		else print (name) obj;
+		switch (st) {
+		_RST_:	roman_style();
+		_IST_:	italic_style();
+		_BST_:	bold_style();
+		_MST_:	monospaced_style();
+		}
+
 		#Ifdef TARGET_GLULX;
 		glk_set_hyperlink(0);
 		#Endif; ! TARGET_GLULX;
-		roman_style();
-		if (obj ofclass String) print (string) obj;
 	}
 ];
 
@@ -545,13 +554,7 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 	roman_style();
 	key = KeyCharPrimitive();
 
-	ChangePlayer(obj_Silvia);	! Personaje controlado por el jugador
-	SetGrammaticalInflection(THIRD_PERSON_PRESENT); ! Flexión gramatical lib.
-	location = obj_COCINA;		! Localidad inicial del relato
-
-	#Ifdef DEBUG;
-	InitialiseDebug();
-	#Endif; ! DEBUG;
+	location = H02_COCINA;		! Localidad inicial del relato
 
 	switch (key) {
 		'R', 'r': erase_window(); print "Cargando partida...^"; <<Restore>>;
@@ -620,31 +623,51 @@ Array name_buffer --> NAME_BUFFER_SIZE;
 !!		#Endif; ! TARGET_
 !!	];
 
+!!------------------------------------------------------------------------------
+!! TODO - revisar
+!! Dado un objeto como parámetro, retorna su antecesor más lejano previo a los 
+!! objetos localidad. (En el árbol de objetos del modelo de mundo, los objetos 
+!! localidad ocupan el nivel 1 del árbol, mientras que el resultado de 
+!! *top_holder()* ocuparía el nivel 2).
+!!------------------------------------------------------------------------------
+[ top_holder obj
+	i;
+	print "** top_holder de ", (name) obj, ": ";
+	while (parent(obj) ~= 0) {
+		i = ObjectScopedBySomething(obj);
+		if (i == 0) i = parent(obj);
+		if (parent(i) == 0) break;
+		obj = i;
+	}
+	print (name) obj, ".^";
+	return obj;
+];
+
 
 !!==============================================================================
-!!	8.	Gramática estándar y extendida.
+!!	8)	Gramática estándar y extendida.
 !!------------------------------------------------------------------------------
 !!	Acciones añadidas o reemplazadas:
-!!	 *	##Audio, ##AudioOn, ##AudioOff
-!!	 *	##CloseX
-!!	 *	##DefaultAction
-!!	 *	##DisrobeX
-!!	 *	##GNA (sólo en modo de depuración)
-!!	 *	##Graphics, ##GraphicsOn, ##GraphicsOff TODO - REVISAR
-!!	 *	##Highlight
-!!	 *	##LMode2
-!!	 *	##NoSuchVerb (permite eliminar acciones)
-!!	 *	##OpenX
-!!	 *	##RemarkableObjects TODO - REVISAR
-!!	 *	##TalkOn, ##TalkTo
-!!	 *	##Teleport
-!!	 *	##TopicInventory
-!!	 *	##Wear
-!!	 *	##WearX
+!!	 -	##Audio, ##AudioOn, ##AudioOff (sólo en GLULX)
+!!	 -	##CloseX
+!!	 -	##DefaultAction
+!!	 -	##DisrobeX
+!!	 -	##GNA (sólo en modo de depuración)
+!!	 -	##Graphics, ##GraphicsOn, ##GraphicsOff (sólo en GLULX)
+!!	 -	##Highlight
+!!	 -	##LMode2
+!!	 -	##NoSuchVerb (permite eliminar acciones)
+!!	 -	##OpenX
+!!	 -	##RemarkableObjects TODO - REVISAR
+!!	 -	##TalkOn, ##TalkTo
+!!	 -	##Teleport
+!!	 -	##TopicInventory
+!!	 -	##Wear
+!!	 -	##WearX
 !!
 !!	Acciones eliminadas:
-!!	 *	##Sorry
-!!	 *	##Swim
+!!	 -	##Sorry
+!!	 -	##Swim
 !!------------------------------------------------------------------------------
 
 Include	"SpanishG.h";		! Gramática española
@@ -715,7 +738,8 @@ Verb 'no.verb'
 ;
 
 [ DefaultActionSub;
-	<<Examine noun>>;
+	if (noun ofclass Room) <<Look>>;
+	else <<Examine noun>>;
 ];
 
 !!------------------------------------------------------------------------------
@@ -800,23 +824,22 @@ Verb meta 'grafico' 'graficos' 'graphic' 'graphics'
 VerboIrregular "establecer ventana gráfica"
 	with imperativo 'grafico' 'graficos' 'graphic' 'graphics';
 
-!! FIXME - Cuando se cierra la ventana y se abre después, la imágen que se
-!! mostraba deja de hacerlo.
-
 [ GraphicsSub;
-	if (GRAPHIC_WIN_FLAG) <<GraphicsOff>>;
+	if (graphicWindow has on) <<GraphicsOff>>;
 	else <<GraphicsOn>>;
 ];
 
 [ GraphicsOnSub;
-	if (GRAPHIC_WIN_FLAG)
+	if (graphicWindow has on)
 		print_ret (parser) "La ventana gráfica ya estaba abierta.";
+	if (GRAPHIC_WIN_WIDTH == 0 || graphicWindow.image == 0)
+		print_ret (parser) "No hay gráficos que mostrar.";
 	ShowGraphicWindow();
 	print_ret (parser) "Ventana gráfica abierta.";
 ];
 
 [ GraphicsOffSub;
-	if (~~GRAPHIC_WIN_FLAG)
+	if (graphicWindow hasnt on)
 		print_ret (parser) "La ventana gráfica ya estaba cerrada.";
 	HideGraphicWindow();
 	print_ret (parser) "Ventana gráfica cerrada.";
@@ -894,8 +917,6 @@ Extend only 'normal' replace
 	return GPR_PREPOSITION;
 ];
 
-[ NoSuchVerbSub; return ParserError(VERB_PE); ];
-
 Extend	'perdona' replace
 	* Anything						-> NoSuchVerb
 ;
@@ -903,6 +924,8 @@ Extend	'perdona' replace
 Extend	'nada' replace
 	* Anything						-> NoSuchVerb
 ;
+
+[ NoSuchVerbSub; return ParserError(VERB_PE); ];
 
 !!------------------------------------------------------------------------------
 !! ##OpenX
@@ -961,6 +984,34 @@ Global remarkableObjectsCount;
 	new_line;
 	return true;
 ];
+
+!!------------------------------------------------------------------------------
+!! ##Remember - TODO
+!!------------------------------------------------------------------------------
+
+Verb	'evoca' 'recuerda'
+	*								-> Remember
+	* noun							-> Remember
+;
+VerboIrregular "recordar" with imperativo 'recuerda';
+
+Verb	'cavila'
+	*								-> Remember
+	* noun							-> Remember
+	* 'acerca' 'de' noun			-> Remember
+	* 'sobre' noun					-> Remember
+;
+
+[ RememberSub;
+	if (noun == nothing) {
+		"No tiene nada que recordar.";
+	}
+	if (~~(noun ofclass Memory)) {
+		"No tiene nada que recordar sobre ", (the) noun, ".";
+	}
+	"Piensa en ", (the) noun, ".";
+];
+
 
 !!------------------------------------------------------------------------------
 !! ##TalkOn, ##TalkTo
@@ -1136,7 +1187,7 @@ VerboIrregular "vestir" with imperativo
 
 
 !!==============================================================================
-!!	9.	Definición de atributos, clases y objetos.
+!!	9)	Definición de atributos, clases y objetos.
 !!------------------------------------------------------------------------------
 
 Include ">59mins_classes.inf";

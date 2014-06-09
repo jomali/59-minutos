@@ -37,6 +37,8 @@ else
 	echo " "
 fi
 
+perl preprocesaTexto.pl ./$gameFile\_langOM_pre.inf ./$gameFile\_langOM.inf
+
 #===============================================================================
 # Compilar el relato para GLULX (sin multimedia)
 #-------------------------------------------------------------------------------

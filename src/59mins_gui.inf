@@ -3,41 +3,44 @@
 !!==============================================================================
 !!
 !!	59 MINUTOS
-!!	Definici√≥n de la interfaz gr√°fica (s√≥lo en GLULX)
+!!	DefiniciÛn de la interfaz gr·fica (sÛlo en GLULX)
 !!
 !!==============================================================================
 !!
 !!	File:			59mins_gui.inf
-!!	Author(s):		J. Francisco Mart√≠n <jfm.lisaso@gmail.com>
+!!	Author(s):		J. Francisco MartÌn <jfm.lisaso@gmail.com>
 !!	Languague:		ES (Castellano)
 !!	System:			Inform-INFSP 6
-!!	Platform:		M√°quina-Z / GLULX
-!!	Version:		1.0
-!!	Released:		2014/03/05
+!!	Platform:		M·quina-Z / GLULX
+!!	Version:		1.2
+!!	Released:		2014/06/06
 !!
 !!------------------------------------------------------------------------------
 !!
 !!	# HISTORIAL DE VERSIONES
 !!
+!!	1.2: 2014/06/06	EliminaciÛn de gram·ticas asociadas a la ventana gr·fica.
+!!	1.1: 2014/05/29	Correcciones sobre el comportamiento de la operaciones para 
+!!					abrir la ventana gr·fica.
 !!	1.0: 2014/03/05
 !!
 !!------------------------------------------------------------------------------
 !!
-!!	Copyright (c) 2014, J. Francisco Mart√≠n
+!!	Copyright (c) 2014, J. Francisco MartÌn
 !!
 !!	Este archivo forma parte de 59 MINUTOS.
 !!
 !!	59 MINUTOS es software libre: usted puede redistribuirlo y/o
-!!	modificarlo bajo los t√©rminos de la Licencia P√∫blica General GNU
-!!	publicada por la Fundaci√≥n para el Software Libre, ya sea la versi√≥n
-!!	3 de la Licencia, o (a su elecci√≥n) cualquier versi√≥n posterior.
+!!	modificarlo bajo los tÈrminos de la Licencia P˙blica General GNU
+!!	publicada por la FundaciÛn para el Software Libre, ya sea la versiÛn
+!!	3 de la Licencia, o (a su elecciÛn) cualquier versiÛn posterior.
 !!
-!!	59 MINUTOS se distribuye con la esperanza de que sea √∫til, pero
-!!	SIN GARANT√çA ALGUNA; ni siquiera la garant√≠a impl√≠cita MERCANTIL o
-!!	de APTITUD PARA UN PROP√ìSITO DETERMINADO. Consulte los detalles de
-!!	la Licencia P√∫blica General GNU para m√°s informaci√≥n.
+!!	59 MINUTOS se distribuye con la esperanza de que sea ˙til, pero
+!!	SIN GARANTÕA ALGUNA; ni siquiera la garantÌa implÌcita MERCANTIL o
+!!	de APTITUD PARA UN PROP”SITO DETERMINADO. Consulte los detalles de
+!!	la Licencia P˙blica General GNU para m·s informaciÛn.
 !!
-!!	Deber√≠a haber recibido una copia de la Licencia P√∫blica General GNU
+!!	DeberÌa haber recibido una copia de la Licencia P˙blica General GNU
 !!	junto a 59 MINUTOS. En caso contrario, consulte
 !!	<http://www.gnu.org/licenses/>.
 !!
@@ -48,16 +51,13 @@
 !!	Constantes y variables
 !!------------------------------------------------------------------------------
 
-Constant MARGIN_WIDTH 8;		! Ancho del margen interior
-Constant FRAME_WIDTH 56;		! Ancho del marco
-Constant GRAPHIC_WIN_WIDTH 28;	! Ancho de la ventana de im√°genes
-
-!! Variable que indica si se est√° mostrando o no la ventana de im√°genes:
-Global GRAPHIC_WIN_FLAG = false;
+Constant MARGIN_WIDTH 8;		! Ancho del margen interior (def. 8)
+Constant FRAME_WIDTH 56;		! Ancho del marco (def. 56)
+Constant GRAPHIC_WIN_WIDTH 28;	! Ancho de la ventana de im·genes (def. 28)
 
 
 !!==============================================================================
-!!	Librer√≠as
+!!	LibrerÌas
 !!------------------------------------------------------------------------------
 
 Include "gimage.h";				! GWindows; Image Window Widget
@@ -66,7 +66,7 @@ Include "gtile.h";				! GWindows; Tiled Image Windows
 
 
 !!==============================================================================
-!!	Definici√≥n de la interfaz
+!!	DefiniciÛn de la interfaz
 !!------------------------------------------------------------------------------
 !!
 !!	+---+---------------------------+---+
@@ -108,10 +108,11 @@ WindowPair rootUI;
                        with split 0, split_dir winmethod_Left;
                 !! B
                 GImageWin -> -> -> -> -> -> -> -> -> -> graphicWindow
-                  with split 0, split_dir winmethod_Left;
+                  with split 0, split_dir winmethod_Left
+				  has on;
 
 !!------------------------------------------------------------------------------
-!!	Definici√≥n de m√°rgenes interiores
+!!	DefiniciÛn de m·rgenes interiores
 !!------------------------------------------------------------------------------
                   !! C
                   GraphWin -> -> -> -> -> -> -> -> -> rightMargin
@@ -130,7 +131,7 @@ WindowPair rootUI;
             with split_dir winmethod_Above;
 
 !!------------------------------------------------------------------------------
-!!	Definici√≥n del marco
+!!	DefiniciÛn del marco
 !!------------------------------------------------------------------------------
         !! H
 		GVTileWin -> -> -> -> rightSide
@@ -179,11 +180,13 @@ WindowPair rootUI;
 
 
 !!==============================================================================
-!!	Funciones de utilidad
+!!	Funciones para abrir/cerrar la ventana gr·fica
 !!------------------------------------------------------------------------------
 
-[ ShowGraphicWindow;
-	!! Se redimensiona la ventana gr√°fica:
+[ ShowGraphicWindow img;
+	!! Si no tiene anchura, se evita que la ventana se abra:
+	if (GRAPHIC_WIN_WIDTH == 0) return false;
+	!! Se redimensiona la ventana gr·fica:
 	glk_window_set_arrangement(parent(graphicWindow).winid, 
 		winmethod_Left|winmethod_Proportional, 
 		GRAPHIC_WIN_WIDTH, 
@@ -195,12 +198,15 @@ WindowPair rootUI;
 		MARGIN_WIDTH + 2, 
 		interiorMargin.winid);
 	interiorMargin.split = MARGIN_WIDTH + 2;
-	!! Se activa el indicador de la ventana gr√°fica:
-	GRAPHIC_WIN_FLAG = true;
+	!! Se establece la imagen de la ventana gr·fica:
+	if (img) graphicWindow.setImage(img);
+	else if (graphicWindow.image) graphicWindow.setImage(graphicWindow.image);
+	!! Se activa el indicador de la ventana gr·fica:
+	give graphicWindow on;
 ];
 
 [ HideGraphicWindow;
-	!! Se redimensiona la ventana gr√°fica:
+	!! Se redimensiona la ventana gr·fica:
 	glk_window_set_arrangement(parent(graphicWindow).winid, 
 		winmethod_Left|winmethod_Proportional, 
 		0, 
@@ -212,13 +218,13 @@ WindowPair rootUI;
 		0, 
 		interiorMargin.winid);
 	interiorMargin.split = 0;
-	!! Se desactiva el indicador de la ventana gr√°fica:
-	GRAPHIC_WIN_FLAG = false;
+	!! Se desactiva el indicador de la ventana gr·fica:
+	give graphicWindow ~on;
 ];
 
 
 !!==============================================================================
-!!	Inicializaci√≥n de la interfaz
+!!	InicializaciÛn de la interfaz
 !!------------------------------------------------------------------------------
 
 [ InitGWindows;

@@ -164,8 +164,11 @@
 !!------------------------------------------------------------------------------
 System_file;
 
-!! Descomentar para obtener información de depuración:
+!! Descomentar para obtener info. de depuración del controlador:
 !Constant DEBUG_TOPICINVENTORY;
+
+!! Descomentar para obtener info. de depuración de la rutina CompareWord():
+!Constant DEBUG_COMPARE_WORD_ROUTINE;
 
 !! Estilo y textos por defecto de la extensión:
 Default CONVERSATION_STYLE	1; ! (0-3)
@@ -180,9 +183,8 @@ Default CONVERSATION_NO_MSG	"No hay temas que tratar";
 Object	TopicBag "(Topic Bag)";
 
 
-#Ifndef COMPARE_WORD; ! No se hace nada si ya se ha incluido
-Constant COMPARE_WORD;
-
+#Ifndef COMPARE_WORD_ROUTINE;
+Constant COMPARE_WORD_ROUTINE;
 !!==============================================================================
 !!	Compara una palabra de la entrada del usuario con una de las palabras de 
 !!	diccionario. La palabra de entrada se pasa a la función a través de 
@@ -190,13 +192,14 @@ Constant COMPARE_WORD;
 !!	de entrada, y la palabra de diccionario se pasa a través de *dictword* 
 !!	(hay que volcarla en un vector antes de hacer la comprobación).
 !!
-!!	Se retorna 1 si las palabras son iguales, o 0 si son diferentes
+!!	Se retorna 1 si las palabras son iguales, o 0 si son diferentes.
 !!------------------------------------------------------------------------------
 
 !! Vector para guardar palabras temporalmente:
 Array tmp_text -> 64;
 
-[ CompareWord num_word_prompt dictword i len;
+[ CompareWord num_word_prompt dictword
+	i len;
 
 	!! A) Se vuelca la palabra de diccionario a un array:
 
@@ -221,11 +224,11 @@ Array tmp_text -> 64;
 		(tmp_text->(WORDSIZE-1))--;		! Se reducen las dimensiones
 		len = tmp_text->(WORDSIZE-1);	! Se actualiza el valor de 'len'
 	}
-	
-	#Ifdef DEBUG_TOPICINVENTORY;
+
+	#Ifdef DEBUG_COMPARE_WORD_ROUTINE;
 	print "Comparando prompt: <", (PrintPromptWord) num_word_prompt, 
 	"> con palabra de diccionario:<", (PrintStringArray) tmp_text, ">^";
-	#Endif; ! DEBUG_TOPICINVENTORY;
+	#Endif; ! DEBUG_COMPARE_WORD_ROUTINE;
 
 	!! Si la longitud de las palabras no es igual, se retorna NO coincidente. 
 	!! (NOTA: Hay que contemplar el caso especial de palabras de más de 9 
@@ -245,11 +248,10 @@ Array tmp_text -> 64;
 	return 1;
 ];
 
+#Ifdef DEBUG_COMPARE_WORD_ROUTINE;
 !!==============================================================================
 !!	Funciones de depuración
 !!------------------------------------------------------------------------------
-
-#Ifdef DEBUG_TOPICINVENTORY;
 
 !! Función para pintar un String Array
 [ PrintStringArray the_array i;
@@ -265,9 +267,9 @@ Array tmp_text -> 64;
 		print (char) dir->i;
 ];
 
-#Endif; ! DEBUG_TOPICINVENTORY;
+#Endif; ! DEBUG_COMPARE_WORD_ROUTINE;
+#Endif; ! COMPARE_WORD_ROUTINE;
 
-#Endif; ! COMPARE_WORD;
 
 !!==============================================================================
 !!	Representa un tema sobre el que se puede hablar en una conversación.

@@ -51,26 +51,27 @@
 !!
 !!	# RUTINAS IMPLEMENTADAS
 !!
-!!	<>	AttemptToTakeObject()
-!!	<>	Banner()
-!!		<>	PrintVersionNumber()
-!!		<>	PrintSerialNumber()
-!!	<>	DrawStatusLine()
-!!		<>	PrintLocationName()
-!!	<>	GetGNAOfObject()
-!!	<>	InvSub()
-!!	<>	InvTallSub()
-!!	<>	InvWideSub()
-!!	<>	LMode1Sub()
-!!	<>	LMode2Sub()
-!!	<>	LMode3Sub()
-!!	<>	LookSub()
-!!	<>	_o()
-!!	<>	ParseNoun()
-!!	<>	SetGrammaticalInflection()
-!!		<>	GrammarSub()
-!!	<>	SpanishNominativePronoun()
-!!	<>	VersionSub()	
+!!	 *	_o()
+!!	 *	AttemptToTakeObject()
+!!	 *	Banner()
+!!		 -	PrintVersionNumber()
+!!		 -	PrintSerialNumber()
+!!	 *	DrawStatusLine()
+!!		 -	PrintLocationName()
+!!	 *	GetGNAOfObject()
+!!	 *	InvSub()
+!!	 *	InvTallSub()
+!!	 *	InvWideSub()
+!!	 *	LMode1Sub()
+!!	 *	LMode2Sub()
+!!	 *	LMode3Sub()
+!!	 *	LookSub()
+!!	 *	ParseNoun()
+!!	 -	PSN__()
+!!	 *	SetGrammaticalInflection()
+!!		 -	GrammarSub()
+!!	 *	SpanishNominativePronoun()
+!!	 *	VersionSub()	
 !!
 !!------------------------------------------------------------------------------
 
@@ -87,6 +88,25 @@ Constant SECOND_PERSON_PAST		= 5;
 Constant THIRD_PERSON_PAST		= 6;
 
 Global GRAMMATICAL_INFLECTION = SECOND_PERSON_PRESENT;
+
+
+!!==============================================================================
+!!	Escribe la terminación -o -a -os -as según el género y número del objeto 
+!!	recibido, para hacer concordar los adjetivos. Si se invoca con el parámetro 
+!!	*flag* activado (=true), GetGNAOfObject trata de devolver (si es que el 
+!!	objeto está definido apropiadamente) el GNA definido por su propiedad 
+!!	*gender*, en lugar de tener en cuenta los atributos *animate*, *male*, 
+!!	*female* y *pluralname*.
+!!------------------------------------------------------------------------------
+[ _o obj gna;
+	gna = GetGNAOfObject (obj, true);
+	switch (gna) {
+		0, 6:	print "o";
+		1, 7:	print "a";
+		3, 9:	print "os";
+		4, 10:	print "as";
+	}
+];
 
 
 !!==============================================================================
@@ -263,14 +283,16 @@ Global GRAMMATICAL_INFLECTION = SECOND_PERSON_PRESENT;
 !! Dibuja una barra de estado con el nombre de la localidad centrado.
 !! [Sobreescribe a parserm.h]
 !!------------------------------------------------------------------------------
-!! Buffer temporal para calcular el largo de un texto
-#Ifdef	VN_1630; ! compilador 6.30 o superior
-Array	_AlmacenDeTexto_ buffer 160;	! 150 y algo caracteres deberían bastar
-#Ifnot;		 ! compiladores más viejos
+#Ifndef PRINT_LOCATION_NAME;
+Constant PRINT_LOCATION_NAME;
+!! Buffer auxiliar para calcular la longitud de un texto:
+#Ifdef	VN_1630;	! compilador 6.30 o superior
+Array _AlmacenDeTexto_ buffer 160; ! 150 y algo caracteres deberían bastar
+#Ifnot;				! compiladores más viejos
 Array	_AlmacenDeTexto_ -> 160 + WORDSIZE;
 #Endif;	!VN_1630
 !! La siguiente función sirve tanto para imprimir el nombre de la localidad 
-!! como para redirigir su salida a PrintToBuffer() para contar caracteres
+!! como para redirigir su salida a *PrintToBuffer()* para contar caracteres:
 [ PrintLocationName;
 	if (location == thedark) print (name) location;
 	else {
@@ -279,6 +301,8 @@ Array	_AlmacenDeTexto_ -> 160 + WORDSIZE;
 		else print (The) visibility_ceiling;
 	}
 ];
+#Endif; ! PRINT_LOCATION_NAME;
+!!------------------------------------------------------------------------------
 [ DrawStatusLine width pos;
     #Ifdef TARGET_GLULX;
     ! If we have no status window, we must not try to redraw it.
@@ -304,6 +328,7 @@ Array	_AlmacenDeTexto_ -> 160 + WORDSIZE;
 
 
 !!==============================================================================
+!! TODO - revisar
 !! Rutina para obtener la descripción de un objeto. Es idéntica a la rutina 
 !! original implementada en *parserm.h* con una salvedad: al examinar un objeto 
 !! por primera vez se le da el nuevo atributo *described*.
@@ -313,15 +338,16 @@ Attribute described; ! Indica si un objeto ha sido descrito al jugador
 
 [ ExamineSub i;
     if (location == thedark) return L__M(##Examine, 1);
-	if (noun hasnt described) give noun described;
     i = noun.description;
     if (i == 0) {
+		if (noun hasnt described) give noun described;
         if (noun has container) <<Search noun>>;
         if (noun has switchable) { L__M(##Examine, 3, noun); rfalse; }
         return L__M(##Examine, 2, noun);
     }
     PrintOrRun(noun, description);
     if (noun has switchable) L__M(##Examine, 3, noun);
+	if (noun hasnt described) give noun described;
     if (AfterRoutines() == 1) rtrue;
 ];
 
@@ -558,24 +584,6 @@ Attribute described; ! Indica si un objeto ha sido descrito al jugador
 
 
 !!==============================================================================
-!! Escribe la terminación -o -a -os -as según el género y número del objeto 
-!! recibido, para hacer concordar los adjetivos. Si se invoca con el parámetro 
-!! flag activado (=true), GetGNAOfObject trata de devolver (si es que el objeto 
-!! está definido apropiadamente) el GNA definido por su propiedad gender, en 
-!! lugar de tener en cuenta los atributos animate, male, female y pluralname.
-!!------------------------------------------------------------------------------
-[ _o obj gna;
-	gna = GetGNAOfObject (obj, true);
-	switch (gna) {
-		0, 6:	print "o";
-		1, 7:	print "a";
-		3, 9:	print "os";
-		4, 10:	print "as";
-	}
-];
-
-
-!!==============================================================================
 !! La rutina ParseNoun se ocupa de ignorar "de" cuando aparece entre dos 
 !! palabras reconocidas como names de un mismo objeto. Así, si un objeto tiene 
 !! en su campo "name" los valores "caja" "madera" "caoba" ParseNoun aceptará 
@@ -741,6 +749,56 @@ Attribute described; ! Indica si un objeto ha sido descrito al jugador
 
 
 !!==============================================================================
+!! Rutina para imprimir el nombre corto de un objeto. Además, crea un 
+!! hipervínculo relacionado con el objeto y, si el objeto tiene el atributo 
+!! *remarkable* utiliza un estilo resaltado para imprimir el nombre.
+!! [Sobreescribe a parserm.h]
+!!------------------------------------------------------------------------------
+[ PSN__ obj
+	st;
+	if (obj == 0) { print (string) NOTHING__TX; rtrue; }
+	switch (metaclass(obj)) {
+		Routine:  print "<routine ", obj, ">"; rtrue;
+		String:   print "<string ~", (string) obj, "~>"; rtrue;
+		nothing:  print "<illegal object number ", obj, ">"; rtrue;
+	}
+	if (obj == player) { print (string) YOURSELF__TX; rtrue; }
+	#Ifdef LanguagePrintShortName;
+	if (LanguagePrintShortName(obj)) rtrue;
+	#Endif; ! LanguagePrintShortName
+
+	if (~~(obj ofclass Room)) {
+		#Ifdef TARGET_GLULX;
+		glk_set_hyperlink(obj);
+		#Endif; ! TARGET_GLULX;
+		st = current_style;
+		if (obj has remarkable) highlight_style();
+	}
+
+	if (indef_mode && obj.&short_name_indef ~= 0 
+		&& PrintOrRun(obj, short_name_indef, 1) ~= 0)
+			jump PSN__end;
+	if (obj.&short_name ~= 0 && PrintOrRun(obj, short_name, 1) ~= 0)
+		jump PSN__end;
+	print (object) obj;
+
+	.PSN__end;
+
+	if (~~(obj ofclass Room)) {
+		switch (st) {
+			_RST_:	roman_style();
+			_IST_:	italic_style();
+			_BST_:	bold_style();
+			_MST_:	monospaced_style();
+		}
+		#Ifdef TARGET_GLULX;
+		glk_set_hyperlink(0);
+		#Endif; ! TARGET_GLULX;
+	}
+];
+
+
+!!==============================================================================
 !! Establece la flexión gramatical de los mensajes de la librería.
 !!------------------------------------------------------------------------------
 [ SetGrammaticalInflection gi;
@@ -896,7 +954,7 @@ Verb	meta 'gramatica' 'grammar'
 !! Imprime el pronombre nominativo correcto correspondiente a un objeto
 !!------------------------------------------------------------------------------
 [ SpanishNominativePronoun obj;
-	switch (GetGNAOfObject(obj)) {
+	switch (GetGNAOfObject (obj, true)) {
 		0, 6:	print "él";
 		1, 7:	print "ella";
 		2, 8:	print "ello";

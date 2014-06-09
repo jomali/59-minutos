@@ -12,18 +12,18 @@
 !!	Languague:		ES (Castellano)
 !!	System:			Inform-INFSP 6
 !!	Platform:		Máquina-Z / GLULX
-!!	Version:		1.0
-!!	Released:		2014/03/05
+!!	Version:		1.1
+!!	Released:		2014/04/09
 !!
 !!------------------------------------------------------------------------------
 !!
 !!	# HISTORIAL DE VERSIONES
 !!
+!!	1.1: 2014/04/09	Añadido resaltado de nombres de objetos en los mensajes por 
+!!					defecto de la librería.
 !!	1.0: 2014/03/05
 !!
 !!------------------------------------------------------------------------------
-!!
-!!	Copyright (c) 2014, J. Francisco Martín
 !!
 !!	Este archivo forma parte de 59 MINUTOS.
 !!
@@ -40,6 +40,8 @@
 !!	Debería haber recibido una copia de la Licencia Pública General GNU
 !!	junto a 59 MINUTOS. En caso contrario, consulte
 !!	<http://www.gnu.org/licenses/>.
+!!
+!!	Copyright (c) 2014, J. Francisco Martín
 !!
 !!------------------------------------------------------------------------------
 
@@ -154,7 +156,7 @@ Default GRAMMATICAL_INFLECTION 2;
 		2:	"No descubres nada interesante en ", (the) x1, " sobre ese tema.";
 		3:	"No descubre nada interesante en ", (the) x1, " sobre ese tema.";
 		4:	"No descubrí nada interesante en ", (the) x1, " sobre ese tema.";
-		5:	"No descubriste nada interesante en ", (the) x1, " sobre ese tema.";
+		5:	"No descubriste nada interesante en ", (the) x1," sobre ese tema.";
 		6:	"No descubrió nada interesante en ", (the) x1, " sobre ese tema.";
 		}
 
@@ -279,22 +281,22 @@ Default GRAMMATICAL_INFLECTION 2;
 		!! acciones PonerSobre o Meter.]
 		switch (n) {
 			1:	switch (GRAMMATICAL_INFLECTION) {
-				1,2,3:	print_ret (The) x1, " no puede", (n) x1, " tener 
-						cosas dentro.";
-				4,5,6:	print_ret (The) x1, " no podía", (n) x1, " tener 
-						cosas dentro.";
+				1,2,3:	print_ret (The) x1, " no puede", (n) x1, 
+						" tener cosas dentro.";
+				4,5,6:	print_ret (The) x1, " no podía", (n) x1, 
+						" tener cosas dentro.";
 				}
 			2:	switch (GRAMMATICAL_INFLECTION) {
-				1,2,3:	print_ret (The) x1, " ", (esta) x1, " cerrad", 
-						(o) x1, ".";
-				4,5,6:	print_ret (The) x1, " estaba", (n) x1, " cerrad", 
-						(o) x1, ".";
+				1,2,3:	print_ret (The) x1, " ", (esta) x1, 
+						" cerrad", (o) x1, ".";
+				4,5,6:	print_ret (The) x1, " estaba", (n) x1, 
+						" cerrad", (o) x1, ".";
 				}
 			3:	switch (GRAMMATICAL_INFLECTION) {
-				1,2,3:	print_ret (The) x1, " ya ", (esta) x1, " vací", 
-						(o) x1, ".";
-				4,5,6:	print_ret (The) x1, " ya estaba", (n) x1, " vací",
-						(o) x1, ".";
+				1,2,3:	print_ret (The) x1, " ya ", (esta) x1, 
+						" vací", (o) x1, ".";
+				4,5,6:	print_ret (The) x1, " ya estaba", (n) x1, 
+						" vací", (o) x1, ".";
 				}
 			4:	switch (GRAMMATICAL_INFLECTION) {
 				1:	"No puedo vaciar un objeto sobre sí mismo.";
@@ -400,22 +402,22 @@ Default GRAMMATICAL_INFLECTION 2;
 				6:	" ahí mientras no lo soltase.";
 				}
 			5:	switch (GRAMMATICAL_INFLECTION) {
-				1:	if (x1 has supporter) print "Subo ", (al) x1;
+				1:	if (x1 has supporter) print "Subo ", (al_) x1;
 					else print "Entro en ", (the) x1;
 					".";
-				2:	if (x1 has supporter) print "Subes ", (al) x1;
+				2:	if (x1 has supporter) print "Subes ", (al_) x1;
 					else print "Entras en ", (the) x1;
 					".";
-				3:	if (x1 has supporter) print "Sube ", (al) x1;
+				3:	if (x1 has supporter) print "Sube ", (al_) x1;
 					else print "Entra en ", (the) x1;
 					".";
-				4:	if (x1 has supporter) print "Subí ", (al) x1;
+				4:	if (x1 has supporter) print "Subí ", (al_) x1;
 					else print "Entré en ", (the) x1;
 					".";
-				5:	if (x1 has supporter) print "Subiste ", (al) x1;
+				5:	if (x1 has supporter) print "Subiste ", (al_) x1;
 					else print "Entraste en ", (the) x1;
 					".";
-				6:	if (x1 has supporter) print "Subió ", (al) x1;
+				6:	if (x1 has supporter) print "Subió ", (al_) x1;
 					else print "Entró en ", (the) x1;
 					".";
 				}
@@ -432,24 +434,24 @@ Default GRAMMATICAL_INFLECTION 2;
 					else print "(Saliste ";
 				6:	if (x1 has supporter) print "(Se bajó ";
 					else print "(Salió ";
-				} print_ret (del) x1, ".)";
+				} print_ret (del_) x1, ".)";
 			7:	switch (GRAMMATICAL_INFLECTION) {
-				1:	if (x1 has supporter) "(Me subo ", (al) x1, ".)^";
+				1:	if (x1 has supporter) "(Me subo ", (al_) x1, ".)^";
 					if (x1 has container) "(Me meto en ", (the) x1, ".)^";
 					"(Entro en ", (the) x1, ".)^";
-				2:	if (x1 has supporter) "(Te subes ", (al) x1, ".)^";
+				2:	if (x1 has supporter) "(Te subes ", (al_) x1, ".)^";
 					if (x1 has container) "(Te metes en ", (the) x1, ".)^";
 					"(Entras en ", (the) x1, ".)^";
-				3:	if (x1 has supporter) "(Se sube ", (al) x1, ".)^";
+				3:	if (x1 has supporter) "(Se sube ", (al_) x1, ".)^";
 					if (x1 has container) "(Se mete en ", (the) x1, ".)^";
 					"(Entra en ", (the) x1, ".)^";
-				4:	if (x1 has supporter) "(Me subí ", (al) x1, ".)^";
+				4:	if (x1 has supporter) "(Me subí ", (al_) x1, ".)^";
 					if (x1 has container) "(Me metí en ", (the) x1, ".)^";
 					"(Entré en ", (the) x1, ".)^";
-				5:	if (x1 has supporter) "(Te subiste ", (al) x1, ".)^";
+				5:	if (x1 has supporter) "(Te subiste ", (al_) x1, ".)^";
 					if (x1 has container) "(Te metiste en ", (the) x1,".)^";
 					"(Entraste en ", (the) x1, ".)^";
-				6:	if (x1 has supporter) "(Se subió ", (al) x1, ".)^";
+				6:	if (x1 has supporter) "(Se subió ", (al_) x1, ".)^";
 					if (x1 has container) "(Se metió en ", (the) x1, ".)^";
 					"(Entró en ", (the) x1, ".)^";
 				}
@@ -481,8 +483,8 @@ Default GRAMMATICAL_INFLECTION 2;
 				6:	"No observó nada especial en ", (the) x1, ".";
 				}
 			3:	switch (GRAMMATICAL_INFLECTION) {
-				1,2,3:	print (The) x1, " ", (esta) x1;
-				4,5,6:	print (The) x1, " estaba", (n) x1;
+					1,2,3:	print (The) x1, " ", (esta) x1;
+					4,5,6:	print (The) x1, " estaba", (n) x1;
 				}
 				if (x1 has on) " encendid", (o) x1, ".";
 				else " apagad", (o) x1,".";
@@ -507,17 +509,17 @@ Default GRAMMATICAL_INFLECTION 2;
 				}
 				LanguageVerb(verb_word); ".";
 			2:	switch (GRAMMATICAL_INFLECTION) {
-				1:	"No puedo salir ", (del) x1, " porque está", (n) x1, 
+				1:	"No puedo salir ", (del_) x1, " porque está", (n) x1, 
 					" cerrad", (o) x1, ".";
-				2:	"No puedes salir ", (del) x1, " porque está", (n) x1,
+				2:	"No puedes salir ", (del_) x1, " porque está", (n) x1,
 					" cerrad", (o) x1, ".";
-				3:	"No puede salir ", (del) x1, " porque está", (n) x1,
+				3:	"No puede salir ", (del_) x1, " porque está", (n) x1,
 					" cerrad", (o) x1, ".";
-				4:	"No podía salir ", (del) x1, " porque estaba", (n) x1,
+				4:	"No podía salir ", (del_) x1, " porque estaba", (n) x1,
 					" cerrad", (o) x1, ".";
-				5:	"No podías salir ", (del) x1, " porque estaba", (n) x1,
+				5:	"No podías salir ", (del_) x1, " porque estaba", (n) x1,
 					" cerrad", (o) x1, ".";
-				6:	"No podía salir ", (del) x1, " porque estaba", (n) x1,
+				6:	"No podía salir ", (del_) x1, " porque estaba", (n) x1,
 					" cerrad", (o) x1, ".";
 				}
 			3:	switch (GRAMMATICAL_INFLECTION) {
@@ -533,7 +535,7 @@ Default GRAMMATICAL_INFLECTION 2;
 					else print "Saliste ";
 				6:	if (x1 has supporter) print "Bajó "; 
 					else print "Salió ";
-				} print_ret (del) x1, ".";
+				} print_ret (del_) x1, ".";
 			!! -- "Pero es que no estás ecima/dentro de ", (the) x1, ".";
 			4:	switch (GRAMMATICAL_INFLECTION) {
 				1:	print "No puedo. No estoy ";
@@ -544,7 +546,7 @@ Default GRAMMATICAL_INFLECTION 2;
 				6:	print "No podía. No estaba ";
 				}
 				if (x1 has supporter) print "encima "; else print "dentro ";
-				print_ret (del) x1, ".";
+				print_ret (del_) x1, ".";
 		}
 
 	Fill:
@@ -673,7 +675,7 @@ Default GRAMMATICAL_INFLECTION 2;
 					if (x1 has supporter) print "bajarse ";
 					else print "salir ";
 				}
-				print_ret (del) x1, " antes.";
+				print_ret (del_) x1, " antes.";
 			2:	switch (GRAMMATICAL_INFLECTION) {
 				1:	"No puedo ir por ahí.";
 				2:	"No puedes ir por ahí.";
@@ -699,12 +701,12 @@ Default GRAMMATICAL_INFLECTION 2;
 				6:	"Era incapaz de bajar por ", (the) x1, ".";
 				}
 			5:	switch (GRAMMATICAL_INFLECTION) {
-				1:	"No puedo pasar a través ", (del) x1, ".";
-				2:	"No puedes pasar a través ", (del) x1, ".";
-				3:	"No puede pasar a través ", (del) x1, ".";
-				4:	"No podía pasar a través ", (del) x1, ".";
-				5:	"No podías pasar a través ", (del) x1, ".";
-				6:	"No podía pasar a través ", (del) x1, ".";
+				1:	"No puedo pasar a través ", (del_) x1, ".";
+				2:	"No puedes pasar a través ", (del_) x1, ".";
+				3:	"No puede pasar a través ", (del_) x1, ".";
+				4:	"No podía pasar a través ", (del_) x1, ".";
+				5:	"No podías pasar a través ", (del_) x1, ".";
+				6:	"No podía pasar a través ", (del_) x1, ".";
 				}
 			6:	switch (GRAMMATICAL_INFLECTION) {
 				1:	"No puedo ir porque ", (the) x1, " no lleva", (n) x1, 
@@ -786,13 +788,13 @@ Default GRAMMATICAL_INFLECTION 2;
 						meter", (lo) x1, " donde fuese.";
 				}
 			2:	switch (GRAMMATICAL_INFLECTION) {
-				1,2,3:	"No se pueden meter cosas dentro ", (del) x1, ".";
-				4,5,6:	"No se podían meter cosas dentro ", (del) x1, ".";
+				1,2,3:	"No se pueden meter cosas dentro ", (del_) x1, ".";
+				4,5,6:	"No se podían meter cosas dentro ", (del_) x1, ".";
 				}
 			3:	switch (GRAMMATICAL_INFLECTION) {
 				1,2,3:	print_ret (The) x1, " ", (esta) x1, 
 						" cerrad", (o) x1, ".";
-				4,5,6:	print (The) x1, " estaba", (n) x1,
+				4,5,6:	print_ret (The) x1, " estaba", (n) x1, 
 						" cerrad", (o) x1, ".";
 				}
 			4:	switch (GRAMMATICAL_INFLECTION) {
@@ -825,12 +827,12 @@ Default GRAMMATICAL_INFLECTION 2;
 				}
 			8:	"Hecho.";
 			9:	switch (GRAMMATICAL_INFLECTION) {
-				1:	"Meto ", (the) x1, " dentro ", (del) second, ".";
-				2:	"Metes ", (the) x1, " dentro ", (del) second, ".";
-				3:	"Mete ", (the) x1, " dentro ", (del) second, ".";
-				4:	"Metí ", (the) x1, " dentro ", (del) second, ".";
-				5:	"Metiste ", (the) x1, " dentro ", (del) second, ".";
-				6:	"Metió ", (the) x1, " dentro ", (del) second, ".";
+				1:	"Meto ", (the) x1, " dentro ", (del_) second, ".";
+				2:	"Metes ", (the) x1, " dentro ", (del_) second, ".";
+				3:	"Mete ", (the) x1, " dentro ", (del_) second, ".";
+				4:	"Metí ", (the) x1, " dentro ", (del_) second, ".";
+				5:	"Metiste ", (the) x1, " dentro ", (del_) second, ".";
+				6:	"Metió ", (the) x1, " dentro ", (del_) second, ".";
 				}
 		}
 
@@ -1044,9 +1046,10 @@ Default GRAMMATICAL_INFLECTION 2;
 				1,2,3:	"No parece", (n) x1, " tener ningún tipo de cerrojo.";
 				4,5,6:	"No parecía", (n) x1," tener ningún tipo de cerrojo.";
 				}
-			2:	if (x1 provides with_key)
+			2:	if (x1 provides with_key) {
 					print_ret (The) x1, " ya estaba", (n) x1, 
 					" cerrad", (o) x1, " con llave.";
+				}
 				else {
 					switch (GRAMMATICAL_INFLECTION) {
 					1,2,3:	print_ret (The) x1, " ya tiene", (n) x1, 
@@ -1077,17 +1080,17 @@ Default GRAMMATICAL_INFLECTION 2;
 				}
 			5:	switch (GRAMMATICAL_INFLECTION) {
 				1:	if (second) "Cierro ", (the) x1, " con ", (the) second, ".";
-					"Echo el cerrojo ", (al) x1, ".";
+					"Echo el cerrojo ", (al_) x1, ".";
 				2:	if (second) "Cierras ", (the) x1, " con ", (the) second,".";
-					"Echas el cerrojo ", (al) x1, ".";
+					"Echas el cerrojo ", (al_) x1, ".";
 				3:	if (second) "Cierra ", (the) x1, " con ", (the) second, ".";
-					"Echa el cerrojo ", (al) x1, ".";
+					"Echa el cerrojo ", (al_) x1, ".";
 				4:	if (second) "Cerré ", (the) x1, " con ", (the) second, ".";
-					"Eché el cerrojo ", (al) x1, ".";
+					"Eché el cerrojo ", (al_) x1, ".";
 				5:	if (second) "Cerraste ", (the) x1," con ", (the) second,".";
-					"Echaste el cerrojo ", (al) x1, ".";
+					"Echaste el cerrojo ", (al_) x1, ".";
 				6:	if (second) "Cerró ", (the) x1, " con ", (the) second, ".";
-					"Echó el cerrojo ", (al) x1, ".";
+					"Echó el cerrojo ", (al_) x1, ".";
 				}
 		}
 
@@ -1614,7 +1617,7 @@ Default GRAMMATICAL_INFLECTION 2;
 			5:	print "   (dejado con alguien)";
 			6:	print "   (ahora en ", (name) x1, ")";
 			7:	print "   (ahora en ", (the) x1, ")";
-			8:	print "   (ahora dentro ", (del) x1, ")";
+			8:	print "   (ahora dentro ", (del_) x1, ")";
 			9:	print "   (ahora en ", (the) x1, ")";
 !! TODO - usar x1
 			10:	print "   (perdido)";
@@ -2039,23 +2042,23 @@ Default GRAMMATICAL_INFLECTION 2;
 				6:	"No encontró nada interesante.";
 				}
 			5:	switch (GRAMMATICAL_INFLECTION) {
-				1:	"No puedo ver lo que hay dentro ", (del) x1, " porque ", 
+				1:	"No puedo ver lo que hay dentro ", (del_) x1, " porque ", 
 					(esta) x1, " cerrad", (o) x1, ".";
-				2:	"No puedes ver lo que hay dentro ", (del) x1, " porque ", 
+				2:	"No puedes ver lo que hay dentro ", (del_) x1, " porque ", 
 					(esta) x1, " cerrad", (o) x1, ".";
-				3:	"No puede ver lo que hay dentro ", (del) x1, " porque ", 
+				3:	"No puede ver lo que hay dentro ", (del_) x1, " porque ", 
 					(esta) x1, " cerrad", (o) x1, ".";
-				4:	"No podía ver lo que hay dentro ", (del) x1, " porque 
+				4:	"No podía ver lo que hay dentro ", (del_) x1, " porque 
 					estaba", (n) x1, " cerrad", (o) x1, ".";
-				5:	"No podías ver lo que hay dentro ", (del) x1, " porque 
+				5:	"No podías ver lo que hay dentro ", (del_) x1, " porque 
 					estaba", (n) x1, " cerrad", (o) x1, ".";
-				6:	"No podía ver lo que hay dentro ", (del) x1, " porque 
+				6:	"No podía ver lo que hay dentro ", (del_) x1, " porque 
 					estaba", (n) x1, " cerrad", (o) x1, ".";
 				}
 			6:	switch (GRAMMATICAL_INFLECTION) {
 				1,2,3:	print_ret (The) x1, " ", (esta) x1, 
 						" vací", (o) x1, ".";
-				4,5,6:	print_ret (The) x1, " estaba", (n) x1,
+				4,5,6:	print_ret (The) x1, " estaba", (n) x1, 
 						" vací", (o) x1, ".";
 				}
 			7:	print "En ", (the) x1;
@@ -2101,7 +2104,7 @@ Default GRAMMATICAL_INFLECTION 2;
 			2:	switch (GRAMMATICAL_INFLECTION) {
 				1,2,3:	print_ret (The) x1, " no muestra", (n) x1, 
 						" ningún interés.";
-				4,5,6:	print_ret (The) x1, " no mostraba", (n) x1,
+				4,5,6:	print_ret (The) x1, " no mostraba", (n) x1, 
 						" ningún interés.";
 				}
 		}
@@ -2273,14 +2276,14 @@ Default GRAMMATICAL_INFLECTION 2;
 				6:	"Siempre se ha tenido a sí mism", (o) player, ".";
 				}
 			3:	switch (GRAMMATICAL_INFLECTION) {
-				1:	"No creo que ", (al) x1, " le", (s) x1, " gustara.";
-				2:	"No crees que ", (al) x1, " le", (s) x1, " gustara.";
-				3:	"No cree que ", (al) x1, " le", (s) x1, " gustara.";
-				4:	"No creía que ", (al) x1, " le", (s) x1, " hubiese 
+				1:	"No creo que ", (al_) x1, " le", (s) x1, " gustara.";
+				2:	"No crees que ", (al_) x1, " le", (s) x1, " gustara.";
+				3:	"No cree que ", (al_) x1, " le", (s) x1, " gustara.";
+				4:	"No creía que ", (al_) x1, " le", (s) x1, " hubiese 
 					gustado.";
-				5:	"No creías que ", (al) x1, " le", (s) x1, " hubiese 
+				5:	"No creías que ", (al_) x1, " le", (s) x1, " hubiese 
 					gustado.";
-				6:	"No creía que ", (al) x1, " le", (s) x1, " hubiese 
+				6:	"No creía que ", (al_) x1, " le", (s) x1, " hubiese 
 					gustado.";
 				}
 			4:	switch (GRAMMATICAL_INFLECTION) {
@@ -2303,7 +2306,7 @@ Default GRAMMATICAL_INFLECTION 2;
 					if (x1 has supporter) print "bajarse ";
 					else print "salir ";
 				}
-				print_ret (del) x1, " antes.";
+				print_ret (del_) x1, " antes.";
 			5:	switch (GRAMMATICAL_INFLECTION) {
 				1:	"Ya tengo ", (the) x1, ".";
 				2:	"Ya tienes ", (the) x1, ".";
@@ -2313,22 +2316,22 @@ Default GRAMMATICAL_INFLECTION 2;
 				6:	"Ya tenía ", (the) x1, ".";
 				}
 			6:	switch (GRAMMATICAL_INFLECTION) {
-				1,2,3:	"Parece", (n) noun, " pertenecer ", (al) x1, ".";
-				4,5,6:	"Parecía", (n) noun, " pertenecer ", (al) x1, ".";
+				1,2,3:	"Parece", (n) noun, " pertenecer ", (al_) x1, ".";
+				4,5,6:	"Parecía", (n) noun, " pertenecer ", (al_) x1, ".";
 				}
 			7:	switch (GRAMMATICAL_INFLECTION) {
-				1,2,3:	"Parece", (n) noun, " formar parte ", (del) x1, ".";
-				4,5,6:	"Parecía", (n) noun, " formar parte ", (del) x1, ".";
+				1,2,3:	"Parece", (n) noun, " formar parte ", (del_) x1, ".";
+				4,5,6:	"Parecía", (n) noun, " formar parte ", (del_) x1, ".";
 				}
 			8:	switch (GRAMMATICAL_INFLECTION) {
 				1,2,3:	"No ", (esta) x1, " disponible", (s) x1, ".";
 				4,5,6:	"No estaba", (n) x1, " disponible", (s) x1, ".";
 				}
 			9:	switch (GRAMMATICAL_INFLECTION) {
-				1,2,3:	print_ret (The) x1, " no ", (esta) x1, " abiert", 
-						(o) x1, ".";
-				4,5,6:	print_ret (The) x1, " no estaba", (n) x1, " abiert", 
-						(o) x1, ".";
+				1,2,3:	print_ret (The) x1, " no ", (esta) x1, 
+						" abiert", (o) x1, ".";
+				4,5,6:	print_ret (The) x1, " no estaba", (n) x1, 
+						" abiert", (o) x1, ".";
 				}
 			10:	switch (GRAMMATICAL_INFLECTION) {
 				1:	"Difícilmente podría llevarme eso.";
@@ -2339,10 +2342,10 @@ Default GRAMMATICAL_INFLECTION 2;
 				6:	"Difícilmente hubiese podido llevarse eso.";
 				}
 			11:	switch (GRAMMATICAL_INFLECTION) {
-				1,2,3:	print_ret (The) x1, " ", (esta) x1, " fij", (o) x1, 
-						" en el sitio.";
-				4,5,6:	print_ret (The) x1, " estaba", (n) x1, " fij", (o) x1, 
-						" en el sitio.";
+				1,2,3:	print_ret (The) x1, " ", (esta) x1, 
+						" fij", (o) x1, " en el sitio.";
+				4,5,6:	print_ret (The) x1, " estaba", (n) x1, 
+						" fij", (o) x1, " en el sitio.";
 				}
 			!! -- "Ya llevas demasiadas cosas.";
 			12:	switch (GRAMMATICAL_INFLECTION) {
@@ -2489,7 +2492,8 @@ Default GRAMMATICAL_INFLECTION 2;
 				1,2,3:	"No parece", (n) x1, " tener ningún tipo de cerrojo.";
 				4,5,6:	"No parecía", (n) x1, " tener ningún tipo de cerrojo.";
 				}
-			2:	print_ret (The) x1, " ya tenía", (n) x1, " abierto el cerrojo.";
+			2:	print_ret (The) x1, " ya tenía", (n) x1, 
+				" abierto el cerrojo.";
 			3:	if (second) switch (GRAMMATICAL_INFLECTION) {
 				1,2,3:	"No parece", (n) x1, " encajar en la cerradura.";
 				4,5,6:	"No parecía", (n) x1, " encajar en la cerradura.";
@@ -2503,18 +2507,18 @@ Default GRAMMATICAL_INFLECTION 2;
 				6:	"Necesitaba algún tipo de llave.";
 				}
 			4:	switch (GRAMMATICAL_INFLECTION) {
-				1:	if (~~second) "Quito el cerrojo ", (al) x1, ".";
-					"Quito el cerrojo ", (al) x1, " con ", (the) second, ".";
-				2:	if (~~second) "Quitas el cerrojo ", (al) x1, ".";
-					"Quitas el cerrojo ", (al) x1, " con ", (the) second, ".";
-				3:	if (~~second) "Quita el cerrojo ", (al) second, ".";
-					"Quita el cerrojo ", (al) x1, " con ", (the) second, ".";
-				4:	if (~~second) "Quité el cerrojo ", (al) x1, ".";
-					"Quité el cerrojo ", (al) x1, " con ", (the) second, ".";
-				5:	if (~~second) "Quitaste el cerrojo ", (al) x1, ".";
-					"Quitaste el cerrojo ",(al) x1," con ", (the) second, ".";
-				6:	if (~~second) "Quitó el cerrojo ", (al) x1, ".";
-					"Quitó el cerrojo ", (al) x1, " con ", (the) second, ".";
+				1:	if (~~second) "Quito el cerrojo ", (al_) x1, ".";
+					"Quito el cerrojo ", (al_) x1, " con ", (the) second, ".";
+				2:	if (~~second) "Quitas el cerrojo ", (al_) x1, ".";
+					"Quitas el cerrojo ", (al_) x1, " con ", (the) second, ".";
+				3:	if (~~second) "Quita el cerrojo ", (al_) second, ".";
+					"Quita el cerrojo ", (al_) x1, " con ", (the) second, ".";
+				4:	if (~~second) "Quité el cerrojo ", (al_) x1, ".";
+					"Quité el cerrojo ", (al_) x1, " con ", (the) second, ".";
+				5:	if (~~second) "Quitaste el cerrojo ", (al_) x1, ".";
+					"Quitaste el cerrojo ",(al_) x1," con ", (the) second, ".";
+				6:	if (~~second) "Quitó el cerrojo ", (al_) x1, ".";
+					"Quitó el cerrojo ", (al_) x1, " con ", (the) second, ".";
 				}
 		}
 

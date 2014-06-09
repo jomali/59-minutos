@@ -1,9 +1,54 @@
 
 
+!!==============================================================================
+!!
+!!	PARSING PREPROCESSOR
+!!
+!!==============================================================================
+!!
+!!	File:			pPreprocessor.h
+!!	Author(s):		J. Francisco Martín <jfm.lisaso@gmail.com>
+!!	Language:		ES (Castellano)
+!!	System:			Inform-INFSP 6
+!!	Platform:		Z-Machine / Glulx
+!!	Version:		1.0
+!!	Released:		2014/05/29
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	# HISTORIAL DE VERSIONES
+!!
+!!	0.1: 2014/05/29	Versión preliminar.
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	Copyright (c) 2014, J. Francisco Martín
+!!
+!!	Este programa es software libre: usted puede redistribuirlo y/o 
+!!	modificarlo bajo los términos de la Licencia Pública General GNU 
+!!	publicada por la Fundación para el Software Libre, ya sea la versión 
+!!	3 de la Licencia, o (a su elección) cualquier versión posterior.
+!!
+!!	Este programa se distribuye con la esperanza de que sea útil, pero 
+!!	SIN GARANTÍA ALGUNA; ni siquiera la garantía implícita MERCANTIL o 
+!!	de APTITUD PARA UN PROPÓSITO DETERMINADO. Consulte los detalles de 
+!!	la Licencia Pública General GNU para más información.
+!!
+!!	Debería haber recibido una copia de la Licencia Pública General GNU 
+!!	junto a este programa. En caso contrario, consulte
+!!	<http://www.gnu.org/licenses/>.
+!!
+!!------------------------------------------------------------------------------
+System_file;
 
-#Ifndef COMPARE_WORD; ! No se hace nada si ya se ha incluido
-Constant COMPARE_WORD;
+!! Descomentar para obtener info. de depuración del preprocesador:
+!Constant DEBUG_PARSING_PREPROCESSOR;
 
+!! Descomentar para obtener info. de depuración de la rutina CompareWord():
+!Constant DEBUG_COMPARE_WORD_ROUTINE;
+
+#Ifndef COMPARE_WORD_ROUTINE;
+Constant COMPARE_WORD_ROUTINE;
 !!==============================================================================
 !!	Compara una palabra de la entrada del usuario con una de las palabras de 
 !!	diccionario. La palabra de entrada se pasa a la función a través de 
@@ -11,13 +56,14 @@ Constant COMPARE_WORD;
 !!	de entrada, y la palabra de diccionario se pasa a través de *dictword* 
 !!	(hay que volcarla en un vector antes de hacer la comprobación).
 !!
-!!	Se retorna 1 si las palabras son iguales, o 0 si son diferentes
+!!	Se retorna 1 si las palabras son iguales, o 0 si son diferentes.
 !!------------------------------------------------------------------------------
 
 !! Vector para guardar palabras temporalmente:
 Array tmp_text -> 64;
 
-[ CompareWord num_word_prompt dictword i len;
+[ CompareWord num_word_prompt dictword
+	i len;
 
 	!! A) Se vuelca la palabra de diccionario a un array:
 
@@ -42,11 +88,11 @@ Array tmp_text -> 64;
 		(tmp_text->(WORDSIZE-1))--;		! Se reducen las dimensiones
 		len = tmp_text->(WORDSIZE-1);	! Se actualiza el valor de 'len'
 	}
-	
-	#Ifdef DEBUG_TOPICINVENTORY;
+
+	#Ifdef DEBUG_COMPARE_WORD_ROUTINE;
 	print "Comparando prompt: <", (PrintPromptWord) num_word_prompt, 
 	"> con palabra de diccionario:<", (PrintStringArray) tmp_text, ">^";
-	#Endif; ! DEBUG_TOPICINVENTORY;
+	#Endif; ! DEBUG_COMPARE_WORD_ROUTINE;
 
 	!! Si la longitud de las palabras no es igual, se retorna NO coincidente. 
 	!! (NOTA: Hay que contemplar el caso especial de palabras de más de 9 
@@ -66,11 +112,10 @@ Array tmp_text -> 64;
 	return 1;
 ];
 
+#Ifdef DEBUG_COMPARE_WORD_ROUTINE;
 !!==============================================================================
 !!	Funciones de depuración
 !!------------------------------------------------------------------------------
-
-#Ifdef DEBUG_TOPICINVENTORY;
 
 !! Función para pintar un String Array
 [ PrintStringArray the_array i;
@@ -86,23 +131,27 @@ Array tmp_text -> 64;
 		print (char) dir->i;
 ];
 
-#Endif; ! DEBUG_TOPICINVENTORY;
-
-#Endif; ! COMPARE_WORD;
-
-
+#Endif; ! DEBUG_COMPARE_WORD_ROUTINE;
+#Endif; ! COMPARE_WORD_ROUTINE;
 
 
 !!==============================================================================
-!!	Preprocesador de la entrada de usuario. Implementa la función *run()* que 
-!!	comprueba si la acción introducida se refiere a alguno de los objetos 
-!!	definidos en el modelo del mundo.
+!!	Preprocesador de la entrada de usuario. Implementa las siguientes 
+!!	funciones:
+!!
+!!	 -	get_selected_object() - Retorna el último objeto reconocido en la 
+!!		entrada del usuario por el preprocesador.
+!!
+!!	 -	run() - Comprueba la entrada del usuario y trata de reconocer patrones 
+!!		en ella mediante análisis no estricto para identificar si puede 
+!!		referirse a alguno de los objetos definidos en el modelo del mundo.
 !!------------------------------------------------------------------------------
 Object	ParsingPreprocessor "(Parsing preprocessor)"
  with	get_selected_object [;
 			return self.selected_object;
 		],
-		run [ obj i j n m valid hits max_hits;
+		run [
+			obj i j n m valid hits max_hits;
 
 			!! A) Inicializaciones del método:
 			self.selected_object = 0;
@@ -175,13 +224,15 @@ Object	ParsingPreprocessor "(Parsing preprocessor)"
 				}
 			}
 
-!			if (self.selected_object ~= 0) {
-!				print "COINCIDENCIA: ";
-!				print (name) self.selected_object, ", ";
-!				print max_hits, " hits.^";
-!			} else {
-!				print "NO HAY COINCIDENCIAS.^";
-!			}
+			#Ifdef DEBUG_PARSING_PREPROCESSOR;
+			if (self.selected_object ~= 0) {
+				print "** PARSING PREPROCESSOR **^", "Coincidencia: ", 
+				(name) self.selected_object, ", ", max_hits, "%.^";
+			}
+			else {
+				print "** PARSING PREPROCESSOR **^", "No hay coincidencias.^";
+			}
+			#Endif; ! DEBUG_PARSING_PREPROCESSOR;
 
 		],
  private

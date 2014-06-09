@@ -1,0 +1,3435 @@
+
+
+!!==============================================================================
+!!
+!!	59 MINUTOS
+!!	Definición de mensajes de los objetos
+!!
+!!==============================================================================
+!!
+!!	File:			59mins_langOM.inf
+!!	Author(s):		[En orden alfabético. Falta el nombre de cada redactor.]
+!!					J. Francisco Martín <jfm.lisaso@gmail.com>
+!!	Languague:		ES (Castellano)
+!!	System:			Inform-INFSP 6
+!!	Platform:		Máquina-Z / GLULX
+!!	Version:		0.11
+!!	Released:		2014/05/12
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	Este archivo forma parte de 59 MINUTOS.
+!!
+!!	59 MINUTOS es software libre: usted puede redistribuirlo y/o
+!!	modificarlo bajo los términos de la Licencia Pública General GNU
+!!	publicada por la Fundación para el Software Libre, ya sea la versión
+!!	3 de la Licencia, o (a su elección) cualquier versión posterior.
+!!
+!!	59 MINUTOS se distribuye con la esperanza de que sea útil, pero
+!!	SIN GARANTÍA ALGUNA; ni siquiera la garantía implícita MERCANTIL o
+!!	de APTITUD PARA UN PROPÓSITO DETERMINADO. Consulte los detalles de
+!!	la Licencia Pública General GNU para más información.
+!!
+!!	Debería haber recibido una copia de la Licencia Pública General GNU
+!!	junto a 59 MINUTOS. En caso contrario, consulte
+!!	<http://www.gnu.org/licenses/>.
+!!
+!!	Copyright (c) 2014, J. Francisco Martín
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	# TABLA DE CONTENIDOS:
+!!
+!!	1)	LIMBO: En algún lugar.
+!!	2)	BAÑO: Baño.
+!!	3)	COCINA: Cocina.
+!!	4)	DORMITORIO: Dormitorio.
+!!	5)	HABITACION: Habitación multiusos.
+!!	6)	PASILLO: Pasillo de la segunda planta.
+!!	7)	PLAYA: Playa.
+!!	8)	RECIBIDOR: Recibidor.
+!!	9)	SALON: Salón.
+!!	10)	TALLER: Pequeño taller.
+!!	11)	TERRAZA: Terraza.
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	# NOTA PARA LOS REDACTORES
+!!
+!!	En este archivo se incluyen los mensajes de respuesta que dan los objetos a 
+!!	las diferentes acciones que puedan intentar realizar sobre ellos un 
+!!	jugador/lector (a falta de un término mejor, de ahora en adelante utilizaré 
+!!	el "interlector" del que habla a veces Johan P., o simplemente "usuario").
+!!
+!!	Como vais a ver, me he ocupado sobre todo de dar una idea de la función que 
+!!	desempeña cada objeto dentro del relato y de describir su comportamiento, 
+!!	pero en realidad faltan la mayoría de los mensajes. Los pocos que he 
+!!	escrito son todos propuestas provisionales apuntados un poco a 
+!!	"vuelapluma", con ideas o detalles que tal vez podrían incluirse en sus 
+!!	versiones finales pero que, desde luego, en ningún caso tenéis que tomar 
+!!	como algo fijo e inamovible (los he puesto por intentar ilustrar el tipo de 
+!!	mensaje en que estaba pensando, y el tipo de redacción horrible de la que 
+!!	soy capaz y por la que os he pedido ayuda). Cuando escribáis los textos no 
+!!	hace falta que tengáis esos mensajes en cuenta; tenéis total libertad para 
+!!	utilizar lo que creáis que puede tener algún interés de lo poco que yo haya 
+!!	escrito, e ignorar todo lo que no. Hacédlo como más adecuados os parezcan a 
+!!	vosotros.
+!!
+!!	Las localidades están distribuidas en orden alfabético (debajo de cada 
+!!	localidad se incluyen los mensajes de los objetos presentes en ella):
+!!
+!!	 -	Baño.
+!!	 -	Cocina.
+!!	 -	Dormitorio.
+!!	 -	Habitación multiusos.
+!!	 -	Pasillo de la segunda planta.
+!!	 -	Playa.
+!!	 -	Recibidor.
+!!	 -	Salón.
+!!	 -	Pequeño taller.
+!!	 -	Terraza.
+!!
+!!	Hay además una localidad especial, el LIMBO, a la que nunca tendrá acceso 
+!!	el interlector pero en la que se definen ciertos objetos especiales. Los 
+!!	mensajes para esta localidad y los objetos que hay en ella se incluyen al 
+!!	principio del documento.
+!!
+!!	Por último, todas las líneas precedidas de '!' o '!!' son comentarios que 
+!!	el usuario final no va a ver. Los mensajes que se vería el usuario (y que 
+!!	son los que conforman el relato) son aquellos envueltos entre comillas y 
+!!	precedidos del término 'print' (como en: print "Esto es un mensaje que verá 
+!!	el usuario.";). Y se puede escribir texto con los estilos abstractos 
+!!	"enfático" y "fuerte" (generalmente, estos textos se imprimirán en itálica 
+!!	y negrita respectivamente). Para escribir algo con estilo enfático hay que 
+!!	envolverlo entre asteriscos simples '*' y con estilo fuerte entre 
+!!	asteriscos dobles '**' (por ejemplo: "*Esta palabra* se escribirá con 
+!!	estilo enfático y **esta otra** con estilo fuerte.").
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	# PLANIFICACIÓN DE VERSIONES
+!!
+!!	v0.1X:	En esta primera versión se definirán los mensajes del conjunto de 
+!!			objetos principales que modelan la casa en la que se desarrolla la 
+!!			narración principal. Son objetos principales todas las localidades 
+!!			que conforman la casa, y aquellos objetos para los que se contempla 
+!!			algún tipo de interacción especial (objetos que no sean simples 
+!!			decorados). Durante esta parte, el narrador es siempre un narrador 
+!!			omnisciente que se dirige al interlector en tercera persona y 
+!!			utiliza el tiempo presente.
+!!
+!!	v0.21X:	Definirá los mensajes de las localidades y los objetos presentes en 
+!!			el recuerdo interactivo titulado "EL ERIZO". Durante estos 
+!!			recuerdos interactivos, el narrador sigue siendo ese narrador 
+!!			omnisciente que se dirige al interlector en tercera persona, pero 
+!!			pasará a utilizar el tiempo pasado.
+!!
+!!	v0.22X:	Mensajes de las localidades y objetos presentes en el recuerdo 
+!!			interactivo titulado "LA SONRISA". De nuevo, el narrador 
+!!			omnisciente en tercera persona que utiliza el tiempo pasado.
+!!
+!!	v0.23X:	Mensajes del recuerdo interactivo titulado "EL LOCAL". El mismo 
+!!			narrador de todos los recuerdos interactivos: tercera persona que 
+!!			utiliza el pasado.
+!!
+!!	v0.24X:	Mensajes del recuerdo interactivo titulado "EL DIBUJO".
+!!
+!!	v0.25X:	Mensajes del recuerdo interactivo "EL REGALO DE CUMPLEAÑOS".
+!!
+!!	v0.26X:	Mensajes del recuerdo interactivo "LA NOCHE DE MAYO".
+!!
+!!	v0.27X:	Mensajes del recuerdo interactivo "LA DISCUSIÓN".
+!!
+!!	v0.28X:	Mensajes del recuerdo interactivo "EL ACCIDENTE".
+!!
+!!	v0.3X:	En esta versión se añadirán los mensajes con los que se dará inicio 
+!!			y final al relato, y se añadirán también los mensajes de cualquier 
+!!			objeto de decorado que quedase por definir.
+!!
+!!------------------------------------------------------------------------------
+
+
+[ LanguageOM obj n;
+	switch (obj) {
+
+
+!!==============================================================================
+!!
+!!	1)	LIMBO: En algún lugar.
+!!
+!!	Conexiones:
+!!	 -	Ninguna
+!!
+!!	Objetos importantes:
+!!	 -	botas (se pueden vestir/desvestir)
+!!	 -	paredes (presentes en múltiples localidades)
+!!	 -	ropa (se puede vestir/desvestir)
+!!	 -	Silvia (objeto personaje manejado por el interlector)
+!!	 -	ventanas (presentes en múltiples localidades)
+!!
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!!	En algún lugar
+X00_LIMBO: switch (n) {
+!!
+!!	Como ya se ha apuntado, el usuario final no tendrá acceso en ningún momento 
+!!	a esta localidad (aunque si a los objetos definidos en ella), de manera que 
+!!	en realidad la descripción del limbo no tiene importancia. El texto que he 
+!!	utilizado está sacado de un relato de H.P. Lovecraft.
+!!
+1:	! (descripción)
+print "Más allá de la barrera casi insuperable que separa la realidad de todo lo demás. Un lugar etéreo, donde la vida, la materia y la vitalidad no son necesariamente constantes; un lugar donde el tiempo y el espacio no existen tal y como los capta nuestro ser despierto...";
+!!	Aquí un ejemplo de texto que usa el estilo enfático:
+if (obj hasnt visited) print " *¿Qué? ¿Cómo?... ¿cómo he llegado aquí?*";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	botas
+X00_botas: switch (n) {
+!!
+!!	El relato empieza con las botas en posesión de Silvia, y puestas.
+!!
+1:	! (descripción)
+print "Mensaje 1 de las botas.";
+new_line;
+return true;
+2:	! (acción: vestirse -- con las botas puestas)
+!!
+!!	Mensaje de error. No puede ponerse las botas si ya las lleva puestas.
+!!
+print "Mensaje 2 de las botas.";
+new_line;
+return true;
+3:	! (acción: vestirse -- con las botas quitadas)
+!!
+!!	Describe cómo Silvia se pone las botas.
+!!
+print "Mensaje 3 de la ropa.";
+new_line;
+return true;
+4:	! (acción: desvestirse -- con las botas quitadas)
+!!
+!!	Mensaje de error. No puede quitarse las botas si no las lleva puestas.
+!!
+print "Mensaje 4 de las botas.";
+new_line;
+return true;
+5:	! (acción: desvestirse -- con las botas puestas)
+!!
+!!	Describe cómo Silvia se quita las botas.
+!!
+print "Mensaje 5 de las botas.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	paredes
+X00_paredes: switch (n) {
+!!
+!!	Objeto de decorado. Hay paredes presentes en todas las localidades 
+!!	interiores. Se necesitan mensajes en presente y pasado porque se 
+!!	reutilizan durante los recuerdos interactivos. 
+!!
+1:	! (descripción - en presente)
+print "No hay nada especial en [las X00_paredes].";
+new_line;
+return true;
+2:	! (descripción - en pasado)
+print "No había nada especial en [las X00_paredes].";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	ropa
+X00_ropa: switch (n) {
+!!
+!!	El relato empieza con este objeto en posesión de Silvia, vestido. La 
+!!	descripción de la ropa se puede contemplar de diferentes formas. Por una 
+!!	parte, se puede crear una descripción genérica para toda la ropa en su 
+!!	conjunto, como hace por ejemplo Michael S. Gentry en la ficción interactiva 
+!!	"Anchorhead":
+!!
+!!	 -	"A tasteful ensemble from Ann Taylor in muted browns and olive greens 
+!!		(she has been an autumn person since she was old enough to match her 
+!!		own socks)."
+!!
+!!	O se puede dividir en diferentes descripciones; una general para la ropa en 
+!!	su conjunto, en la que se citen diferentes prendas, y luego una individual 
+!!	para cada prenda citada. Por ejemplo:
+!!
+!!	 -	"Siempre ha vestido ropa barata y discreta; estos son unos pantalones 
+!!		negros algo desgastados por el uso, camisa de algodón blanca, y un gran 
+!!		abrigo gris de tela basta, largo hasta los muslos y con dos profundos 
+!!		bolsillos a los lados." (Para cuando se examina la ropa, en general).
+!!
+!!	 -	"Son unos pantalones negros algo desgastados ya a la altura de las 
+!!		rodillas y en los bajos." (Al examinar los pantalones).
+!!
+!!	 -	"Una sencilla camisa de color blanco." (Para la camisa)
+!!
+!!	 -	"Se trata de un gran abrigo de tela basta, largo hasta la altura de los 
+!!		muslos y con dos profundos bolsillos a ambos lados." (Para el abrigo).
+!!
+!!	Os dejo a vosotros escoger cómo describir la ropa.
+!!
+1:	! (descripción -- para la ropa en su conjunto)
+print "A tasteful ensemble from Ann Taylor in muted browns and olive greens (she has been an automn person since she was old enough to match her own socks).";
+new_line;
+return true;
+6:	! (descripción -- para una prenda en concreto)
+!!
+!!	Si es que decidís escribir descripciones para las diferentes prendas. Cada 
+!!	prenda seguiría la estructura de este mensaje 6, pero en mensajes sucesivos 
+!!	7, 8,...
+!!
+print "Mensaje 6 de la ropa. Podría incluir una descripción de los pantalones, por ejemplo.";
+new_line;
+return true;
+2:	! (acción: vestirse -- con la ropa puesta)
+!!
+!!	Mensaje de error. No puede ponerse la ropa si ya la lleva puesta.
+!!
+print "Mensaje 2 de la ropa.";
+new_line;
+return true;
+3:	! (acción: vestirse -- con la ropa quitada)
+!!
+!!	Describe cómo Silvia se pone la ropa.
+!!
+print "Mensaje 3 de la ropa.";
+new_line;
+return true;
+4:	! (acción: desvestirse -- con la ropa quitada)
+!!
+!!	Mensaje de error. No puede quitarse la ropa si no la lleva puesta.
+!!
+print "Mensaje 4 de la ropa.";
+new_line;
+return true;
+5:	! (acción: desvestirse -- con la ropa puesta)
+!!
+!!	Describe cómo Silvia se quita la ropa.
+!!
+print "Mensaje 5 de la ropa.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	Silvia
+X00_Silvia: switch (n) {
+!!
+!!	Este es el objeto que representa al personaje manejado por el usuario. Su 
+!!	descripción se imprime si el interlector teclea la instrucción EXAMÍNATE.
+!!
+!!	Hay ciertos convencionalismos del medio de los relatos interactivos que se 
+!!	ven involucrados aquí; habitualmente se utiliza una acción (INVENTARIO) 
+!!	para obtener el listado de los objetos que el personaje principal lleva 
+!!	consigo. Esta acción INVENTARIO se diferencia mucho del resto de acciones 
+!!	que actúan sobre el relato (generalmente verbos como EXAMINAR, ESCUCHAR, 
+!!	COGER, ABRIR,...) por lo que a mi personalmente no me gusta. Siempre me ha 
+!!	parecido más natural usar EXAMÍNATE para obtener el listado de objetos que 
+!!	lleva el personaje principal consigo. Esto se puede hacer introduciendo la 
+!!	siguiente línea en la descripción del personaje:
+!!
+!!		return L__M(##Miscellany, 19);
+!!
+!!	Sin embargo, ya que hay mucha gente acostumbrada a ellos, a veces es útil 
+!!	seguir los convencionalismos. Aunque pueda usarse la descripción del 
+!!	personaje para mostrar su inventario de objetos, quizá conviene contemplar 
+!!	la norma y usar la instrucción INVENTARIO para ello. Y entonces, la 
+!!	descripción del personaje puede ser una oportunidad para describir la forma 
+!!	en la que Silvia se ve a si misma; pero, en cualquier caso, aquí no se 
+!!	tendría que dar una descripción física sino más bien psicológica. Para dar 
+!!	una descripción del aspecto físico del personaje utilizaremos un espejo que 
+!!	hay en el baño del segundo piso de la casa.
+!!
+!!	En resumen: en el mensaje '1' contemplo la opción de usar la descripción 
+!!	para mostrar el inventario del personaje, pero he añadido también un 
+!!	mensaje '2' para escribir una descripción real de Silvia. Seguramente en el 
+!!	relato utilicemos ese mensaje '2'.
+!!
+1:	! (descripción -- si la usamos para dar el listado de objetos de su inv.)
+return L__M(##Miscellany, 19);
+2:	! (descripción)
+!!
+!!	Desde que somos niños nos enseñan que está bien sentirse alegre y 
+!!	mostrarnos felices, pero que por el contrario hemos de ocultar cuando nos 
+!!	sentimos tristes; reir está bien, llorar en público es violento. A Silvia 
+!!	le cuesta mucho expresar sus emociones y sus sentimientos (más adelante, en 
+!!	la versión 0.2 del documento se hará una analogía entre ella, su padre y un 
+!!	erizo); suele mostrarse hermética y distante, le cuesta mucho abrirse a los 
+!!	demás, es afable y tiene muchas amistades, pero suelen tratarse de 
+!!	relaciones superficiales. Ha formado a su alrededor un escudo con púas para 
+!!	protegerse, y las veces que ha llegado a conseguir cierta intimidad con 
+!!	alguien ha terminado por hacerle daño (la última persona con la que le ha 
+!!	ocurrido ha sido Carmen, la que ha sido su pareja hasta hace algo más de 
+!!	una semana).
+!!
+!!	Silvia es consciente de muchas de estas cosas, sin embargo no tengo claro 
+!!	cómo se verá a si misma exactamente. Lo que tengo claro es que la imagen 
+!!	que tenemos de nosotros mismos siempre está en mayor o menor medida 
+!!	distorsionada. Probablemente tendrá la autoestima baja; se verá aún más 
+!!	hermética e incapaz de expresar lo que siente de lo que es en realidad, 
+!!	culpará a su forma de ser de haber distanciado a Carmen de su lado, aunque 
+!!	evidentemente la responsabilidad no sea sólo suya, y subestimará 
+!!	ampliamente lo mucho que afectó a su carácter la muerte de su madre por el 
+!!	cáncer, cuando tenía nueve años. (Ella aprendió más a fondo que el resto de 
+!!	niños de su entorno que la gente acepta muy bien que nos mostremos felices, 
+!!	pero no así tristes)... en fin, la descripción contemplará algo de todo 
+!!	esto.
+!!
+!!	Además se me ocurre que sería fantástico si la imagen que tiene de si misma 
+!!	evoluciona conforme avanza el relato. Al explorar la casa y los objetos de 
+!!	su padre y sus propios recuerdos, descubrirá cosas sobre si misma que 
+!!	pueden modificar cómo se ve. Como sea, esta posibilidad de la evolución de 
+!!	Silvia (que consistiría en escribir segundas, terceras o cuartas 
+!!	descripciones del personaje) ya la contemplaremos en la futura versión 0.3 
+!!	del documento. De momento nos limitaremos a preparar una primera
+!!	descripción inicial, que será la que por ahora se mantenga desde el 
+!!	principio y durante todo el relato.
+!!
+print "Tan buen aspecto como siempre.";
+new_line;
+return true;
+3:	! (descripción)
+!!
+!!	TODO: versión 0.3
+!!
+return false;
+}
+
+!!------------------------------------------------------------------------------
+!!	ventanas
+X00_ventanas: switch (n) {
+!!
+!!	Las ventanas están presentes en casi todas las habitaciones de la casa, 
+!!	pero ya que las vistas desde cada habitación son diferentes, lo suyo es 
+!!	contemplar una descripción diferente del objeto para cada localidad. Como 
+!!	apunté antes en esa NOTA PARA LOS REDACTORES, estos mensajes son 
+!!	descripciones provisionales escritos "al tuntún" y que habría que 
+!!	reemplazar por otros mejor redactados y más interesantes (¡al ser 
+!!	posible!).
+!!
+1:	! (descripción genérica)
+print "La luz del exterior se cuela por las ventanas.";
+new_line;
+return true;
+2:	! (descripción genérica en pasado)
+print "La luz del exterior se colaba por las ventanas.";
+new_line;
+return true;
+3:	! (descripción -- desde el baño y la habitación multiusos)
+print "Se puede ver la playa desierta y el inmenso mar Cantábrico desde las ventanas.";
+new_line;
+return true;
+4:	! (descripción -- desde la cocina)
+print "Las ventanas de la cocina dan a la playa, más allá de la terraza trasera de la casa.";
+new_line;
+return true;
+5:	! (descripción -- desde el dormitorio)
+print "Desde las ventanas se pueden ver los verdes prados y las montañas de Cantabria, a lo lejos.";
+new_line;
+return true;
+6:	! (descripción -- desde el recibidor)
+print "Una ventana en el recibidor da al porche delantero, pero allí no hay nada que le llame la atención.";
+new_line;
+return true;
+7:	! (descripción -- desde el salón)
+print "Desde la ventana se puede ver la playa que se extiende en la parte de atrás de la casa.";
+new_line;
+return true;
+8:	! (descripción -- desde el taller)
+print "Hay una pequeña ventana por la que se filtra la luz del exterior.";
+new_line;
+return true;
+9:	! (descripción -- desde la terraza)
+print "Hay unos grandes ventanales en la fachada que dan a la cocina y al salón.";
+new_line;
+return true;
+}
+
+
+!!==============================================================================
+!!
+!!	2)	BAÑO: Baño.
+!!
+!!	Conexiones:
+!!	 -	SUR: al dormitorio
+!!	 -	SUROESTE: al pasillo
+!!
+!!	Objetos importantes:
+!!	 -	armario (se pueden meter cosas dentro)
+!!	 -	bañera
+!!	 -	espejo
+!!	 -	medicinas (dentro del armario. Se pueden ingerir)
+!!	 -	velas (dentro del armario. Se pueden encender)
+!!
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!!	Baño
+H01_BANNO: switch (n) {
+1:	! (descripción)
+!!
+!!	Dentro del baño Silvia podrá gastar varios minutos dándose un baño de agua 
+!!	caliente, relajante. Todo en el baño está enfocado alrededor de esta idea 
+!!	de la relajación. Es muy luminoso (la luz afecta al estado de ánimo), de 
+!!	azulejo y cerámicas en tonos claros. La bañera es amplia y cómoda. Dentro 
+!!	del armario hay unas velas aromáticas (con aroma a vainilla, que al parecer 
+!!	resulta antidepresiva y calmante) y drogas tranquilizantes. No lo he 
+!!	apuntado, pero ya que Silvia va a desnudarse (si es que finalmente el 
+!!	interlector decide que se de el baño), sería interesante incluir una 
+!!	alfombrilla con alguna textura agradable y cálida que sentirá bajo los 
+!!	pies. Etc.
+!!
+print "Un pequeño baño con puertas al dormitorio y al pasillo. Es pequeño, pero luminoso. Tiene una bañera, grande como para que una persona pueda tumbarse por completo dentro, un espejo desde el que una Silvia gemela le devuelve la mirada, y un armarito auxiliar, debajo del espejo.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	armario auxiliar
+H01_armario: switch (n) {
+1:	! (descripción -- cerrado)
+!!
+!!	Lo describo como de aglomerado enchapado en blanco pero me parece una 
+!!	descripción feísima. En realidad puede estar hecho de cualquier material y 
+!!	tener cualquier aspecto.
+!!
+print "Es un pequeño armario auxiliar de aglomerado enchapado en blanco. Ahora mismo está cerrado.";
+new_line;
+return true;
+2:	! (descripción -- abierto)
+print "Es un pequeño armario auxiliar de aglomerado enchapado en blanco. Ahora está abierto. Dentro hay algunos productos de higiene, unas velas aromáticas y varias cajas con medicinas.";
+new_line;
+!!
+!!	La lista de objetos que hay en el interior del armario variará durante el 
+!!	relato (puesto que el interlector puede introducir o sacar objetos). Al 
+!!	escribir las descripciones no os preocupéis por esto, redactarlas de forma 
+!!	similiar a como he hecho con el armario (el: "Dentro hay algunos productos 
+!!	de higiene, unas velas aromáticas y varias cajas con medicias") y ya me 
+!!	encargaré yo de hacer que esos listados se generen de forma dinámica más 
+!!	adelante, al programar el objeto.
+!!
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	bañera
+H01_bannera: switch (n) {
+1:	! (descripción)
+!!
+!!	El interlector puede hacer que Silvia se bañe. La forma de lanzar esta 
+!!	acción es metiéndose en la bañera, de manera que la descripción tiene que 
+!!	introducir al usuario la idea de que puede meterse en su interior (para lo 
+!!	que tendría que teclear METETE EN LA BAÑERA). Mi descripción intenta hacer 
+!!	esto, aunque no sea de forma más sutil del mundo ni, posiblemente, la más 
+!!	efectiva (ni, ya puestos, la más interesante tampoco):
+!!
+print "Es grande, lo suficiente como para que una persona pueda entrar completamente tumbada dentro.";
+new_line;
+return true;
+2:	! (acción -- al intentar entrar en la bañera si no se ha dado un baño)
+!!
+!!	Si se intenta entrar en la bañera sin haberse dado un baño aún, se describe 
+!!	cómo Silvia la observa y se plantea preparar uno. Entonces un mensaje 
+!!	solicitará al usuario que confirme o cancele la acción. Para pedir esta 
+!!	confirmación se usará la librería topicInventory que permite interacciones 
+!!	del tipo:
+!!
+!!		[Puedes escoger entre estudiar filosofía, matemáticas o historia.]
+!!		Y esto es lo que introduciría el usuario --> matemáticas
+!!
+!!	Ya que estamos en esto, un apunte sobre el narrador: durante la obra hay un 
+!!	narrador principal, omnisciente y que usa la tercera persona, encargado de 
+!!	relatar lo que hace Silvia ante las órdenes del usuario. Pero, además, hay 
+!!	también un segundo narrador que pone voz al analizador de comandos (o 
+!!	"parser") y que se dirige directamente al usuario en segunda persona. Los 
+!!	mensajes de este segundo narrador se muestran entre corchetes ('[]') y se 
+!!	tratan de mensajes del tipo "[La acción que has introducida no está 
+!!	definida en el relato.]", "[Tu puntuación se ha incrementado en un punto.]" 
+!!	o el anterior "[Puedes escoger entre estudiar filosofía, matemáticas o 
+!!	historia.]".
+!!
+print "Mensaje 2 de la bañera. Silvia observa la bañera y se plantea prepararse un baño.";
+new_line;
+!print "[Puedes preparar un baño.]";
+!new_line;
+return true;
+3:	! (al confirmar el baño)
+!!
+!!	Si el usuario confirma la acción de bañarse, se describe cómo Silvia llena 
+!!	la bañera de agua caliente cargando de vaho la habitación, se desnuda y se 
+!!	mete ella. Después de un rato de baño relajante, sale del agua y quita el 
+!!	tapón, dejando que la bañera se vacíe por el desagüe. La acción termina con 
+!!	Silvia desnuda en mitad del baño, con la ropa tirada a sus pies (se deja 
+!!	como tarea para el interlector el que vista o deje desnuda a Silvia).
+!!
+print "Mensaje 3 de la bañera.";
+new_line;
+return true;
+4:	! (acción -- entrar en la bañera después de haberse bañado ya)
+!!
+!!	Si el interlector trata de entrar en la bañera después de haberse dado ya 
+!!	un baño, un mensaje indicará que Silvia no quiere volver a meterse al agua 
+!!	por segunda vez.
+!!
+print "Mensaje 4 de la bañera.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	espejo
+H01_espejo: switch (n) {
+1:	! (descripción -- al examinarlo por primera vez)
+!!
+!!	El espejo sirve para dar la descripción física de Silvia; sólo aquí se 
+!!	describe el aspecto que tiene.
+!!
+print "Mira a la mujer que está al otro lado del espejo: es una mujer pequeña, de pelo largo y liso color rubio pajizo y ojos castaño oscuro. Apenas la reconoce en realidad. Es ella, y a la vez una extraña. Una máscara tras la que se debe ocultar su auténtico aspecto, aquel en el que si se debería reconocer. El efecto es similar a cuando escuchas tu voz grabada y no la reconoces. ¿Esta soy yo? ¿Es así como me ven los demás?... La última pregunta se presenta en su mente por sorpresa, como una idea extraña; es... ¿es ella atractiva?";
+new_line;
+return true;
+2:	! (descripción -- al examinarlo de nuevo)
+!!
+!!	Más breve. Hay veces que en un mensaje se pueden introducir varias 
+!!	descripciones similares que se impriman, una u otra, de forma aleatoria. 
+!!	Esta no tiene porqué ser una de esas ocasiones, pero por poner un ejemplo 
+!!	de uno de estos casos:
+!!
+print (string) random(
+"La mujer del otro lado del espejo la sigue con la mirada.",
+"Desde el otro lado del espejo su otro yo la devuelve la mirada.",
+"La otra mujer la observa con curiosidad desde su lado del espejo.",
+);
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	medicinas
+H01_medicinas: switch (n) {
+1:	! (descripción)
+!!
+!!	Entre las medicias se pueden ver varias cajas de Lexatin y Diazepam. 
+!!	Tranquilizantes. En los últimos años de vida, su padre tenía problemas para 
+!!	dormir. En realidad, desde la muerte de su madre por culpa del cáncer había 
+!!	ido arrastrando temporadas de depresión con mayor o menor frecuencia.
+!!
+print "Mensaje 1 de las medicias.";
+new_line;
+return true;
+2:	! (acción: tomar medicias por primera vez)
+!!
+!!	El interlector tiene que tomar los tranquilizantes si quiere que Silvia 
+!!	pueda dormir en la cama. Como le queda poco tiempo y necesita que le hagan 
+!!	efecto cuanto antes, en vez de una pastilla se toma varias a la vez.
+!!
+!!	Aún así, el efecto no será inmediato. Al tomar las medicias se activa un 
+!!	temporizador y sólo después de una cantidad de turnos por determinar, se 
+!!	mostrará un mensaje indicando que los tranquilizantes la empiezan a hacer 
+!!	efecto. Con esto de que el efecto no sea inmediato, la idea es hacer que el 
+!!	interlector se pueda sentir empujado a tomar más pastillas (introducir la 
+!!	acción de tomar pastillas por segunda vez provocará una sobredosis en 
+!!	Silvia).
+!!
+print "Mensaje 2 de las medicias.";
+new_line;
+return true;
+3:	! (descripción de los efectos de una dosis normal de tranquilizantes)
+!!
+!!	Al cabo de una cierta cantidad de turnos tras haber ingerido las pastillas 
+!!	se imprime este mensaje indicando que Silvia empieza a sentirse adormilada. 
+!!	Después de este momento, el interlector puede hacer que Silvia se eche a 
+!!	dormir y la acción funcionará (si intenta hacer que Silvia se eche a dormir 
+!!	antes de que los tranquilizantes le hagan efecto, un mensaje indicará que 
+!!	se encuentra demasiado agitada como para poder conciliar el sueño).
+!!
+print "Mensaje 3 de las medicias.";
+new_line;
+return true;
+4:	! (acción: tomar medicias de nuevo)
+!!
+!!	Este mensaje se imprime si el interlector hace que Silvia tome pastillas 
+!!	otra vez. El efecto seguirá sin ser inmediato y dependerá del temporizador 
+!!	que se activa al tomar las pastillas por primera vez. Sólo que esta vez, al 
+!!	finalizar el temporizador, en lugar de imprimirse el mensaje '3' se 
+!!	imprimirá el mensaje '5'.
+!!
+print "Mensaje 4 de las medicias.";
+new_line;
+return true;
+5:	! (descripción de los efectos de una sobredosis de tranquilizantes)
+!!
+!!	TODO: Este es uno de los mensajes con los que se terminará el relato, por 
+!!	lo que lo dejaremos por detallar y escribir para la próxima versión 0.3. 
+!!	En líneas generales: describirá cómo Silvia empieza a sentirse cada vez más 
+!!	adormilada hasta que, finalmente, pierde el conocimiento. Llegados a este 
+!!	punto Silvia muere y se termina el relato (aunque no se especificará si 
+!!	muere por culpa de la sobredosis de tranquilizantes o porque se cumple la 
+!!	cuenta atrás de 59 minutos).
+!!
+print "Mensaje 5 de las medicinas.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	productos de higiene
+H01_productosHigiene: switch (n) {
+1:	! (descripción)
+!!
+!!	Objeto de decorado: champús, jabones, cremas...
+!!
+print "Mensaje 1 de los productos de higiene.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	velas
+H01_velas: switch (n) {
+!!
+!!	Las velas son un objeto especialmente engorroso porque requiere un montón 
+!!	de pequeñas descripciones diferentes. Por una parte, se necesitan mensajes 
+!!	para cado uno de los tres estados en los que se pueden encontrar: apagadas, 
+!!	encendidas o consumidas. Las transiciones entre estados que, en general, se 
+!!	producen ante acciones introducidas por el interlector (ENCIENDE LAS VELAS, 
+!!	APAGA/SOPLA LAS VELAS,...) también necesitan sus descripciones. Y, por 
+!!	último, algunas de las descripciones anteriores serán contextuales y 
+!!	dependerán de la localidad concreta en que se encuentre Silvia, con lo que 
+!!	se necesitan mensajes adicionales. Con todo esto, una acción simple como 
+!!	EXAMINA LAS VELAS requiere contemplar múltiples mensajes diferentes.
+!!
+!!	Comportamiento de las velas:
+!!
+!!	Comienzan el relato apagadas y guardadas dentro del armario, en el baño del 
+!!	segundo piso. Se necesita una primera descripción para este estado. De 
+!!	apagadas, el interlector puede encenderlas (usando la instrucción ENCIENDE 
+!!	LAS VELAS), para lo que se necesitan diversos mensajes (tanto mensajes de 
+!!	error como descripciones de Silvia llevando a cabo la acción 
+!!	correctamente). Al encenderlas, se inicia un temporizador. Tras cumplir una 
+!!	cierta cantidad por determinar de turnos se consumirán, de modo que se 
+!!	necesitan mensajes describiendo cómo las velas se consumen. Además, antes 
+!!	de que lleguen a consumirse, el usuario puede hacer que Silvia las apague 
+!!	de un soplido, para lo que se necesita otro conjunto de mensajes más (de 
+!!	nuevo, además de los mensajes describiendo la acción, varios mensajes de 
+!!	error).
+!!
+!!	Y un último apunte sobre el comportamiento de las velas: mientras están 
+!!	apagadas, el interlector las puede coger (con lo que pasarían al inventario 
+!!	de objetos de Silvia) y encender (si tiene el mechero al alcance). 
+!!	Encendidas, el interlector las puede apagar pero no coger (si las quiere 
+!!	coger para llevárselas a otro sitio las tendría que apagar antes). Y, una 
+!!	vez consumidas, dejan de ser un objeto interesante así que, además de no 
+!!	poderlas encender (puesto que están consumidas), pasaremos a tratarlas como 
+!!	un simple objeto de decorado sin importancia y tampoco las podrá coger. 
+!!	Apunto una pequeña tabla resumen con los distintos estados y las opciones 
+!!	de interacción:
+!!
+!!	 -	apagadas:	coger (SI) | encender (SI) | apagar (NO)
+!!	 -	encendidas:	coger (NO) | encender (NO) | apagar (SI)
+!!	 -	consumidas:	coger (NO) | encender (NO) | apagar (NO)
+!!
+!!	La gracia de las velas es que se tratan de velas aromáticas y, una vez 
+!!	encendidas, estimularán el sentido del olfato de Silvia. Me parece 
+!!	importante involucrar más sentidos que el de la vista tanto como sea 
+!!	posible (con esto en mente, más adelante se contemplan objetos como el 
+!!	café, comida, tabaco, la arena de la playa entre los pies, o el 
+!!	radiodespertador).
+!!
+1:	! (descripción -- apagadas)
+print "Mensaje 1 de las velas. Son unas velas aromáticas.";
+new_line;
+return true;
+2:	! (descripción -- encendidas. Mensaje por defecto)
+!!
+!!	Tras encender las velas, Silvia las deja repartidas por la habitación. Este 
+!!	es uno de los mensajes que puede variar en función de la localidad en que 
+!!	se encuentre Silvia. Si no se define un mensaje específico para la 
+!!	localidad en que está en ese momento se imprimirá este mensaje (los 
+!!	mensajes específicos se escriben a continuación de este).
+!!
+print "Mensaje 2 de las velas. Hay varias velas encendidas repartidas por el suelo de la habitación.";
+new_line;
+return true;
+3:	! (descripción -- encendidas. En el baño)
+print "Mensaje 3. Hay varias velas encendidas alrededor de la bañera.";
+new_line;
+return true;
+4:	! (descripción -- encendidas. En la cocina)
+print "Mensaje 4. Hay varias velas aromáticas encendidas sobre la encimera.";
+new_line;
+return true;
+5:	! (descripción -- encendidas. En el dormitorio)
+!!
+!!	Se puede hacer, pero no es necesario incluir una descripción personalizada 
+!!	de las velas para cada localidad. En aquellas localidades para las que no 
+!!	se haya escrito un mensaje personalizado se imprimirá el mensaje por 
+!!	defecto '2'.
+!!
+return false;
+6:	! (descripción -- encendidas. En la habitación)
+return false;
+7:	! (descripción -- encendidas. En el pasillo)
+return false;
+8:	! (descripción -- encendidas. En el recibidor)
+return false;
+9:	! (descripción -- encendidas. En el salón)
+return false;
+10:	! (descripción -- encendidas. En el taller)
+return false;
+11:	! (descripción -- consumidas)
+print "Mensaje 11 de las velas. Unas velas aromáticas consumidas por completo.";
+new_line;
+return true;
+12:	! (acción: encenderlas -- si no tiene el mechero)
+!!
+!!	Mensaje de error No se pueden encender las velas a menos que Silvia tenga 
+!!	al alcance el mechero que hay en la cocina.
+!!
+print "Mensaje 12 de las velas. Necesita algo para encenderlas.";
+new_line;
+return true;
+13:	! (acción: encenderlas -- si está en la playa o en la terraza)
+!!
+!!	Mensaje de error. En la playa o en la terraza no se pueden encender las 
+!!	velas, por lo que hay que imprimir un mensaje de error adecuado.
+!!
+print "Mensaje 13 de las velas. Silvia trata de encender las velas con el mechero, pero el viento apaga la llama enseguida.";
+new_line;
+return true;
+14:	! (acción: encenderlas -- mensaje por defecto)
+!!
+!!	Tras encender las velas, Silvia las deja repartidas por la habitación. Este 
+!!	es otro de los mensajes que puede variar en función de la localidad en que 
+!!	se encuentre Silvia. Si no se define un mensaje específico para la 
+!!	localidad en que está en este momento, se imprimirá este mensaje '14' (los 
+!!	mensajes específicos se incluyen a continuación de este. He escrito un par 
+!!	de ellos como ejemplo).
+!!
+print "Mensaje 14 de las velas. Silvia enciende las velas con el mechero y las deja repartidas por el suelo de la habitación.";
+new_line;
+return true;
+15:	! (acción: encenderlas -- en el baño)
+print "Mensaje 15 de las velas. Silvia enciende las velas con el mechero y las coloca alrededor de la bañera.";
+new_line;
+return true;
+16:	! (acción: encenderlas -- en la cocina)
+print "Mensaje 16 de las velas. Silvia utiliza el mechero para encender las velas y las coloca sobre la encimera.";
+new_line;
+return true;
+17:	! (acción: encenderlas -- en el dormitorio)
+!!
+!!	De nuevo, aunque se puede hacer no es necesario incluir una descripción 
+!!	personalizada de la acción para cada localidad. En aquellas localidades 
+!!	para las que no se haya escrito un mensaje personalizado se imprimirá el 
+!!	mensaje por defecto '14'.
+!!
+return false;
+18:	! (acción: encenderlas -- en la habitación)
+return false;
+19:	! (acción: encenderlas -- en el pasillo)
+return false;
+20:	! (acción: encenderlas -- en el recibidor)
+return false;
+21:	! (acción: encenderlas -- en el salón)
+return false;
+22:	! (acción: encenderlas -- en el taller)
+return false;
+23:	! (acción: encenderlas -- si ya están encendidas)
+!!
+!!	Mensaje de error.
+!!
+print "Mensaje 23 de las velas. Las velas no se pueden encender si ya están encendidas.";
+new_line;
+return true;
+24:	! (acción: encenderlas -- si ya se han consumido)
+!!
+!!	Mensaje de error.
+!!
+print "Mensaje 24 de las velas. Las velas están consumidas por completo y ya no se pueden volver a encender.";
+new_line;
+return true;
+25:	! (acción: apagarlas)
+print "Mensaje 25 de las velas. Silvia apaga las velas con un soplido.";
+new_line;
+return true;
+26:	! (acción: apagarlas -- si no están encendidas)
+!!
+!!	Mensaje de error.
+!!
+print "Mensaje 26 de las velas. Las velas ya están apagadas.";
+new_line;
+return true;
+27:	! (mensaje cuando el temporizador hace que las velas se consuman)
+print "Mensaje 27 de las velas.";
+new_line;
+return true;
+28:	! (acción: cogerlas -- si están encendidas)
+!!
+!!	Mensaje de error.
+!!
+print "Mensaje 28 de las velas. No puede coger las velas mientras estén encendidas.";
+new_line;
+return true;
+29: ! (acción: cogerlas -- si están consumidas)
+!!
+!!	Mensaje de error.
+!!
+print "Mensaje 29 de las velas. Consumidas, ya no le sirven para nada así que las deja donde están.";
+new_line;
+return true;
+}
+
+
+!!==============================================================================
+!!
+!!	3)	COCINA: Cocina.
+!!
+!!	Conexiones:
+!!	 -	ESTE: al salón
+!!	 -	NORTE/FUERA: a la terraza
+!!
+!!	Objetos importantes:
+!!	 -	café (aparece después de encender la cafetera)
+!!	 -	cafetera (encima de la encimera)
+!!	 -	mechero (encima de la encimera)
+!!	 -	nevera
+!!	 -	periódico (encima de la mesa)
+!!
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!!	Cocina
+H02_COCINA: switch (n) {
+1:	! (descripción)
+!!
+!!	En estas descripciones de las localidades me limito poco más que a hacer un 
+!!	listado de las cosas con las que se puede interactuar, pero además de 
+!!	adornar los textos de las descripciones, podéis añadir cualesquiera otros 
+!!	objetos de decorado además de los que yo haya apuntado ya (sin olvidar que 
+!!	luego hay que pensar en descripciones individuales para ellos también).
+!!
+print "Grande y espaciosa, como el resto de habitaciones de la casa, con unos [enlace: X00_ventanas, ventanales] que dan a la playa y por los que se cuela el sol, llenando la cocina de luz. Tiene una amplia [H02_encimera] sobre la que hay [lista de objetos sobre H02_encimera]. Hay también [una H02_nevera], un juego de mesa y sillas, y puertas al [enlace: H09_SALON, salón] y a una [enlace: H11_TERRAZA, terraza] trasera.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	taza de café
+H02_cafe: switch (n) {
+!!
+!!	Inicialmente esta taza con café con leche no está en la localidad. Aparece 
+!!	una vez el interlector hace que Silvia ponga la cafetera.
+!!
+1:	! (descripción)
+!!
+!!	Descripción de la taza de café. Muy cargada, como siempre le ha gustado a 
+!!	Silvia.
+!!
+print "Mensaje 1 del café.";
+new_line;
+return true;
+2:	! (acción: beber el café -- primer trago)
+!!
+!!	El interlector puede hacer que Silvia beba el café introduciendo la acción 
+!!	BEBE EL CAFÉ. Al introducir la acción, Silvia da uno o dos tragos de la 
+!!	bebida, pero no se la acaba por completo, de modo que se puede introducir 
+!!	la acción de nuevo. La bebida se acaba tras teclear BEBE EL CAFÉ un número 
+!!	de veces por determinar.
+!!
+!!	Esta descripción se muestra al beber el café por primera vez y tiene que 
+!!	ser más completa que las descripciones siguientes. Conviene jugar con el 
+!!	olfato y el gusto en estos mensajes.
+!!
+print "Mensaje 2 del café.";
+new_line;
+return true;
+3:	! (acción: beber el café -- tragos siguientes)
+!!
+!!	Descripción de Silvia dando un nuevo sorbo de la taza de café con leche. 
+!!	Más breve que el mensaje anterior (estaría bien incluir un pequeño 
+!!	conjunto de mensajes ligeramente diferentes que se impriman de manera 
+!!	aleatoria).
+!!
+print (string) random (
+"Silvia da un sorbo de la taza de café.",
+"Se acerca la taza de nuevo a los labios y disfruta el penetrante olor del café antes de dar otro sorbo.",
+"Bebe de la taza, recreándose en el sabor amargo que le deja el café en la boca.",
+);
+new_line;
+return true;
+4:	! (acción: beber café -- último trago)
+!!
+!!	Mensaje al dar el trago final con el que se acaba el café.
+!!
+print "Mensaje 4 del café. Silvia se acaba el café con un último y largo sorbo de la taza.";
+new_line;
+return true;
+5: ! (acción: echar güisqi al café )
+!!
+!!	Descripción de Silvia echando güisqui al café. (Sólo se puede hacer 
+!!	esto una vez).
+!!
+print "Mensaje 5 del café.";
+new_line;
+return true;
+6:	! (acción: beber el café -- primer trago tras echarle güisqui)
+!!
+!!	Este es el mensaje que se imprime la primera vez que se introduce la acción 
+!!	BEBE CAFÉ tras haberle echado güisqui. Es similar al mensaje '2', salvo que 
+!!	ahora hay que contemplar también el sabor del licor en la bebida. Sucesivos 
+!!	tragos darán como respuesta el mensaje '7'.
+!!
+print "Mensaje 6 del café.";
+new_line;
+return true;
+7:	! (acción: beber el café -- tragos siguientes tras echarle güisqui)
+!!
+!!	Análogo al mensaje '3', pero contemplando el licor.
+!!
+print (string) random (
+"Silvia da un sorbo de la taza de café. Siente la picazón del güisqui en la garganta.",
+"Se acerca la taza de nuevo a los labios y disfruta el penetrante olor del café antes de dar otro sorbo. El licor le deja una agradable picazón en la garganta.",
+"Bebe de la taza, recreándose en el sabor amargo y la picazón que le deja la bebida en la boca.",
+);
+new_line;
+return true;
+8:	! (acción: beber el café -- último trago tras echarle güisqui)
+!!
+!!	Análogo al mensaje '4', pero contemplando el licor.
+!!
+print "Mensaje 8 del café. Silvia se acaba su café irlandés con un último y largo sorbo de la taza.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	cafetera
+H02_cafetera: switch (n) {
+1:	! (descripción)
+!!
+!!	De la descripción de la cafetera, lo importante es que se indique si hay o 
+!!	no hay café hecho (al principio no lo hay, lo tiene que preparar el 
+!!	interlector) y, además, que la forma de hacer café es pulsando el botón de 
+!!	encendido (tecleando: PULSA BOTÓN DE ENCENDIDO) o, alternativamente, 
+!!	simplemente encendiendo la cafetera (tecleando: ENCIENDE LA CAFETERA).
+!!
+print "Es una sencilla cafetera de esas de goteo, con una jarra sobre la que cae el café recién hecho, y que ahora está vacía. Tiene un botón de encendido, en un lateral.";
+new_line;
+return true;
+2:	! (acción: encenderla / pulsar el botón de encendido)
+!!
+!!	Esto debe funcionar a modo de pequeña declaración de amor al café: aquí se 
+!!	describe cómo Silvia busca un sobre de café en lo armarios, cómo coloca 
+!!	cuidadosamente el café en el filtro de la cafetera, añade agua al depósito 
+!!	y le da al botón de encendido. Gota a gota, el agua comienza a cargarse de 
+!!	café y llenar la jarra. Y el aire se impregna del penetrante olor del café 
+!!	recién hecho (se podrá oler desde el salón también). Luego se sirve una 
+!!	taza, añade algo de leche, y la dejará sobre la mesa de la cocina.
+!!
+!!	Después de que esté en la mesa la taza de café con leche, el interlector 
+!!	podrá beberlo poco a poco (como ocurre con la boteela de güisqui. De hecho, 
+!!	como se puede ver en las descripciones del café, podrá añadirle güisqui a 
+!!	la taza y prepararse un café irlandés).
+!!
+print "Mensaje 2 de la cafetera. Silvia se pone un café.";
+new_line;
+return true;
+3:	! (acción: encender la cafetera -- si ya lo ha hecho antes)
+!!
+!!	Si ya se ha preparado un café, Silvia no podrá volver a encender la 
+!!	cafetera otra vez.
+!!
+print "Mensaje 3 de la cafetera. Ya se ha preparado un café y no va a hacerlo de nuevo.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	mechero
+H02_mechero: switch (n) {
+1:	! (descripción)
+!!
+!!	Se me atragantan las descripciones de estos objetos simples aún más que las 
+!!	del resto. El mechero se puede utilizar para encender los cigarrillos que 
+!!	hay en la cómoda del recibidor, o las velas aromáticas del armarito que hay 
+!!	en el baño del segundo piso.
+!!
+print "Un mechero, normal y corriente, sin nada de especial.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	mesa
+H02_mesa: switch (n) {
+1:	! (descripción)
+print "Una sencilla [H02_mesa] de madera.";
+if (child(obj)) print " Sobre ella puede ver [lista de objetos sobre H02_mesa].";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	nevera
+H02_nevera: switch (n) {
+!!
+!!	Las descripciones de la nevera sirven para dar una pista de qué es lo que 
+!!	está ocurriendo en realidad en el relato. Y con esto no digo que el 
+!!	interlector tenga que ver claro qué sucede sólo a partir de estas 
+!!	descripciones, claro. La idea es que utilice esta pista junto con alguna 
+!!	otra que hay también en ciertos puntos para crearse una interpretación, si 
+!!	quiere, y que puede o no ser igual que la explicación que he buscado yo 
+!!	para el relato. Idealmente, las pistas deberían ser lo suficientemente 
+!!	ambiguas como para que puedan encontrarse diferentes explicaciones 
+!!	posibles de lo que sucede.
+!!
+!!	Existen cuatro descripciones diferentes para la acción de examinar la 
+!!	nevera. En las cuatro descripciones la nevera será siempre la misma, pero 
+!!	los papeles enganchados a los imanes serán diferentes en cada una de ellas, 
+!!	y en ningún momento se especificará porqué cambian, ni Silvia se dará 
+!!	cuenta de que hayan cambiado.
+!!
+!!	Lo que sucede en realidad con la nevera Y QUE SE OCULTA AL USUARIO es que 
+!!	las descripciones no son de la nevera real, sino de los recuerdos de Silvia 
+!!	sobre la nevera. Los papeles que se describen han estado realmente allí 
+!!	colgados en algún momento del pasado. Simplemente, cada una de las 
+!!	descripciones son instantáneas de momentos diferentes.
+!!
+!!	1)	La primera descripción se imprimirá al examinar la nevera entre los 
+!!		minutos 0 y 15 del relato (hay que recordar que tenemos una cuenta 
+!!		atrás de 59 minutos ---cuatro cuartos de hora---, cada descripción se 
+!!		corresponderá con uno de estos cuartos de hora). La nevera, tal como se 
+!!		describe aquí, es como se encontraba la última vez que estuvo Silvia en 
+!!		la casa, justo después de la muerte de su padre.
+!!
+!!	2)	La segunda descripción se imprime al examinar la nevera durante el 
+!!		segundo cuarto de hora del relato (mins 15 a 30). Este es el estado en 
+!!		que vio Silvia la nevera hace varios años, durante una visita a su 
+!!		padre.
+!!
+!!	3)	La tercera descripción, al examinar la nevera durante el tercer cuarto 
+!!		de hora (mins 30 a 45). Cada descripción es de un momento más atrás en 
+!!		el tiempo; este es el estado de la nevera hace unos 15-20 años.
+!!
+!!	4)	Al examinarla durante el último cuarto de hora (45-59 mins). En esta 
+!!		ocasión se describe el estado en que estaba la nevera cuando Silvia era 
+!!		aún una niña. Si el interlector presta atención podrá ver que este es 
+!!		el mismo estado que tiene la nevera durante el recuerdo interactivo 
+!!		titulado "EL ERIZO" (en este flashback retrocederemos a la infancia de 
+!!		Silvia, cuando sus padres aún vivían).
+!!
+1:	! (descripción 1: entre 0-15 mins.)
+!!
+!!	Pegados a la nevera hay varios post-its con listas de tareas y anotaciones: 
+!!	> llamar al seguro > recoger fotos donde Rafa > comprar aceite; "Ev. del 
+!!	cerebro: la génesis de la mente" - 30 nov 19:00 biblioteca central; un 
+!!	número de teléfono garabateado deprisa al dorso de una tarjeta de visita 
+!!	que diga: "H. Castellanos. Todo tipo de cubos de basura... en fin, cosas 
+!!	así.
+!!
+print "Mensaje 1 de la nevera.";
+new_line;
+return true;
+2:	! (descripción 2: entre 15-30 mins.)
+!!
+!!	En la nevera hay colgada una dieta, con menús para un par de semanas.
+!!
+print "Mensaje 2 de la nevera.";
+new_line;
+return true;
+3:	! (descripción 3: entre 30-45 mins.)
+!!
+!!	En este momento no hay nada colgado en la nevera.
+!!
+print "Mensaje 3 de la nevera.";
+new_line;
+return true;
+4:	! (descripción 4: entre 45-59 mins.)
+!!
+!!	En la nevera hay colgados un par de dibujos infantiles. (Silvia no los 
+!!	reconoce, pero son dibujos suyos, de cuando era niña).
+!!
+print "Mensaje 4 de la nevera.";
+new_line;
+return true;
+5:	! (acción: abrirla)
+!!
+!!	Al abrir la nevera Silvia comrpueba que está llena de comida (hace unos 
+!!	meses de la muerte del padre, si hay comida, a estas alturas probablemente 
+!!	mucha esté ya echada a perder. Pero recordemos que, aunque el interlector 
+!!	no lo sepa, estamos dentro de la mente de Silvia. Así es como recuerda la 
+!!	nevera, llena de comida, y está toda en buen estado). A continuación se 
+!!	muestra un mensaje dando diferentes opciones al interlector para prepararse 
+!!	algo de comer (se vuelve a utilizar la librería topicInventory para este 
+!!	mensaje), algo del estilo:
+!!
+!!	"[Puedes preparar un sándwich, un <nombre de algún plato más elaborado, que 
+!!	sea el favorito de Silvia>, o no hacer nada.]"
+!!
+!!	TODO: Sebastián, no sé si te gusta cocinar. Si es así puedes aprovechar 
+!!	para escoger un plato que te guste especialmente y hacer que sea ese 
+!!	también el favorito de Silvia, y que sea el que se pueda cocinar.
+!!
+!!	Si el interlector escoge preparar alguna de las dos cosas, a partir de 
+!!	entonces ésta dejará de estar disponible entre las opciones. Si hace que 
+!!	Silvia se prepare las dos cosas: el sándwich y ese plato más elaborado, al 
+!!	abrir la nevera se mostrará el mensaje 6, indicando que ya no va a hacerse 
+!!	nada más de comer.
+!!
+print "Mensaje 5 de la nevera.";
+new_line;
+return true;
+6:	! (acción: abrirla -- si ya se ha preparado el sándwich y el plato)
+!!
+!!	Un mensaje indicando que Silvia ya no va a prepararse nada más de comer.
+!!
+print "Mensaje 6 de la nevera.";
+new_line;
+return true;
+7:	! (si el interlector escoge preparar un sándwich)
+!!
+!!	Descripción de Silvia preparándose un sándwich. Algo breve. A partir de 
+!!	este momento habrá un sándwich que puede comerse encima de la mesa de la 
+!!	cocina.
+!!
+print "Mensaje 7 de la nevera.";
+new_line;
+return true;
+8:	! (si el interlector escoge preparar un plato elaborado)
+!!
+!!	Descripción de Silvia preparándose por última vez alguno de sus platos 
+!!	favoritos. Coppola incorpora una receta en cada una de sus películas de 
+!!	"El Padrino". Yo no tengo ni idea de cocina, pero podría ser una idea 
+!!	copiar a Coppola y aprovechar para incluir una receta aquí. A partir de 
+!!	este momento habrá un plato cocinado que puede comerse encima de la mesa de 
+!!	la cocina.
+!!
+!!	Como apunté antes, puedes aprovechar para incluir aquí tu plato favorito, 
+!!	si quieres, y describir a Silvia preparándoselo.
+!!
+print "Mensaje 8 de la nevera.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	periódico
+H02_periodico: switch (n) {
+!!
+!!	La intención con el periódico es hacer una pequeña crítica de cierta prensa 
+!!	escrita que se publica en España (no sé en Chile, Sebastián, pero supongo 
+!!	que la manipulación de noticias no es algo exclusivo nuestro).
+!!
+!!	El periódico lleva una noticia en portada sobre una manifestación ante un 
+!!	acto público de un presidente de Gobierno regional. Si Silvia lee el 
+!!	periódico, la noticia describe los incidentes provocados por los 
+!!	manifestantes (a los que se llama radicales en algún momento), se ve a la 
+!!	policía en fotos teniendo que enfrentarse a ellos, y trata de quitarse 
+!!	importancia a la cantidad de gente manifestada. Pero en ningún momento se 
+!!	cita en qué consistía el acto público del presidente (al que se presenta 
+!!	como una víctima) ni por qué protestaban los manifestantes.
+!!
+!!	La noticia concreta no es real, pero está basada en algunas que si salieron 
+!!	publicadas aquí, en un diario local de Cantabria, hace unos meses. El 
+!!	periódico que se describe existe también. Podría ser un error presentar 
+!!	como suya una noticia que en realidad nunca han publicado exactamente pero, 
+!!	después de todo y como ocurre con la nevera, la descripción del periódico 
+!!	no tiene por qué ajustarse exactamente a la realidad; es una descripción de 
+!!	los recuerdos de Silvia sobre el periódico, y la memoria de las personas 
+!!	falla.
+!!
+1:	! (descripción)
+print "Es un periódico local de hace unos meses. Lleva en portada una foto en que se ve un cordón policial con jóvenes gritando detrás y el titular: @<<El lamentable 'escrache' en la Universidad al presidente del Gobierno regional se salda con destrozos@>>.";
+new_line;
+return true;
+2:	! (al abrirlo/leerlo por primera vez)
+!!
+!!	Aunque la descrpción de la acción siga una linea similar a la que apunto 
+!!	aquí, de nuevo la redacción es pobre. Hacía falta reescribir el texto. La 
+!!	idea general que he apuntado se puede mantener o no. Lo he escrito por dar 
+!!	una idea de lo que tenía en mente, no porque me guste especialmente. Vamos, 
+!!	que este mensaje se puede cambiar por algo completamente distinto.
+!!
+print "Silvia se detiene un momento para leer con más atención la noticia que lleva ~El Diario Montañés~ en portada. Según el periódico, la Universidad impidió a una treintena de manifestantes el acceso a una intervención abierta del presidente del Gobierno regional. Más adelante, en páginas interiores, con tipografía destacada, unas declaraciones del consejero de Educación: @<<los manifestantes eran diecisiete a juzgar por las fotos y videos que he podido ver de lo sucedido@>>. Entre las fotos escogidas para acompañar la noticia apenas se ven entre ocho o diez jóvenes, abandonando el sitio apresuradamente ante la llegada de la policía, con una papelera destrozada en primer plano.";
+new_line;
+new_line;
+print "Pasa las páginas ojeando por encima alguna otra noticia. Hay una nota sobre el progreso en la construcción de un edificio del que se dice que @<<apenas provocará impacto visual en el centro de la capital cántabra@>>. Una foto muestra parte del edificio (aparentemente no cabe entero en la foto): una mole enorme, a medio construir, recubierta de andamios.";
+new_line;
+new_line;
+print "Hay también una noticia sobre cierta actividad solar inusual que un tal investigador de una universidad tal asegura que puede tener unas tales consecuencias inesperadas y muy peligrosas...";
+new_line;
+new_line;
+print "Aburrida, cierra el periódico.";
+new_line;
+return true;
+3:	! (al abrirlo/leerlo de nuevo)
+!!
+!!	Este es el mensaje por defecto de la acción, mucho más breve.
+!!
+print "Vuelve a ojear por encima la noticia de portada, sobre esa manifestación de entre ocho y treinta estudiantes. Con cierta sorpresa, se da cuenta entonces de que en ningún momento se alude al motivo de la presencia del presidente regional en la Universidad, aunque si se cita que @<<tuvo que abandonar el recinto escoltado, ante el evidente peligro que representaban los radicales@>>.";
+new_line;
+return true;
+}
+
+
+!!==============================================================================
+!!
+!!	DORMITORIO: Dormitorio.
+!!
+!!	Conexiones:
+!!	 -	NORTE: al baño
+!!	 -	OESTE: al pasillo
+!!
+!!	Objetos importantes:
+!!	 -	caja de zapatos (debajo de la cama. Se pueden meter cosas dentro)
+!!	 -	cajón (forma parte de la mesita)
+!!	 -	cama (se puede entrar en ella)
+!!	 -	llave (dentro de la caja de zapatos. Abre el arcón del taller)
+!!	 -	mesita de noche (se pueden colocar cosas encima)
+!!	 -	preservativos (dentro del cajón)
+!!	 -	radiodespertador (encima de la mesita)
+!!	 -	ropa interior (dentro del cajón)
+!!	 -	trastos (dentro de la caja de zapatos)
+!!
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!!	Dormitorio
+H03_DORMITORIO: switch (n) {
+1:	! (descripción)
+!!
+!!	El ambiente del dormitorio deber ser muy sombrío; persianas medio bajadas 
+!!	que mantienen la habitación en penumbras, muebles y sábanas negros o de 
+!!	colores muy oscuros... en contraposición con la luminosidad del baño, o la 
+!!	calidez del pasillo (éste era un espacio íntimo del padre. Nos acercamos a 
+!!	él. Con ello de algún modo nos acercamos a la muerte. Que el entorno 
+!!	refleje un poco esto).
+!!
+!!	Como en el resto de localidades, en la descripción del dormitorio no he 
+!!	incluido más que los objetos importantes que hay presentes, pero se podrían 
+!!	añadir más objetos de decorado: unas alfombras, alguna figura,... lo que 
+!!	se os ocurra. Eso si, lo que no se deberían incluir aquí son libros, de 
+!!	forma que se destaquen así las estanterías con libros que hay en el salón.
+!!
+print "Es el dormitorio de su padre. Estuvo recogiendo y limpiando cosas en la casa el año anterior, poco después del entierro, pero la habitación sigue prácticamente tal y como la dejó él antes de morir. Está dominada por una gran cama con un cabecero en hierro forjado negro y sábanas también oscuras. A su lado hay una mesilla de noche con un radiodespertador encima. Y poco más. Apenas hay adornos. Tiene puertas al pasillo y a un pequeño baño.";
+new_line;
+!!
+!!	Si el interlector ha encontrado la caja de zapatos que hay escondida bajo 
+!!	la cama, ésta pasará a mostrarse automáticamente al final de la descripción 
+!!	del dormitorio: "Puede ver una caja de zapatos en el suelo." (o algo así).
+!!
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	caja de zapatos
+H03_cajaZapatos: switch (n) {
+!!
+!!	Si el interlector busca bajo la cama encontrará esta caja de zapatos. Una 
+!!	vez descubierta pasará a mostrarse automáticamente junto con la descripción 
+!!	del dormitorio.
+!!
+1:	! (descripción)
+!!
+!!	Es una caja de zapatos a la que han arrancado la tapa. La descripción 
+!!	imprime automáticamente el listado de objetos que hay dentro de la caja. 
+!!	Inicialmente, antes de que el interlector meta o saque nada, el listado 
+!!	será algo así: "Dentro puede ver un montón de trastos entre los que destaca 
+!!	una llave.". Tanto los trastos como la llave están definidos como objetos 
+!!	independientes.
+!!
+print "Mensaje 1 de la caja de zapatos.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	cajón
+H03_cajon: switch (n) {
+!!
+!!	Forma parte de la mesita de noche.
+!!
+1:	! (descripción -- cerrado)
+print "Los cajones de la mesita de noche están cerrados.";
+new_line;
+return true;
+2:	! (descripción -- abierto)
+!!
+!!	Al examinar el cajón se muestra la lista de objetos que hay en su interior, 
+!!	pero a diferencia de lo que ocurre con la caja de zapatos antes, o con el 
+!!	armario que hay en el baño, el cajón no estará en realidad definido como un 
+!!	contenedor: ninguno de los objetos que se describen en su interior se podrá 
+!!	sacar, y tampoco se podrá meter nada dentro (así que en esta ocasión, la 
+!!	lista de objetos que hay en el cajón no se necesita imprimir de forma 
+!!	dinámica puesto que será siempre la misma. El texto será fijo).
+!!
+!!	La ropa interior y la caja de preservativos son sólo interesantes por sus 
+!!	descripciones, de modo que estarán definidos como objetos de decorado con 
+!!	los que no se podrá interactuar de ninguna otra manera que examinándolos, y 
+!!	mostaremos un mensaje que diga que el cajón está prácticamente lleno y no 
+!!	iba a entrar nada más si el interlector trata de meter cualquier cosa en 
+!!	su interior.
+!!
+print "Dentro del cajón que ha dejado abierto puede ver un montón de ropa interior y una caja de preservativos.";
+new_line;
+return true;
+3:	! (acción: abrir -- si está abierto)
+!!
+!!	Mensaje de error. No se puede abrir si ya está abierto.
+!!
+print "El cajón ya está abierto.";
+new_line;
+return true;
+4:	! (acción: abrir -- si está cerrado. Al abrirlo por primera vez)
+!!
+!!	Al abrir el cajón por primera vez descubre que, además de la ropa interior, 
+!!	hay una caja de preservativos. Descubrir esta caja de preservativos de su 
+!!	padre puede provocar alguna reacción en Silvia.
+!!
+print "Abre el cajón, descubriendo un montón de ropa interior y una caja de preservativos.";
+new_line;
+return true;
+5:	! (acción: abrir -- si está cerrado)
+print "Abre el cajón. Dentro hay un montón de ropa interior y una caja de preservativos.";
+new_line;
+return true;
+6:	! (acción cerrar -- si está cerrado)
+!!
+!!	Mensaje de error. No se puede cerrar si ya está cerrado.
+!!
+print "El cajón ya está cerrado.";
+new_line;
+return true;
+7:	! (acción cerrar -- si está abierto)
+print "Cierra el cajón.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	cama
+H03_cama: switch (n) {
+!!
+!!	Silvia puede echarse a dormir en la cama si el interlector introduce la 
+!!	instrucción MÉTETE EN LA CAMA / DUERME. En los mensajes específicos de la 
+!!	acción se describe con más detalle, pero a modo de vistazo rápido, el 
+!!	proceso que se sigue es el siguiente:
+!!
+!!	1)	El interlector teclea MÉTETE EN LA CAMA: se imprime el mensaje '2' que 
+!!		describe cómo Silvia se plantea echarse a dormir y entonces se pide la 
+!!		confirmación de la acción. ("[Puedes dejarla dormir o no hacer nada.").
+!!
+!!	2)	El interlector confirma la acción tecleando DEJARLA DORMIR, pero no ha 
+!!		tomado los tranquilizantes que hay en el baño. Un mensaje describe que 
+!!		está demasiado inquieta como para conciliar el sueño, así que se 
+!!		levanta de la cama sin llegar a llevar a cabo la acción.
+!!
+!!	3)	El interlector confirma la acción tecleando DEJARLA DORMIR, después de 
+!!		haber tomado los tranquilizantes. Se describe cómo Silvia se echa en la 
+!!		cama y coge el radiodespertador para programar la alarma. Un mensaje 
+!!		pide al usuario que introduzca la cantidad de minutos en que quiere que 
+!!		suene el despertador.
+!!
+!!	4)	El interlector introduce el número de minutos en que quiere que suene 
+!!		la alarma. Silvia introduce el número en el radiodespertador y lo 
+!!		vuelve a dejar sobre la cómoda. Después se queda dormida.
+!!
+!!	5)	Si la alarma está programada para que suene antes de que finalice la 
+!!		cuenta atrás de 59 minutos, se describe cómo empieza a sonar y 
+!!		despierta a Silvia. Se levanta de la cama y se pasa el control de nuevo 
+!!		al interlector.
+!!
+!!	6)	Si la alarma está programada para que suene después de que finalice la 
+!!		cuenta atrás de 59 minutos no llegará a sonar. El final del relato coge 
+!!		a Silvia durmiendo. Este último caso se dejará por detallar para la 
+!!		próxima versión 0.3 del documento.
+!!
+1:	! (descripción)
+!!
+!!	Es la vieja cama de matrimonio de sus padres.
+!!
+print "Mensaje 1 de la cama.";
+new_line;
+return true;
+2:	! (acción: meterse en la cama)
+!!
+!!	El interlector puede hacer que Silvia se eche a dormir en la cama. Este 
+!!	mensaje se imprime si introduce la instrucción MÉTETE EN LA CAMA / DUERME, 
+!!	y describe cómo Silvia mira la cama y se plantea la opción de echarse a 
+!!	dormir (de forma similar a como hacía cuando se intentaba entrar en la 
+!!	bañera). Como antes, usando topicInventory se solicitará la confirmación de 
+!!	la acción por parte del usuario mediante un mensaje del tipo: "[Puedes 
+!!	dejarla dormir o no hacer nada.]".
+!!
+print "Mensaje 2 de la cama. Silvia se plantea echarse a dormir un rato.";
+new_line;
+!print "[Puedes dejarla dormir o no hacer nada.]";
+!new_line;
+return true;
+3:	! (si el interlector escoge dormir -- sin haber tomado tranquilizantes)
+!!
+!!	A menos que tome antes los tranquilizantes que hay en el armario del baño 
+!!	Silvia estará demasiado inquieta como para quedarse dormida. Este es el 
+!!	mensaje que describe cómo se tumba en la cama pero, viendo que no puede 
+!!	dormir, se levanta de nuevo.
+!!
+print "Mensaje 3 de la cama.";
+new_line;
+return true;
+4:	! (si el interlector escoge dormir -- tras haber tomado tranquilizantes)
+!!
+!!	En caso de que si haya tomado antes los tranquilizantes, se describe cómo 
+!!	Silvia SE QUITA LAS BOTAS y se tumba en la cama. Antes de cerrar los ojos, 
+!!	coge el radiodespertador para programar la alarma (en este punto el usuario 
+!!	tendrá que introducir un número, que será la cantidad de minutos que van a 
+!!	pasar antes de que suene la alarma).
+!!
+!!	El mensaje tiene que terminar dejando claro al usuario que tiene que 
+!!	introducir el número de minutos en que quiere que suene la alarma. Algo tan 
+!!	claro como: "Introduce en cuántos minutos quieres que suene la alarma:" 
+!!	pero, al ser posible, integrando el mensaje con el resto de la narración.
+!!
+print "Mensaje 4 de la cama. Silvia introduce en el radiodespertador en cuántos minutos quiere que suene la alarma: ";
+new_line;
+return true;
+5:	! (mensaje tras haber programado el radiodespertador)
+!!
+!!	Este mensaje es breve: Silvia termina de programar la alarma del 
+!!	radiodespertador y vuelve a colocarlo sobre la cómoda. Entonces cierra los 
+!!	ojos y se queda dormida.
+!!
+print "Mensaje 5 de la cama.";
+new_line;
+return true;
+6:	! (si la alarma suena antes de que finalice la cuenta atrás de 59 mins.)
+!!
+!!	Este mensaje está dividido en dos partes.
+!!
+!!	1)	Silvia se ha quedado dormida. En este punto se aprovecha para iniciar 
+!!		el recuerdo interactivo titulado "LA NOCHE DE MAYO". TODO: Esta primera 
+!!		parte del mensaje la dejamos pendiente de detallar y de escribir para 
+!!		la próxima versión 0.26 del documento.
+!!
+!!	2)	Pero esta parte del mensaje si que se puede escribir ya. Al finalizar 
+!!		la escena con el recuerdo interactivo, se describe cómo empieza a sonar 
+!!		el pitido del despertador, despierta a Silvia, y entonces se levanta de 
+!!		la cama.
+!!
+print "Mensaje 6 de la cama. El despertador empieza a sonar y Silvia se despierta y se levanta otra vez de la cama.";
+new_line;
+return true;
+7:	! (si la alarma no suena antes de que finalice la cuenta atrás de 59 mins.)
+!!
+!!	TODO: En este mensaje se contempla la posibilidad de que el final del 
+!!	relato llegue mientras Silvia sigue durmiendo. Los detalles sobre el final 
+!!	de la historia se dejan pendientes para la próxima versión 0.3 del 
+!!	documento.
+!!
+return false;
+}
+
+!!------------------------------------------------------------------------------
+!!	llave
+H03_llave: switch (n) {
+!!
+!!	Está dentro de la caja de zapatos, debajo de la cama. Con ella se puede 
+!!	abrir la cerradura del arcón que hay en el taller (pero esto, claro, ni 
+!!	Silvia ni el interlector lo sabrán con seguridad hasta que no intenten 
+!!	abrir el arcón con ella).
+!!
+1:	! (descripción)
+!!
+!!	Pequeña y sin ningún detalle significativo.
+!!
+print "Mensaje 1 de la llave.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	mesita de noche
+H03_mesitaNoche: switch (n) {
+!!
+!!	Al cerrar/abrir la mesita de noche, la acción se reconduce al cajón. De 
+!!	forma que la instrucción ABRE MESITA será interpretada como ABRE CAJÓN. Los 
+!!	mensajes en los que se describe a Silvia abriendo/cerrando el cajón están 
+!!	definidos en la sección del cajón, más arriba.
+!!
+1:	! (descripción -- con el cajón cerrado)
+!!
+!!	Descripción de la mesita. Tiene que contemplar la lista de objetos que 
+!!	tiene colocados encima.
+!!
+print "Es una pequeña mesita de noche con algunos cajones. Encima hay un radiodespertador.";
+new_line;
+!!
+!!	Inicialmente sólo está el radiodespertador sobre la mesita, pero si más 
+!!	adelante el interlector coloca algún otro objeto, la lista (que se 
+!!	imprimirá de forma dinámica y automáticamente por la aplicación) incluirá 
+!!	todos los objetos, con un mensaje del tipo: "Encima hay <listado de objetos 
+!!	que hay sobre la mesita>.".
+!!
+return true;
+2:	! (descripción -- con el cajón abierto)
+print "Es una pequeña mesita de noche con algunos cajones. Uno de ellos está abierto y deja ver un montón de ropa interior y una caja de preservativos en su interior. Encima hay un radiodespertador.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	caja de preservativos
+H03_preservativos: switch (n) {
+1:	! (descripción)
+!!
+!!	Es un objeto de decorado. La única interacción interesante es examinarlo.
+!!
+print "Mensaje 1 de la caja de preservativos.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	radiodespertador
+H03_radiodespertador: switch (n) {
+!!
+!!	Potencialmente se trata de otro objeto muy engorroso. Para simplificar un 
+!!	poco las cosas, el usuario sólo puede manipular directamente las funciones 
+!!	de la radio (las funciones de despertador se manipulan únicamente al 
+!!	intentar echarse a dormir en la cama). De este modo, se requieren mensajes 
+!!	sólo para las siguientes funciones:
+!!
+!!	 -	Encender y apagar el radiodespertador: Inicialmente está apagado, pero 
+!!		se puede encender o apagar libremente (hay que citar un botón de 
+!!		encendido en la descripción del objeto que el interlector podrá 
+!!		pulsar). Al encenderlo, en un primer momento se escucharán sólo 
+!!		interferencias. Silvia forcejeará un rato con los diales para acabar 
+!!		encontrando la que parece ser la única emisora en la que se escucha 
+!!		música; y se tratará siempre de la misma canción, repetida una y otra 
+!!		vez, en bucle. Si lo apaga y vuelve a encenderlo después, la emisora 
+!!		ya estará correctamente sintonizada.
+!!
+!!	 -	Subir y bajar el volumen: Además del botón de encendido, se tienen que 
+!!		citar dos botones con los que el interlector podrá subir y bajar el 
+!!		volumen de la música. La radio empieza a un volumen del 100%. Cada vez 
+!!		que se pulsa los botones de subir o bajar el volumen, lo hace en un 50% 
+!!		en uno u otro sentido hasta llegar al 0% o el 200% (es decir, el 
+!!		volumen de la radio se puede establecer en uno de los siguientes 
+!!		valores relativos: {0%, 50%, 100%, 150%, 200%}).
+!!
+1:	! (descripción -- con la radio apagada)
+!!
+!!	Ya he apuntado que hay tres botones que puede pulsar el interlector: 1)
+!!	encender/apagar la radio, 2) subir volumen y 3) bajar volumen. La 
+!!	descripción tiene que servir para dejar claro al usuario cómo puede 
+!!	manipular el objeto.
+!!
+print "Mensaje 1 del radiodespertador.";
+new_line;
+return true;
+2:	! (descripción -- con la radio encendida)
+!!
+!!	Cuando la radio está encendida se reproducirá realmente el audio de una 
+!!	canción que suena en la emisora (siempre es la misma canción que se repite 
+!!	una y otra vez, en bucle). Pero, además de escuchar el audio, el usuario 
+!!	tiene que poder leer una descripción de la música que suena en la radio. En 
+!!	principio he escogido un tema de blues que he encontrado en Jamendo: "Last 
+!!	one standing", de 57jackbraves 
+!!	(<http://www.jamendo.com/en/track/563959/last-one-standing>). La canción en 
+!!	concreto podría ser alguna otra, mientras esté publicada bajo una licencia 
+!!	que permita usarla en el relato.
+!!
+print "Mensaje 2 del radiodespertador.";
+new_line;
+return true;
+3:	! (acción: encender la radio -- si ya está encendida)
+!!
+!!	Mensaje de error. Ya estaba encendida.
+!!
+print "Mensaje 3 del radiodespertador.";
+new_line;
+return true;
+4:	! (acción: encender la radio -- si es la primera vez que la enciende)
+!!
+!!	Al encenderlo por primera vez se escucharán sólo interferencias. Silvia 
+!!	navega entre emisoras durante un rato hasta que encuentra la que parece ser 
+!!	la única emisora en la que se escucha música; y se tratará siempre de un 
+!!	mismo tema, repetido una y otra vez, en bucle.
+!!
+!!	El audio de la canción empezará a sonar realmente al encender la radio.
+!!
+print "Mensaje 4 del radiodespertador.";
+new_line;
+return true;
+5:	! (acción: encender la radio -- mensaje por defecto)
+!!
+!!	Las siguientes veces que encienda la radio, la emisora en la que suena la 
+!!	canción ya estará sintonizada desde el primer momento.
+!!
+!!	El audio de la canción empezará a sonar realmente al encender la radio.
+!!
+print "Mensaje 5 del radiodespertador.";
+new_line;
+return true;
+6:	! (acción: apagar la radio -- si ya está apagada)
+!!
+!!	Mensaje de error. Ya estaba apagada.
+!!
+print "Mensaje 6 del radiodespertador.";
+new_line;
+return true;
+7:	! (acción: apagar la radio)
+!!
+!!	Silvia apaga la radio, de forma que se deja de escuchar la música.
+!!
+print "Mensaje 7 del radiodespertador.";
+new_line;
+return true;
+8:	! (acción: subir volumen -- si ya está en el máximo)
+!!
+!!	Mensaje de error. El volumen ya está a tope y no puede subirse más.
+!!
+print "Mensaje 8 del radiodespertador.";
+new_line;
+return true;
+9: ! (acción: subir volumen)
+!!
+!!	Silvia sube el volumen de la radio en varios puntos.
+!!
+print "Mensaje 9 del radiodespertador.";
+new_line;
+return true;
+10:	! (acción: bajar volumen -- si ya está en el mínimo)
+!!
+!!	Mensaje de error. Ya no hay volumen, no se puede bajar más.
+!!
+print "Mensaje 10 del radiodespertador.";
+new_line;
+return true;
+11:	! (acción: bajar volumen)
+!!
+!!	Silvia baja el volumen de la radio en varios puntos.
+!!
+print "Mensaje 11 del radiodespertador.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	trastos
+H03_trastos: switch (n) {
+!!
+!!	Diferentes objetos de relleno que hay dentro de la caja de zapatos. No se 
+!!	puede interactuar con ellos más allá de examinarlos, pero pueden servir 
+!!	para arrojar algo de información sobre el padre de Silvia, aunque sea de 
+!!	forma tangencial. Hay un fragmento interesante del libro de Paul Auster "La 
+!!	invención de la soledad":
+!!
+!!		<<Descubrí que no hay nada tan terrible como tener que enfrentarse a 
+!!		las pertenencias de un hombre muerto. Los objetos son inertes y sólo 
+!!		tienen significado en función de la vida que los emplea. Cuando esa 
+!!		vida se termina, las cosas cambian, aunque permanezcan iguales. Están y 
+!!		no están allí, como fantasmas tangibles, condenados a sobrevivir en un 
+!!		mundo al que ya no pertenecen. ¿Qué puede decirnos, por ejemplo, un 
+!!		armario lleno de ropa que espera en silencio ser usada otra vez por un 
+!!		hombre que no volverá a abrir la puerta? ¿Y los paquetes de 
+!!		preservativos en cajones llenos de ropa interior y calcetines? ¿Y la 
+!!		afeitadora eléctrica que está en el baño, todavía llena de la pelusa 
+!!		del último afeitado? ¿O una docena de frascos vacíos de tinte para el 
+!!		pelo escondidos en un maletín de piel? De repente se revelan cosas que 
+!!		uno no quiere ver, no quiere saber. Producen un efecto conmovedor, pero 
+!!		al mismo tiempo horrible [...]. Cada vez que abría un cajón o metía la 
+!!		cabeza en uno de sus armarios, me sentía como un intruso, un ladrón 
+!!		saqueando los lugares secretos de la mente de un hombre. Tenía la 
+!!		sensación de que mi padre entraría en cualquier momento, me miraría 
+!!		con incredulidad y me preguntaría qué demonios estaba haciendo. No 
+!!		parecía justo que no pudiera protestar; yo no tenía derecho a invadir 
+!!		su vida privada.>>
+!!
+!!	Escondidos en la caja, además de la llave que ya hemos descrito antes, 
+!!	se podrían meter algunas revistas pornográficas, una pelota de goma de las 
+!!	que utilizan los antidisturbios (este era uno de los tesoros que guardaba 
+!!	mi primo mayor en una caja debajo de su cama), y media docena de frascos 
+!!	vacíos de tinte para el pelo, por ejemplo. Pueden contemplarse como un 
+!!	único objeto con una descripción conjunta para todos ellos, o como objetos 
+!!	individuales cada uno con su descripción particular.
+!!
+1:	! (descripción)
+print "Mensaje 1 de los trastos.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	ropa interior
+H03_ropaInterior: switch (n) {
+!!
+!!	Está dentro del cajón de la mesita de noche. Más decorado. No tiene 
+!!	importancia.
+!!
+1:	! (descripción)
+print "Mensaje 1 de la ropa interior del padre.";
+new_line;
+return true;
+}
+
+
+!!==============================================================================
+!!
+!!	HABITACION: Habitación multiusos.
+!!
+!!	Conexiones:
+!!	 -	SUR: al pasillo
+!!
+!!	Objetos importantes:
+!!	 -	armario (se puede abrir y cerrar)
+!!	 -	balón de baloncesto
+!!	 -	bicicleta estática (se puede subir encima)
+!!	 -	caja de herramientas
+!!	 -	escritorio (se pueden colocar objetos encima)
+!!	 -	puerta del armario (forma parte del armario)
+!!	 -	silla (se puede subir encima)
+!!	 -	bolso (se pueden colocar objetos dentro)
+!!	 -	cuaderno (dentro del bolso)
+!!	 -	exámenes sin corregir (dentro del bolso)
+!!
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!!	Habitación multiusos
+H04_HABITACION: switch (n) {
+!!
+!!	Podría haber también un juego de pesas y cualquier otro objeto de decorado 
+!!	que se os ocurra.
+!!
+1:	! (descripción)
+print "Su antiguo dormitorio. Después de irse ella de casa su padre lo reformó: el lugar en el que estaba su cama hay ahora una bicicleta estática, y hay también un gran armario y un viejo escritorio de madera oscura que antes no estaban allí. Tiene una puerta al pasillo.";
+new_line;
+print "Su bolso está encima del escritorio.";
+new_line;
+print "Puede ver también un balón de baloncesto en una esquina, y una caja de herramientas junto al armario.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	armario
+H04_armario: switch (n) {
+!!
+!!	Es un armario lleno de ropa vieja (mucha de ella ropa de hace 20 años, de 
+!!	su madre). Al abrirlo, Silvia descubre que la puerta está desencajada. En 
+!!	el suelo de la habitación hay una caja de herramientas. El interlector 
+!!	puede utilizarla para arreglar la puerta (y, también, para romper la 
+!!	cerradura del arcón que hay en el taller).
+!!
+1:	! (descripción -- cerrado)
+!!
+!!	Cuando está cerrado da igual si la puerta sigue desencajada o está 
+!!	arreglada porque no se nota.
+!!
+print "Mensaje 1 del armario.";
+new_line;
+return true;
+2:	! (descripción -- abierto y con la puerta desencajada)
+print "Mensaje 2 del armario. Dentro hay un montón de ropa vieja. Una de las bisagras de la puerta está suelta y hace que cuelgue de forma extraña.";
+new_line;
+return true;
+3:	! (descripción -- abierto y con la puerta arreglada)
+print "Mensaje 3 del armario.";
+new_line;
+return true;
+4:	! (acción: abrirlo -- si ya está abierto)
+print "El armario ya está abierto.";
+new_line;
+return true;
+5:	! (acción: abrirlo -- al abrirlo por primera vez)
+!!
+!!	La primera vez que abre el armario, Silvia descubre que la puerta está 
+!!	desencajada (hay una caja de herramientas en la habitación pero, por lo 
+!!	visto, su padre murió sin llegar a arreglarla).
+!!
+print "Mensaje 5 del armario.";
+new_line;
+return true;
+6:	! (acción: abrirlo -- si la puerta sigue desencajada)
+print "Mensaje 6 del armario.";
+new_line;
+return true;
+7:	! (acción: abrirlo -- después de arreglar la puerta)
+print "Mensaje 7 del armario.";
+new_line;
+return true;
+8:	! (acción: cerrarlo -- si ya está cerrado)
+print "El armario ya está cerrado.";
+new_line;
+return true;
+9:	! (acción: cerrarlo -- si la puerta sigue desencajada)
+!!
+!!	Como la puerta está desencajada cuesta volver a cerrar el armario. Silvia 
+!!	forcejea un poco con ella hasta conseguirlo.
+!!
+print "Mensaje 9 del armario.";
+new_line;
+return true;
+10:	! (acción: cerrarlo -- después de arreglar la puerta)
+print "Mensaje 10 del armario. La puerta ahora cierra perfectamente.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	balón de baloncesto
+H04_balonBaloncesto: switch (n) {
+!!
+!!	Silvia puede utilizarlo para jugar con él en la terraza.
+!!
+1:	! (descripción)
+print "Mensaje 1 del balón. Un viejo balón de baloncesto. Está un poco bajo.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	bicicleta estática
+H04_bicicletaEstatica: switch (n) {
+!!
+!!	Cuando dejó de vivir aquí para irse a estudiar a la universidad, su padre 
+!!	quitó su cama y utilizó la habitación como sala multiusos para guardar 
+!!	trastos y colocar su bicicleta estática. Silvia puede utilizarla. Me parece 
+!!	una forma aburridísima de gastar los últimos minutos de su vida, pero allá 
+!!	cada uno...
+!!
+1:	! (descripción)
+print "Mensaje 1 de la bicicleta estática.";
+new_line;
+return true;
+2:	! (acción: subirse a la bici -- por primera vez)
+!!
+!!	Se describe con bastante detalle cómo Silvia se sube a la bicicleta y se 
+!!	pone a pedalear durante unos minutos. Al rato, vuelve a bajarse de la bici.
+!!
+print "Mensaje 2 de la bicicleta.";
+new_line;
+return true;
+3:	! (acción: subirse a la bici -- mensaje por defecto)
+!!
+!!	El interlector puede subirse a la bici todas las veces que quiera. Después 
+!!	de la primera vez, el mensaje será más breve y menos detallado.
+!!
+print "Mensaje 3 de la bicicleta.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	caja de herramientas
+H04_cajaHerramientas: switch (n) {
+!!
+!!	Es una caja de herramientas que está en el suelo, al lado del armario. La 
+!!	puerta del armario está desencajada y parece que su padre se había 
+!!	propuesto arreglarla él mismo, pero murió antes de llegar a hacerlo. Se 
+!!	puede utilizar tanto para arreglar la puerta del armario, como para forzar 
+!!	la cerradura del arcón que hay en el taller.
+!!
+1:	! (descripción)
+print "Mensaje 1 de la caja de herramientas.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	escritorio
+H04_escritorio: switch (n) {
+!!
+!!	Un viejo escritorio de madera oscura. No es el mismo que tenía en su 
+!!	habitación cuando aún vivía aquí. Este es mucho más grande y de aspecto más 
+!!	serio.
+!!
+1:	! (descripción)
+!!
+!!	Si el interlector coloca algún objeto encima, deberán listarse en la 
+!!	descripción "sobre el que se puede ver <lista de objetos que hay sobre el 
+!!	escritorio>". Inicialmente tiene colocado su bolso sobre él.
+!!
+print "Mensaje 1 del escritorio. Un viejo escritorio de madera oscura sobre el que puede ver su bolso.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	puerta del armario
+H04_puerta: switch (n) {
+!!
+!!	Forma parte del armario e inicialmente está desencajada. Silvia puede usar 
+!!	la caja de herramientas para arreglarla. Comparte con el armario el estado 
+!!	abierto/cerrado (es decir, si el armario está abierto, la puerta lo está, y 
+!!	al revés; si está cerrado, la puerta también).
+!!
+1:	! (descripción -- si está cerrada)
+!!
+!!	Cerrada no se ve que esté desencajada.
+!!
+print "Mensaje 1 de la puerta.";
+new_line;
+return true;
+2:	! (descripción -- si está abierta y la ha arreglado)
+print "Mensaje 2 de la puerta.";
+new_line;
+return true;
+3:	! (descripción -- si está abierta y desencajada)
+!!
+!!	Se describe cómo una de las bisagras está suelta, de manera que la puerta 
+!!	abierta cuelga, por una parte, separada del resto del armario.
+!!
+!!	Si la caja de herramientas sigue en la habitación o está en posesión de 
+!!	Silvia, después de describir la puerta desencajada se utilizará la librería 
+!!	topicInventory para imprimir un mensaje indicando al usuario que si quiere 
+!!	puede reparar la puerta: "[Puedes intentar arreglar la puerta.]"
+!!
+print "Mensaje 3 de la puerta. Tiene suelta una de las bisagras.";
+new_line;
+!!
+!!	El siguiente mensaje es el que se imprime únicamente si la caja de 
+!!	herramientas está al alcance de Silvia.
+!!
+!print "[Puedes intentar arreglar la puerta.]";
+!new_line;
+return true;
+4:	! (al indicar que se quiere arreglar la puerta)
+!!
+!!	En este mensaje se describe cómo Silvia utiliza la caja de herramientas 
+!!	para arreglar la puerta. Le cuesta unos minutos reparar la bisagra. Después 
+!!	de este momento la puerta dejará de estar desencajada.
+!!
+print "Mensaje 4 de la puerta.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	silla
+H04_silla: switch (n) {
+1:	! (descripción)
+print "Mensaje 1 de la silla.";
+new_line;
+return true;
+}
+
+
+!!------------------------------------------------------------------------------
+!!	bolso
+H04_bolso: switch (n) {
+1:	! (descripción)
+!!
+!!	Bolso de Silvia. Pueden colocarse objetos en su interior, así que estos 
+!!	objetos deberán listarse junto con la descripción del objeto. (Con un 
+!!	mensaje del tipo "Dentro tiene <listado de objetos que hay dentro del 
+!!	bolso)."). Inicialmente, dentro del bolso hay un cuaderno y un montón de 
+!!	exámenes sin corregir.
+!!
+print "Mensaje 1 del bolso. Dentro tiene un cuaderno con motivos de *El Principito* y un montón de exámenes sin corregir.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	cuaderno
+H04_cuaderno: switch (n) {
+1:	! (descripción)
+!!
+!!	Es un cuaderno moleskine tematizado con motivos de El Principito, regalo de 
+!!	cumpleaños de Carmen ---por su 30 cumpleaños---. Al examinarlo por primera 
+!!	vez se activa el recuerdo: "EL REGALO DE CUMPLEAÑOS", en el que se narra el 
+!!	momento en el que la dio el regalo.
+!!
+print "Mensaje 1 del cuaderno.";
+new_line;
+!!
+!!	Si es la primera vez que se examina, utilizaremos el mismo mensaje de 
+!!	notificación que con otros objetos como el teléfono o el dibujo enmarcado 
+!!	del taller para indicar al usuario que se ha activado un recuerdo.
+!!
+return true;
+2:	! (acción: abrirlo -- por primera vez)
+!!
+!!	Si el interlector introduce la instrucción ABRE EL CUADERNO se imprime este 
+!!	mensaje en el que se describen los contenidos del cuaderno. Silvia tiene 
+!!	algún dibujo suyo (es afinionada al dibujo, una de las cosas que compartía 
+!!	con su padre, aunque él pintaba más que dibujaba), listas de películas 
+!!	pendientes (estas son algunas de las de mi lista de películas pendientes: 
+!!	Chinatown, Magnolia, Hard Candy, Lolita, Barfly, Upstream Color,...), y 
+!!	cualquier cosa que se os ocurra.
+!!
+print "Mensaje 2 del cuaderno.";
+new_line;
+return true;
+3:	! (acción: abrirlo -- mensaje por defecto)
+!!
+!!	Describe también los contenidos del cuaderno. Pero es un mensaje más breve 
+!!	y menos detallado que el anterior.
+!!
+print "Mensaje 3 del cuaderno.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	exámenes sin corregir
+H04_examenes: switch (n) {
+!!
+!!	TODO: dejaremos los mensajes del objeto pendientes para una próxima versión 
+!!	del documento. Silvia puede dedicarse a corregir los exámenes (es profesora 
+!!	de lengua y literatura en un instituto, en León. Son exaémenes de 
+!!	literatura de sus alumnos de bachillerato). Puede parecer una tontería 
+!!	gastar los últimos minutos de tu vida en corregir unos exámenes que nunca 
+!!	vas a llegar a entregar a tus alumnos, pero siempre ha estado contenta con 
+!!	su trabajo y es bonito dedicar tu vida a trabajar en algo que te gusta. Se 
+!!	puede aprovechar para ponerse creativo y escribir algunos fragmentos de los 
+!!	exámenes que tiene que corregir; comentarios de texto y opinión personal de 
+!!	algún libro, por ejemplo.
+!!
+default: return false;
+}
+
+
+!! XXX - Falta una localidad H05. El plan es estudiar si crear una versión 
+!! alternativa de la localidad H04, para intercambiar una por otra a lo largo 
+!! del relato.
+
+
+!!==============================================================================
+!!
+!!	PASILLO: Pasillo de la segunda planta.
+!!
+!!	Conexiones:
+!!	 -	NORTE: a la habitación multiusos
+!!	 -	ESTE: al dormitorio
+!!	 -	NORESTE: al baño
+!!	 -	ABAJO: al recibidor
+!!
+!!	Objetos importantes:
+!!	 -	fotografías
+!!	 -	fotografía de su madre de joven
+!!	 -	fotografía de su noveno cumpleaños
+!!	 -	fotografía de carnavales
+!!	 -	fotografía de ella con su padre
+!!
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!!	Pasillo de la segunda planta
+H06_PASILLO: switch (n) {
+1:	! (descripción)
+print "Conecta el piso de abajo a través de las escaleras con el dormitorio de su padre, una habitación multiusos, y el baño del segundo piso. Colgadas en la pared hay varias fotos antiguas enmarcadas, algunas de cuando era niña, con sus padres.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	fotografías
+H06_fotografias: switch (n) {
+!!
+!!	En plural, describe en general todas las fotos que hay colgadas de la pared 
+!!	del pasillo; unas quince o dieciocho, todas fotos viejas, de antes de la 
+!!	muerte de su madre. Fotos de vacaciones, visitas a tíos y abuelos, fotos de 
+!!	Silvia cuando era pequeña... de entre todas ellas, se destacan cuatro que 
+!!	pueden examinarse de forma independiente: una de su madre de joven; una de 
+!!	su noveno cumpleaños; una de carnavales en el colegio; y otra de ella con 
+!!	su padre, en la playa tras la casa.
+!!
+1:	! (descripción)
+print "Mensaje 1 de las fotografías.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	fotografía de su madre de joven
+H06_fotografia1: switch (n) {
+1:	! (descripción)
+!!
+!!	Es una foto de su madre. De antes de que ella naciese. Muy joven, en el 
+!!	campo, mirando a la cámara con una expresión entre divertida y acusadora 
+!!	(la foto está sacada por su padre). Piensa que resulta raro mirar esa foto. 
+!!	Es, en cierto modo, como ponerse en la piel de su padre y ver a su madre 
+!!	con los ojos de él.
+!!
+print "Descripción de la fotografía.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	fotografía de su noveno cumpleaños
+H06_fotografia2: switch (n) {
+1:	! (descripción)
+!!
+!!	Una foto de ella el día de su noveno cumpleaños, junto a su madre, muy poco 
+!!	antes de que ella muriese. Tomada tambén por su padre. En el momento de la 
+!!	foto, su madre debía tener aproximadamente la edad que ella tiene ahora. Al 
+!!	examinarla por primera vez, un mensaje notificará al interlector que se ha 
+!!	activado el recuerdo interactivo titulado "LA SONRISA DE MAMÁ".
+!!
+print "Descripción de la fotografía.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	fotografía de carnavales
+H06_fotografia3: switch (n) {
+1:	! (descripción)
+!!
+!!	Una foto suya del colegio, unos carnavales, con unos cinco años 
+!!	aproximadamente, posando con sus compañeros de clase disfrazados. Ella, de 
+!!	caperucita roja, entre un cocinero y una sevillana. En un lado se ve a un 
+!!	compañero disfrazado de yogur de fresa que le hace gracia. Y Fran, del que 
+!!	siempre ha dicho que fue su novio del colegio, disfrazado de Robin Hood.
+!!
+print "Descripción de la fotograia.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	fotografía de ella con su padre
+H06_fotografia4: switch (n) {
+1:	! (descripción)
+!!
+!!	Esta es una foto mal enfocada de ella junto a su padre, agachados los dos 
+!!	en la playa tras la casa, mirando algo que en la foto no se llega a ver lo 
+!!	que es. Es la única foto de la pared en la que aparecen ella y su padre 
+!!	solos. El fotógrafo siempre fue él, está claro que esta es una de las pocas 
+!!	fotos sacadas por su madre.
+!!
+!!	Al examinarla por primera vez una notificación indica que se ha activado el 
+!!	recuerdo interactivo titulado "EL ERIZO".
+!!
+print "Descripción de la fotografía.";
+new_line;
+return true;
+}
+
+
+!!==============================================================================
+!!
+!!	PLAYA: Playa.
+!!
+!!	Conexiones:
+!!	 -	SUR: a la terraza
+!!
+!!	Objetos importantes:
+!!	 -	casa
+!!	 -	mar (se puede entrar dentro)
+!!
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!!	Playa
+H07_PLAYA: switch (n) {
+!!
+!!	Antes de entrar en esta localidad se comprueba si Silvia lleva puestas las 
+!!	botas. Si es así, un mensaje describe cómo se las quita y se las lleva en 
+!!	las manos.
+!!
+!!	La instrucción VE AL NORTE se reinterpretará como MÉTETE EN EL MAR. Los 
+!!	mensajes de respuesta a esta acción se definen en el apartado dedicado al 
+!!	objeto que representa al mar, más abajo.
+!!
+1:	! (descripción)
+print "Una playa completamente desierta. Nunca le ha gustado ir a la playa en la ciudad, saturada siempre de gente tostándose al sol. Pero esta si. Es agradable sentir la arena entre los pies y el penetrante olor del mar. La playa se extiende de en dirección este-oeste, con el mar al norte y la casa al sur.";
+new_line;
+return true;
+2:	! (acción: ir al este/oeste -- vestida. Si es por primera vez)
+!!
+!!	La playa se extiende en dirección este-oeste. Si el interlector intenta ir 
+!!	en cualquiera de estas dos direcciones, Silvia no se desplazará hacia una 
+!!	nueva localidad, pero un mensaje la describirá andando descalza por la 
+!!	playa, con la arena bajo los pies, la brisa del mar cantábrico 
+!!	acariciándola suavemente el rostro, el rumor del suave oleaje en los oidos 
+!!	y el salitre en las fosas nasales.
+!!
+print "Mensaje 2 de la playa.";
+new_line;
+return true;
+3:	! (acción: ir al este/oeste -- vestida. Mensaje por defecto)
+!!
+!!	Si el interlector trata de ir al este o al oeste de nuevo, otra vez se 
+!!	describe a Silvia andando por la playa, pero el mensaje en esta ocasión 
+!!	será más breve y menos detallado.
+!!
+print "Mensaje 3 de la playa.";
+new_line;
+return true;
+4:	! (acción: ir al este/oeste -- desnuda. Si es por primera vez)
+!!
+!!	Si Silvia se ha bañado en el agua y sigue desnuda, al intentar desplazarse 
+!!	al este o el oeste un mensaje la describe echando a correr por la playa. No 
+!!	hay nadie que pueda verla. Está helada pero es agradable sentir la brisa en 
+!!	el cuerpo, secándola el agua lentamente.
+!!
+print "Mensaje 4 de la playa.";
+new_line;
+return true;
+5:	! (acción: ir al este/oeste -- desnuda. Mensaje por defecto)
+!!
+!!	Si se ha bañado y sigue desnuda, al intentar desplazarse de nuevo al este o 
+!!	el oeste se vuelve a describir a Silvia andando desnuda por la playa. Entre 
+!!	el rato nadando y la carrera anterior ya está cansada, así que esta vez no 
+!!	se echa a correr. En cualquier caso, el mensaje será más breve y menos 
+!!	detallado que el anterior.
+!!
+print "Mensaje 5 de la playa.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	casa
+H07_casa: switch (n) {
+1:	! (descripción -- al examinarla por primera vez)
+!!
+!!	Desde la playa se tiene una vista completa de la casa. Es un edificio 
+!!	grande, en el que pasó su infancia acompañada de sus padres. Puede dar 
+!!	pie para una descripción interesante...
+!!
+print "Mensaje 1 de la casa.";
+new_line;
+return true;
+2:	! (descripción -- mensaje por defecto)
+!!
+!!	Si la descripción del mensaje '1' es muy detallada, al examinar la casa de 
+!!	nuevo sería mejor cambiarla por una más breve.
+!!
+print "Mensaje 2 de la casa.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	mar
+H07_mar: switch (n) {
+1:	! (descripción)
+print "Mensaje 1 del mar.";
+new_line;
+return true;
+2:	! (acción: meterse en el mar -- si no se ha metido antes)
+!!
+!!	Como hacemos con algunas acciones como meterse en la bañera, o echarse a 
+!!	dormir en la cama, al intentar la acción de meterse en el mar se describe 
+!!	cómo Silvia se plantea darse un baño y entonces se usa la librería 
+!!	topicInventory para solicitar al usuario que confirme la acción antes de 
+!!	llevarla efectivamente a cabo: "[Puedes dejarla darse un baño en el mar o 
+!!	no hacer nada.]".
+!!
+print "Mensaje 2 del mar.";
+new_line;
+return true;
+3:	! (al confirmar la acción de meterse en el mar)
+!!
+!!	Mensaje detallado describiendo cómo Silvia se desnuda, deja la ropa en la 
+!!	arena y entra corriendo a zambullirse en el agua. El agua del Cantábrico 
+!!	está siempre helada. Silvia nada durante unos diez minutos, hasta que 
+!!	empieza a sentirse cansada, y sale medio tiritando. Se la deja desnuda, con 
+!!	la ropa a sus pies, sobre la arena. Que sea el usuario quien se encargue de 
+!!	vestirla.
+!!
+print "Mensaje 3 del mar.";
+new_line;
+return true;
+4:	! (acción: meterse en el mar -- si ya se ha metido antes)
+!!
+!!	Se imprime un mensaje indicando que Silvia no va a volver a meterse en el 
+!!	agua.
+!!
+print "Mensaje 4 del mar.";
+new_line;
+return true;
+}
+
+
+!!==============================================================================
+!!	RECIBIDOR: Recibidor.
+!!
+!!	Conexiones:
+!!		-	NORTE: al salón
+!!		-	ARRIBA: al pasillo del segundo piso
+!!
+!!	Objetos importantes:
+!!		-	cómoda (pueden colocarse objetos encima)
+!!		-	cajón (de la cómoda. Pueden colocarse objetos dentro)
+!!		-	teléfono (sobre la cómoda): activa el recuerdo "DISCUSIÓN"
+!!		-	cajetilla (dentro del cajón): activa "TARDES EN EL LOCAL"
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+H08_RECIBIDOR: switch (n) {
+1:	! (descripción)
+print "La puerta principal de la casa da a un pequeño recibidor desde el que se puede seguir un pasillo hasta el salón, o subir por las escaleras hasta el segundo piso. Junto a la puerta hay una cómoda de madera oscura sobre la que descansa un teléfono.";
+new_line;
+!!
+!!	Se podría incluir también un perchero en el que colocar el bolso de Silvia. 
+!!	Dentro del bolso guarda una libreta ---regalo de Carmen--- que activa uno 
+!!	de los "flashbacks" o recuerdos interactivos. Como en el recibidor ya hay 
+!!	dos objetos que activan recuerdos: el teléfono y, dentro de la cómoda, la 
+!!	cajetilla de tabaco, probablemente sea mejor colocar el bolso en una 
+!!	localidad que no tenga ningún objeto activador de recuerdos. De todas 
+!!	formas, si al final se incluyese aquí, podría describirse con una línea que 
+!!	indicase los diferentes objetos colgados en el perchero:
+!!
+!!	print "Su abrigo y su bolso están colgados de un perchero.";
+!!	new_line;
+!!
+return true;
+}
+
+!!------------------------------------------------------------------------------
+H08_cajetilla: switch (n) {
+1:	! (descripción)
+!!
+!!	No sé hacer una descripción interesante de objetos tan simples como este. 
+!!	Se podría aludir, tal vez, a que Silvia pensaba que su padre no había 
+!!	vuelto a fumar desde la enfermedad de su madre ---murió de cáncer cuando 
+!!	ella tenía nueve años---. Se necesitan además dos descripciones 
+!!	adiccionales para la acción de fumar un cigarrillo. 
+!!
+print "Una cajetilla de tabaco empezada, de su padre. Le quedan seis cigarrillos.";
+new_line;
+return true;
+2:	! (acción: fumar un cigarrillo -- por primera vez)
+!!
+!!	Esta descripción es más completa que la siguiente. Detallará cosas como el 
+!!	sabor y el olor del humo (es importante implicar distintos sentidos aquí), 
+!!	la sensación de tener el cigarrillo entre los dedos,... y evocará en Silvia 
+!!	el recuerdo interactivo titulado "EL LOCAL".
+!!
+print "Mensaje 2 de la cajetilla.";
+new_line;
+return true;
+3:	! (acción: fumar un cigarrillo -- de nuevo)
+!!
+!!	En total hay seis cigarrillos en la cajetilla. Si después de fumar uno de 
+!!	ellos, el interlector decide fumar alguno de los otros cinco restantes, se 
+!!	necesita una segunda descripción, más breve, de Silvia fumando. Pero esta 
+!!	vez sin evocar ningún recuerdo adicional.
+!!
+print "Mensaje 3 de la cajetilla.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	cajón
+H08_cajon: switch (n) {
+!!
+!!	Forma parte de la cómoda.
+!!
+1:	! (descripción -- cerrado)
+print "El cajón de la cómoda está cerrado.";
+new_line;
+return true;
+2:	! (descripción -- abierto)
+!!
+!!	Al examinar el cajón se muestra la lista de objetos que hay en su interior.
+!!
+print "Dentro del cajón hay un montón de trastos entre los que destaca una cajetilla de tabaco.";
+new_line;
+return true;
+3:	! (acción: abrir -- si está abierto)
+!!
+!!	Mensaje de error. No se puede abrir si ya está abierto.
+!!
+print "El cajón ya está abierto.";
+new_line;
+return true;
+4:	! (acción: abrir -- si está cerrado)
+print "Abre el cajón, descubriendo un montón de trastos entre los que destaca una cajetilla de tabaco.";
+new_line;
+return true;
+5:	! (acción cerrar -- si está cerrado)
+!!
+!!	Mensaje de error. No se puede cerrar si ya está cerrado.
+!!
+print "El cajón ya está cerrado.";
+new_line;
+return true;
+6:	! (acción cerrar -- si está abierto)
+print "Cierra el cajón.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	cómoda
+H08_comoda: switch (n) {
+1:	! (descripción -- con el cajón cerrado)
+!!
+!!	Tiene que contemplar un espacio en el que se va a imprimir la lista de 
+!!	objetos que hay sobre la cómoda (inicialmente sólo está el teléfono, pero 
+!!	después el interlector podría haber colocado alguno otro). La lista de 
+!!	objetos se generará de manera automática, como ocurre en otras ocasiones, 
+!!	pero hay que indicar en qué lugar se debe mostrar. En esta descripción de 
+!!	ejemplo, el programa en realidad lo que imprimirá será: "Es una pequeña 
+!!	cómoda de madera oscura sobre la que hay <lista de objetos que hay sobre la 
+!!	cómoda>.".
+!!
+print "Es una pequeña cómoda de madera oscura sobre la que hay un teléfono. Tiene un único cajón, que en estos momentos está cerrado.";
+new_line;
+return true;
+2:	! (descripción -- con el cajón abierto)
+!!
+!!	En este caso, además de imprimir la lista de objetos que hay sobre la 
+!!	cómoda, se tiene que imprimir también la lista de objetos que hay en el 
+!!	interior del cajón. Inicialmente, el único realmente importante es la 
+!!	cajetilla de tabaco (que activa uno de los recuerdos interactivos), pero 
+!!	hay unos cuantos trastos más de decorado: cables enrredados, cargadores de 
+!!	algún aparato electrónico, papeles arrugados,... que probablemente deberían 
+!!	poder examinarse también.
+!!
+!!	Si el interlector introduce algún otro objeto dentro del cajón, como el 
+!!	mechero que hay en la cocina, por ejemplo, como hay que detallar en la 
+!!	descripción los objetos que hay dentro del cajón, la línea indicando este 
+!!	listado pasaría a ser algo del tipo: "Tiene un único cajón, que ahora está 
+!!	abierto, dejando al descubierto un montón de trastos entre los que ve una 
+!!	cajetilla de tabaco y un mechero". (Es decir, ahora, el programa imprimiría 
+!!	"Tiene un único cajón, que ahora está abierto, dejando al descubierto un 
+!!	montón de trastos entre los que se ve <lista de objetos que hay en el 
+!!	cajón>.").
+!!
+print "Es una pequeña cómoda de madera oscura sobre la que hay un teléfono. Tiene un único cajón, que ahora está abierto, dejando al descubierto un montón de trastos entre los que ve una cajetilla de tabaco.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	teléfono
+H08_telefono: switch (n) {
+!!
+!!	El teléfono tiene un total de cuatro descripciones. Se imprimirá una u otra 
+!!	en función de diferentes factores si el interlector trata de examinarlo:
+!!
+!!	1)	Al examinar el teléfono por primera vez. Al hacerlo se activa el 
+!!		recuerdo interactivo titulado "LA DISCUSIÓN".
+!!
+!!	2)	Mientras el interlector no reviva el recuerdo "LA DISCUSIÓN" (una vez 
+!!		se haya activado un recuerdo, el interlector deberá teclear RECUERDA 
+!!		<NOMBRE DEL RECUERDO>, para revivirlo).
+!!
+!!	3)	Al examinar el teléfono después de que el interlector haya revivido el 
+!!		recuerdo "LA DISCUSIÓN".
+!!
+!!	4)	Descripción final si el jugador examina el teléfono de nuevo, tras 
+!!		haber dado las tres descripciones anteriores.
+!!
+1:	! (descripción -- al examinarlo por primera vez)
+print "Está sobre la cómoda, al lado de la puerta. Es de esos multifunción con botones para consultar el buzón de voz, el mensaje del contestador automático y la agenda de contactos. **(La idea al describir estos botones es que el interlector pueda pulsarlos. Si se incluye esto, habría que preparar también descripciones para el buzón de voz ---¿últimos mensajes que le hayan dejado al padre?---, el contestador ---la voz del padre diciendo que 'en estos momentos no está' es un imagen interesante---, y la agenda.** Sin duda, contar con una memoria para guardar contactos es algo que resultará muy útil a casi todo el mundo, aunque no a ella. Sólo hay dos números a los que llamaba habitualmente, y se los sabe de memoria; uno de ellos, de hecho, es el número de este mismo teléfono, el de su padre. Y ya no le sirve de nada ahora que no está. El otro es el de Carmen. Hace varios días que no usa ese tampoco. Desde la discusión. No han vuelto a hablar, y no porque siga enfadada y no quiera hacerlo ---aunque, en parte, un poco también---, sino porque no ha sabido qué podía decirla después del otro día... la echa de menos.";
+new_line;
+!!
+!!	Hay que notificar al interlector de alguna manera que el recuerdo de la 
+!!	discusión pasa a estar activo (es decir, que a partir de este momento el 
+!!	interlector podrá consultar el inventario de recuerdos tecleando RECUERDOS 
+!!	y ver "LA DISCUSIÓN" en él, y que podrá teclear RECUERDA LA DISCUSIÓN para 
+!!	revivirlo). Aaron A. Reed usa un mecanismo así en "SAND-DANCER". La fórmula 
+!!	que utiliza él para estas notificaciones es: "Something about <objeto que 
+!!	hace de disparador del recuerdo> makes you want to brood about <nombre del 
+!!	recuerdo que se haya activado>."
+!!
+!!	Al utilizar simpre el mismo mensaje, una vez descubra el interlector que 
+!!	significa que se ha activado un "flashback" y que lo puede revivir, cada 
+!!	vez que aparezca este mensaje sabrá automáticamente que se ha añadido un 
+!!	nuevo recuerdo al inventario.
+!! 
+return true;
+2:	! (descripción -- al examinarlo mientras no se reviva el recuerdo)
+!!
+!!	Mucho más corta. Esta descripción tiene que que aludir de nuevo a la 
+!!	discusión para guiar la atención del jugador y empujarle a que reviva el 
+!!	recuerdo.
+!!
+print "Mira el teléfono, pensando en lo mucho que echa de menos a Carmen. Pero, ¿cómo empezar una conversación después de la discusión del otro día? ¿qué puede decirla después de aquello?";
+new_line;
+return true;
+3:	! (descripción -- tras revivir el recuerdo "LA DISCUSIÓN")
+!!
+!!	Ahora se daría opción al interlector de llamar por teléfono a Carmen 
+!!	(usando la librería topicInventory para imprimir listas de opciones del 
+!!	tipo: [Puedes llamar a Carmen o no hacer nada.]).
+!!
+!!	Si decide llamar finalmente a Carmen, descubrirá que no hay línea y que no 
+!!	va a poder hablar con ella una última vez. Me parece interesante eso de que 
+!!	Silvia se muera quedándole temas pendientes con Carmen que no va a poder 
+!!	arreglar ya.
+!!
+print "Mensaje 3 del teléfono.";
+new_line;
+return true;
+4:	! (descripción final por defecto)
+!!
+!!	Esta es la última descripción que se imprime al examinar el teléfono, 
+!!	después de que se hayan dado ya las descripciones anteriores. Breve, 
+!!	incidirá de nuevo en que no hay línea telefónica y que ya no va a poder 
+!!	hablar con Carmen una última vez.
+!!
+print "Mensaje 4 del teléfono.";
+new_line;
+return true;
+}
+
+
+!!==============================================================================
+!!	SALON: Salón.
+!!
+!!	Conexiones:
+!!	 -	OESTE: a la cocina
+!!	 -	SUR: al recibidor
+!!
+!!	Objetos importantes:
+!!	 -	televisión
+!!	 -	reproductor de DVD
+!!	 -	libros
+!!	 -	libro "En busca del tiempo perdido", de Marcel Proust
+!!	 -	mueble-bar (pueden colocarse objetos dentro)
+!!	 -	trofeos (dentro del mueble-bar)
+!!	 -	botella de güisqui medio vacía (dentro del mueble-bar)
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!!	Salón
+H09_SALON: switch (n) {
+1:	! (descripción)
+print "La habitación más grande de la casa. Es un lugar agradable, con varias [H09_estanterias] repletas de [H09_libros] y viejos sillones de aspecto cómodo. Destacan [un H09_televisor] con [H09_DVD] y [un H09_muebleBar], en una esquina. Está conectada con la [enlace: H02_COCINA, cocina] y el [enlace: H08_RECIBIDOR, recibidor].";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	botella de güisqui
+H09_botellaGuisqui: switch (n) {
+1:	! (descripción)
+!!
+!!	Este es todo el alcohol que hay en la casa. En cuanto a licores, Silvia 
+!!	hubiese preferido vodka, pero a falta de otra cosa no va a hacerle ascos al 
+!!	güisqui.
+!!
+print "Mensaje 1 de la botella de güisqui.";
+new_line;
+return true;
+2:	! (mensaje ante la acción de beber)
+!!
+!!	El interlector puede intentar la acción de beber varias veces antes de que 
+!!	se termine el alcohol.Si Silvia bebe y luego se toma las pastillas que hay 
+!!	guardadas dentro del armario del baño, se quedará inconsciente y morirá 
+!!	(bien por sobredosis o porque la cuenta atrás de 59 minutos finalice, no 
+!!	quedará claro).
+!!
+print "Mensaje 2 de la botella de güisqui.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	reproductor de DVD
+H09_DVD: switch (n) {
+1:	! (descripción -- estando apagado)
+!!
+!!	Quizá Silvia podría preguntarse si su padre habrá dejado alguna película en 
+!!	su interior.
+!!
+print "Un aparato de DVD apagado.";
+new_line;
+return true;
+2:	! (descripción -- estando encendido)
+!!
+!!	No sé cómo hacer estas descripciones más interesantes... en cualquier caso, 
+!!	además de las dos descripciones del DVD apagado o encendido, se necesitan 
+!!	otras dos que dependen no sólo del estado del DVD (apagado/encendido), sino 
+!!	también del estado de la televisión. Son las siguientes descripciones 3 y 
+!!	4.
+!!
+print "El DVD ahora está encendido.";
+new_line;
+return true;
+3:	! (descripción de la película al verla por primera vez)
+!!
+!!	Esta descripción se imprime ante una de las siguientes situaciones:
+!!
+!!	 *	Si la tele está encendida, y el DVD apagado, al encender el DVD.
+!!	 *	Si el DVD está encendido, y la tele apagada, al encender la tele.
+!!
+!!	Describe la película que su padre había dejado en el interior del 
+!!	reproductor. Al encender la televisión y el DVD, Silvia se encuentra que 
+!!	había un DVD puesto y que se trata de la película "Lawrence de Arabia", una 
+!!	de sus películas de aventuras favoritas. Aunque ya la ha visto muchas 
+!!	veces, dedica un rato delante de la televisión viendo una vez más las 
+!!	primeras escenas de la película. Le llama la atención que sea justo esa, 
+!!	una de sus películas favoritas, justo la película que probablemente hubiese 
+!!	visto su padre por última vez. (Al final de este documento he añadido un 
+!!	apunte con la explicación de lo que [interpreto yo que] ocurre en realidad 
+!!	en el relato. Teniendo eso en cuenta, que la película del DVD sea una de 
+!!	las películas favoritas de Silvia puede no ser tanto una coincidencia).
+!!
+print "Mensaje 3 del DVD.";
+new_line;
+return true;
+4:	! (al examinar la tele o el DVD después de haber puesto la película)
+!!
+!!	Mientras el relato continua y el interlector sigue haciendo cosas por la 
+!!	casa, Lawrence permanece de fondo en la televisión. Al examinar de nuevo la 
+!!	tele o el DVD se tiene que describir la película.
+!!
+print "Mensaje 4 del DVD.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	libros
+H09_libros: switch (n) {
+1:	! (descripción -- esta parte se imprime sólo la primera vez que se examinan)
+print "Su padre tenía una biblioteca realmente grande. Recuerda escucharle decir, de pequeña, que los libros eran la forma más barata de viajar. Probablemente ahora le parecería una frase artificial, pero lo cierto es que desde entonces no se ha quitado de la cabeza esa imagen del viaje cada vez que ha cogido un libro; una turista de visita por los lugares descritos por el escritor, cargada de equipaje y todo... resulta curioso cómo las cosas más insignificantes pueden modelar nuestra forma de pensar.";
+new_line;
+return O__M(H09_libros, 2);
+2:	! (descripción)
+print "Siempre que ha venido aquí de visita se ha entretenido ojeando esas estanterías. Esperaba el momento adecuado para leer alguno de esos libros que siempre había querido leer pero para los que no había encontrado tiempo, como los tres volúmenes de una lujosa edición de ~A la busca del tiempo perdido~, que se destacan a un lado.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	mueble bar
+H09_muebleBar: switch (n) {
+1:	! (descripción -- cerrado)
+print "Se encuentra en una esquina del salón, desplazado por las estanterías de libros. Está lleno de polvo.";
+new_line;
+return true;
+2:	! (descripción -- abierto)
+print "El mueble-bar está lleno de trofeos de fotografía y pintura de certámenes locales, amontonados allí descuidadamente. De su padre. En cuanto a bebidas, sólo hay una botella de güisqui, medio vacía, y casi parece que está allí por obligación, porque es algo que debe haber dentro de un mueble-bar.";
+new_line;
+!!
+!!	Puesto que el mueble-bar es un contenedor, el interlector puede colocar 
+!!	objetos en su interior. Si hay alguno más, aparte de la botella de güisqui, 
+!!	se tienen que listar al final de la descripción: "Puede ver también <lista 
+!!	de objetos que haya en el interior del mueble>.".
+!!
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	televisor
+H09_televisor: switch (n) {
+!!
+!!	Además de las descripciones de la televisión que se especifican aquí, para 
+!!	los casos en que está apagada o encendida, hay otras dos descripciones 
+!!	relacionadas con la televisión que se imprimen ante las siguientes 
+!!	situaciones:
+!!
+!!	 *	Si la tele está encendida y el DVD apagado, al encender el DVD o, si 
+!!		el DVD está encendido y la tele apagada, al encender la tele.
+!!	 *	Si se vuelve a examinar la televisión después de poner la película.
+!!
+!!	Estos dos mensajes adicionales que describen la película del DVD están 
+!!	definidos para el obj_DVD (más arriba, sus descripciones 3 y 4).
+!!
+1:	! (descripción -- apagada)
+print "Es una vieja [enlace: H09_televisor, televisión] de gran tamaño, conectada a [un H09_DVD]. Está apagada.";
+new_line;
+return true;
+2:	! (descripción -- encendida)
+!!
+!!	Silvia puede preguntarse si el que no se vea nada en la televisión es en 
+!!	realidad culpa de la señal o de su padre. La última vez que vino a verle 
+!!	aún no se había molestado en comprar un receptor de señal digital y desde 
+!!	que se dejó de emitir en analógico sólo podía verse el DVD.
+!!
+print "Es una vieja [enlace: H09_televisor, televisión] de gran tamaño, conectada a [un H09_DVD]. Está encendida, pero sólo se ve esa nieve que aparece cuando no hay señal. Silvia cambia de canal varias veces, pero en todos ellos se ve esa misma nieve.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	A la busca del tiempo perdido
+H09_tiempoPerdido: switch (n) {
+1:	! (descripción al examinar el libro)
+!!
+!!	Esta es la descripción física del libro. Como siempre, sería genial dar 
+!!	descripciones más interesantes que esta birria. (Me he empeñado en que sea 
+!!	el libro ese y lo cierto es que es tan grande que está siempre dividido en 
+!!	al menos tres volúmenes, como aquí: 
+!!	<http://www.amazon.com/busca-del-tiempo-perdido/dp/8477023190/>. Sería más 
+!!	fácil de programar cualquier otro libro que ocupe un sólo volumen, pero los 
+!!	temas de este ---la obra se mete en la memoria del narrador: sus recuerdos 
+!!	y los vínculos que crean--- encajan perfectamente con nuestro relato. En 
+!!	cualquier caso, aunque en las descripciones se hable de tres volúmenes 
+!!	diferentes, el objeto estará modelado como uno solo).
+!!
+print "Una lujosa edición en tres volúmenes de ~A la busca del tiempo perdido~, de Marcel Proust.";
+new_line;
+return true;
+2:	! (al leer el libro por primera vez)
+!!
+!!	En menos de una hora está claro que no la va a dar tiempo a leer gran cosa, 
+!!	pero siguiendo la idea del viaje que la metió su padre en la cabeza cuando 
+!!	era pequeña, "viajar a la mente de Proust" por primera la parece una 
+!!	actividad perfecta en la que gastar parte de sus últimos minutos de vida. 
+!!	Tras un rato leyendo, lo deja (de forma que no se consuma la cuenta atrás 
+!!	de 59 minutos por completo y el interlector pueda intentar otras cosas), 
+!!	pero antes va a la última página del libro para leer el final.
+!!
+!!	Aquí hay otra pista, aunque sea un poco oscura, que apunta a que lo que 
+!!	sucede en realidad en el relato no es lo que parece. Al mostrar la 
+!!	descripción de la acción leer se tiene que imprimir un pequeño fragmento 
+!!	literal del inicio del libro, sólo que el inicio que aparece no se 
+!!	corresponderá en realidad con el verdadero inicio de "A la busca del tiempo 
+!!	perdido". Silvia, desde luego, no sabrá que lo que está leyendo no es el 
+!!	libro de Proust, ni se hará ninguna mención a ello por parte de nuestro 
+!!	narrador. Sólo se dará cuenta de este detalle aquel interlector que conozca 
+!!	el libro, o que se moleste en comparar su inicio con lo que se describe 
+!!	aquí.
+!!
+print "Mensaje 2 de @<<A la busca del tiempo perdido@>>.";
+new_line;
+return true;
+3:	! (al leer el libro de nuevo)
+!!
+!!	Descripción por defecto si el interlector intenta leer el libro de nuevo. 
+!!	Más breve que la anterior. Describe cómo sigue con la lectura mientras se 
+!!	va consumiendo la cuenta atrás de 59 minutos.
+!!
+print "Mensaje 3 de @<<A la busca del tiempo perdido@>>.";
+new_line;
+return true;
+}
+
+
+!!==============================================================================
+!!
+!!	TALLER: Pequeño taller.
+!!
+!!	Conexiones:
+!!	 -	ESTE/FUERA: a la terraza
+!!
+!!	Objetos importantes:
+!!	 -	arcón (debajo de la mesa. Pueden colocarse objetos dentro)
+!!	 -	cerradura (del arcón)
+!!	 -	dibujo
+!!	 -	lienzos
+!!	 -	lienzo a medio terminar
+!!	 -	mesa de trabajo (pueden colocarse objetos encima)
+!!	 -	pinturas (sobre la mesa de trabajo)
+!!	 -	rifle de caza
+!!
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!!	Pequeño taller
+H10_taller: switch (n) {
+1:	! (descripción)
+print "Es poco más que un cuarto trastero con una única puerta, de vuelta a la terraza. Todo lo que hay aquí dentro eran cosas de su padre, y está prácticamente tal y como lo dejó antes de morir. Hay una mesa de trabajo con pinturas, pinceles y disolventes, y un montón de lienzos repartidos por todo el espacio.";
+new_line;
+!!
+!!	Además, la descripción incluirá otros dos objetos si el interlector se 
+!!	molesta en rebucar entre los objetos del taller:
+!!
+!!	 -	si examina los lienzos se describirá cómo están tirados por todas 
+!!		partes, pero sólo hay uno colgado. A partir de este momento, la 
+!!		descripción incluirá este dibujo ("[...] y un montón de lienzos 
+!!		repartidos por todo el espacio, aunque sólo uno de ellos está 
+!!		coldado.", por ejemplo).
+!!
+!!	 -	si se busca o se mira bajo la mesa, Silvia descubrirá un arcón. A 
+!!		partir de entonces, en la descripción del taller se deberá aludir a él 
+!!		("Hay una mesa de trabajo con pinturas, pinceles y disolventes, UN 
+!!		GRAN ARCÓN DEBAJO, y un montón de...", por ejemplo).
+!!
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	arcón
+H10_arcon: switch (n) {
+!!
+!!	Es un gran arcón que hay bajo la mesa. Inicialmente está cerrado con llave 
+!!	(hay una cerradura que el interlector tendrá que abrir para poder abrir el 
+!!	arcón).
+!!
+1:	! (descripción -- cuando está cerrado)
+print "Mensaje 1 del arcón.";
+new_line;
+return true;
+2:	! (descripción -- cuando está abierto)
+!!
+!!	En este caso, además de describir el arcón se debe imprimir la lista de 
+!!	objetos que haya en su interior.
+!!
+print "Mensaje 2 del arcón.";
+new_line;
+return true;
+3:	! (acción: abrirlo -- si tiene la cerradura cerrada)
+!!
+!!	Mensaje de error. No puede abrir el arcón con la cerradura echada.
+!!
+print "Mensaje 3 del arcón. Silvia intenta abrir la tapa, pero el arcón está cerrado con llave.";
+new_line;
+return true;
+4:	! (acción: abrirlo -- si ya está abierto)
+!!
+!!	Mensaje de error. No se puede abrir si ya está abierto.
+!!
+print "Mensaje 4 del arcón.";
+new_line;
+return true;
+5:	! (acción: abrirlo -- por primera vez)
+!!
+!!	Dentro del arcón hay un rifle de caza. Al descubrirlo por primera vez 
+!!	Silvia se debería sorprender mucho de que su padre pudiese guardar un arma.
+!!
+print "Abre el arcón, descubriendo un rifle de caza en su interior.";
+new_line;
+return true;
+6:	! (acción: abrirlo -- mensaje por defecto)
+!!
+!!	Después de haberlo abierto ya una vez, Silvia no se va a sorprender por lo 
+!!	que pueda haber dentro. Este mensaje se puede generar automáticamente, así 
+!!	que no es necesario redactar un mensaje nuevo.
+!!
+print "Abre el arcón, descubriendo (lo que sea que haya dentro) en su interior.";
+new_line;
+return true;
+7:	! (acción: cerrarlo -- si ya está cerrado)
+!!
+!!	Mensaje de error. No puede cerrar el arcón si ya está cerrado.
+!!
+print "Ya está cerrado.";
+new_line;
+return true;
+8:	! (acción: cerrarlo -- mensaje por defecto)
+print "Mensaje 8 del arcón. Silvia cierra el arcón.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	cerradura
+H10_cerradura: switch (n) {
+!!
+!!	El arcón que hay bajo la mesa de trabajo del taller está inicialmente 
+!!	cerrado y estos son los mensajes del objeto representa su cerradura. Hay 
+!!	dos posibles formas de abrirla:
+!!
+!!	1)	Usando la llave. Se puede encontrar en el dormitorio del padre de 
+!!		Silvia, dentro de una caja de zapatos debajo de la cama.
+!!
+!!	2)	Usando la caja de herramientas que hay en la habitación multiusos de la 
+!!		segunda planta. En este caso, la cerradura quedará destrozada.
+!!
+1:	! (descripción -- cerrada)
+print "Mensaje 1 de la cerradura.";
+new_line;
+return true;
+2:	! (descripción -- abierta con la llave)
+!!
+!!	Si el interlector la ha abierto usando la llave, la cerradura aún es 
+!!	funcional y podría volver a cerrarla.
+!!
+print "Menaje 2 de la cerradura.";
+new_line;
+return true;
+3:	! (descripción -- destrozada con la caja de herramientas)
+!!
+!!	Si el interlector ha utilizado la caja de herramientas para abrir la 
+!!	cerradura, lo que hace es romperla y dejarla inservible. Esta es la 
+!!	descripción que se imprimirá a partir de entonces al examinarla.
+!!
+print "Mensaje 3 de la cerradura.";
+new_line;
+return true;
+4:	! (acción: abrir la cerradura -- sin utilizar nada para hacerlo)
+print "Silvia no puede abrir la cerradura a menos que utilice algo para hacerlo.";
+new_line;
+return true;
+5:	! (acción: abrir la cerradura -- usando un objeto que no es adecuado)
+print "No puede abrir la cerradura con eso.";
+new_line;
+return true;
+6:	! (acción: abrir la cerradura -- usando la llave)
+!!
+!!	Silvia usa la llave para abrir la cerradura.
+!!
+print "Mensaje 6 de la cerradura.";
+new_line;
+return true;
+7:	! (acción: abrir la cerradura -- usando las herramientas)
+!!
+!!	Aquí se describiría cómo Silvia utiliza las herramientas para destrozar la 
+!!	cerradura (dejándola inservible a partir de entonces) y abrir el arcón.
+!!
+print "Mensaje 7 de la cerradura.";
+new_line;
+return true;
+8:	! (acción: cerrar la cerradura -- usando la llave)
+!!
+!!	Si el interlector ha utilizado la llave para abrir la cerradura, puede 
+!!	hacer que Silvia la cierre de nuevo. En este caso se imprimiría este 
+!!	mensaje.
+!!
+print "Mensaje 8 de la cerradura.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	dibujo
+H10_dibujo: switch (n) {
+1:	! (descripción -- al examinarlo por primera vez)
+!!
+!!	Al examinar los lienzos que hay tirados por todas partes, Silvia se da 
+!!	cuenta de que sólo uno de ellos está enmarcado y colgado de la pared. Si el 
+!!	interlector intenta examinarlo, Silvia se sorprende mucho al ver que es el 
+!!	dibujo de una mujer, y entonces se activa el recuerdo interactivo titulado: 
+!!	"EL DIBUJO" (en esta escena se explica el porqué de la sorpresa de Silvia 
+!!	al ver el dibujo).
+!!
+!!	Como ya se indicó al describir el teléfono del recibidor, un mensaje tiene 
+!!	que notificar al interlector que se ha activado el recuerdo. Al ser 
+!!	posible, siempre que se active un recuerdo se tiene que utilizar el mismo 
+!!	mensaje de notificación. Algo del estilo al que usa Aaron A. Reed en 
+!!	"Sand-dancer": "Something about <objeto que hace de disparador del 
+!!	recuerdo> makes you want to brood about <nombre del recuerdo que se haya 
+!!	activado>.".
+!!
+print "Mensaje 1 del dibujo.";
+new_line;
+!!
+!!	Si es la primera vez que se examinan los lienzos:
+!!
+print "Something about <el cuadro que hay enmarcado> makes you want to brood about <EL DIBUJO>.";
+new_line;
+return true;
+2:	! (descripción -- mientras no se reviva el recuerdo titulado "EL DIBUJO")
+!!
+!!	Mientras el interlector no reviva el recuerdo, al examinar el dibujo se 
+!!	tiene que volver a incidir en la sorpresa de Silvia porque su padre tuviese 
+!!	ese dibujo colgado en su taller, aunque no se explique el motivo de su 
+!!	sorpresa (para descubrir esto último, el interlector debe revivir el 
+!!	recuerdo tecleando "RECORDAR EL DIBUJO").
+!!
+print "Mensaje 2 del dibujo.";
+new_line;
+return true;
+3:	! (descripción -- tras revivir el recuerdo "EL DIBUJO")
+!!
+!!	Nunca se hubiese imaginado que su padre podría tener colgado aquel dibujo 
+!!	allí.
+!!
+print "Mensaje 3 del dibujo.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	lienzos
+H10_lienzos: switch (n) {
+!!
+!!	De entre todos los lienzos que hay en el taller, se tiene que describir uno 
+!!	que está sin terminar (y que el interlector puede manipular de forma 
+!!	individual). Los demás son diferentes pinturas de su padre. Siempre fue 
+!!	aficionado a la fotografía y la afición acabó extendiéndose también a la 
+!!	pintura. Sus cuadros no son realistas. No llegan a ser completamente 
+!!	abstractos y sus objetos son reconocibles pero con deformidades; 
+!!	dimensiones incongruentes, colores erróneos (personas de pieles verdes y 
+!!	azules, prados rojos y cielos verdes,...), y cosas del estilo.
+!!
+1:	! (descripción)
+print "Mensaje 1 de los lienzos.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	lienzo a medio terminar
+H10_lienzo: switch (n) {
+!!
+!!	De entre todos los lienzos que hay en el taller, uno está sin terminar (se 
+!!	puede pensar que su padre murió antes de acabarlo). Silvia puede coger 
+!!	algunas pinturas y continuar en la terraza con el trabajo que empezase su 
+!!	padre.
+!!
+!!	TODO: El proceso de pintar el cuadro puede resultar engorroso y dependiendo 
+!!	de cómo se diseñe, requerir un montón de mensajes diferentes... en esta 
+!!	versión sólo contemplaremos mensajes para describir el estado inicial del 
+!!	lienzo y las acciones de colocarlo/quitarlo en el caballete de la terraza. 
+!!	El proceso de pintarlo lo dejaremos por describir en la próxima versión del 
+!!	documento.
+!!
+1:	! (descripción)
+!!
+!!	Estado inicial del lienzo. Como se lo encuentra Silvia en el taller. Su 
+!!	padre empezó a trabajar en él, pero murió antes de poderlo terminar.
+!!
+print "Mensaje 1 del lienzo.";
+new_line;
+return true;
+2:	! (acción: colocarlo sobre el caballete)
+!!
+!!	En este mensaje se tiene que describir cómo Silvia coloca el lienzo sobre 
+!!	el caballete que hay en la terraza.
+!!
+print "Mensaje 2 del lienzo.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	mesa de trabajo
+H10_mesa: switch (n) {
+1:	! (descripción)
+!!
+!!	Una mesa de trabajo sin nada especial. Se pueden colocar objetos encima. 
+!!	Debajo hay un arcón.
+!!
+print "Mensaje 1 de la mesa. Tiene pinturas, pinceles y disolventes encima.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	pinturas
+H10_pinturas: switch (n) {
+1:	! (descripción)
+!!
+!!	Pinturas, pinceles y disolventes.
+!!
+print "Mensaje 1 de las pinturas.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	rifle de caza
+H10_rifle: switch (n) {
+!!
+!!	TODO: se puede utilizar para que Silvia se vuele la cabeza y terminar así 
+!!	el relato. Los mensajes de final de relato los dejaremos por detallar para 
+!!	la próxima versión 0.3 del documento, así que por ahora sólo tenemos que 
+!!	preocuparnos de describir el arma.
+!!
+1:	! (descripción -- si es la primera vez que se examina)
+!!
+!!	Un rifle de caza. Silvia nunca se había imaginado que su padre pudiese 
+!!	tener un arma. Como con otros objetos, podemos utilizar dos mensajes para 
+!!	la descripción: uno primero que se imprima la primera vez que el usuario 
+!!	examina el objeto y en el que se describa, además del rifle en si, la 
+!!	incredulidad de Silvia al encontrarse un arma entre las posesiones de su 
+!!	padre. Y una segunda, más breve, en la que simplemente se describa el 
+!!	objeto.
+!!
+print "Mensaje 1 del rifle.";
+new_line;
+return true;
+2:	! (descripción -- mensaje por defecto)
+print "Mensaje 2 del rifle.";
+new_line;
+return true;
+}
+
+
+!!==============================================================================
+!!
+!!	TERRAZA: Terraza.
+!!
+!!	Conexiones:
+!!	 -	NORTE: a la playa
+!!	 -	SUR: a la cocina
+!!	 -	OESTE: al taller
+!!
+!!	Objetos importantes:
+!!	 -	aro de baloncesto
+!!	 -	caballete
+!!	 -	macetas
+!!	 -	mesa y sillas de exterior
+!!
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!!	Terraza
+H11_terraza: switch (n) {
+1:	! (descripción)
+print "Un privilegiado mirador a la playa desierta y al mar cantábrico. Hay una mesa y algunas sillas de exterior, deterioradas por el tiempo y el salitre, un aro de baloncesto sin red colgado a la fachada de la casa y algunas macetas con hierbajos dispuestas aquí y allá. Una pasarela cerrada con portilla desciende hasta la playa, al norte. Además, hay acceso a un pequeño taller ---una construcción anexa a la casa para guardar trastos y herramientas--- y a la cocina.";
+new_line;
+print "Puede ver también un caballete para lienzos, cerrado y apoyado contra la pared.";
+new_line;
+return true;
+2:	! (acción: oler)
+!!
+!!	Desde la terraza se puede oler el olor del mar. Estas descripciones, 
+!!	que se imprimen sólo si el interlector trata de involucrar otros sentidos, 
+!!	deben funcionar un poco a modo de recompensa (por intentar diferentes 
+!!	acciones) y ser más interesantes que un simple: "Huele a mar".
+!!
+print "Mensaje 2 de la terraza.";
+new_line;
+return true;
+3:	! (acción: escuchar)
+!!
+!!	Aquí ocurre lo mismo con el mensaje anterior, solo que involucrando el 
+!!	oído en lugar del olfato.
+!!
+print "Mensaje 3 de la terraza.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	aro de baloncesto
+H11_aroBaloncesto: switch (n) {
+!!
+!!	Objeto engorroso. Si Silvia tiene al alcance el balón de baloncesto, se 
+!!	puede jugar con la canasta. El juego utiliza la mecánica de apuntado y 
+!!	disparo de la librería aimAndFire: al lanzar la pelota se inicia una 
+!!	animación en la barra de estado que consiste en una retícula que se 
+!!	desplaza del extremo izquierdo al derecho y viceversa. El interlector debe 
+!!	pulsar una tecla para detener la retícula; si lo hace en el centro de la 
+!!	barra se considera que el balón entra en el aro, sin embargo si la detiene 
+!!	demasiado alejada del centro de la barra, se considera que falla el tiro.
+!!
+!!	El aro implementará un mini-juego que consista en encestar 7 tiros a 
+!!	canasta seguidos. Cada vez que el interlector enceste una canasta, la 
+!!	animación de la retícula aumentará de velocidad, haciendo que la siguiente 
+!!	canasta sea más difícil de encestar (justificaremos este aumento de 
+!!	dificultad describiendo a Silvia alejándose un paso del aro con cada nueva 
+!!	canasta). Si falla un tiro, se reinicia el juego; la velocidad de la 
+!!	animación volverá a ser la inicial, y el contador de canastas encestadas 
+!!	volverá a 0.
+!!
+!!	Para hacer el juego más interesante, le daremos un trasfondo a la historia 
+!!	de Silvia. Cuando tendría once o doce años (su madre murió cuando tenía 
+!!	nueve así que en este momento viviría sola en la casa con su padre) solía 
+!!	jugar allí con Patricia, una amiga un año mayor que vivía cerca. El juego 
+!!	entonces era el mismo: empezaban cerca de la canasta y lanzaban. Cada vez 
+!!	que una encestaba, se alejaba un paso del aro y volvía a lanzar. Ganaba la 
+!!	primera en encestar siete seguidas. Silvia no ganó nunca a su amiga.
+!!
+!!	En el relato, haremos que cada vez que el interlector enceste una canasta 
+!!	se describan los recuerdos de Silvia sobre ella, Patricia y aquel 
+!!	pasatiempo al que jugaban de chavalas. Si el interlector es capaz de 
+!!	encestar los siete tiros seguidos será como si, finalmente, después de 
+!!	todos aquellos años, Silvia gana una partida por primera vez a su amiga 
+!!	Patricia.
+!!
+!!	TODO: De momento sólo prepararemos la descripción del aro. El conjunto de 
+!!	mensajes que tengan que ver con el mini-juego lo dejaremos por detallar 
+!!	para una próxima versión del documento.
+!!
+1:	! (descripción)
+!!
+!!	Un viejo y oxidado aro de baloncesto. Hace mucho que perdió la red.
+!!
+print "Mensaje 1 del aro de baloncesto.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	caballete
+H11_caballete: switch (n) {
+!!
+!!	Este caballete se puede utilizar para pintar uno de los lienzos que hay en 
+!!	el taller (es necesario conseguir el lienzo y las pinturas antes). Puede 
+!!	encontrarse en uno de tres estados: 1) cerrado, 2) abierto, 3) con el 
+!!	lienzo colocado en él (en este caso, también está abierto).
+!!
+!!	Mientras no tenga el lienzo colocado en él, el interlector puede abrirlo y 
+!!	cerrarlo. Una vez haya colocado el lienzo se quedará abierto. Tendría que 
+!!	coger el lienzo antes para poder cerrarlo de nuevo.
+!!
+!!	Los mensajes en los que se desribe cómo Silvia coloca el lienzo en el 
+!!	caballete se definen en el objeto que representa el lienzo.
+!!
+1:	! (descripción -- cerrado)
+!!
+!!	El caballete, cuando está cerrado, se encuentra apoyado contra la pared de 
+!!	la casa.
+!!
+print "Mensaje 1 del caballete.";
+new_line;
+return true;
+2:	! (descripción -- abierto)
+!!
+!!	Al abrirlo, Silvia deja el caballete colocado en medio de la terraza, 
+!!	mirando al mar.
+!!
+print "Mensaje 2 del caballete.";
+new_line;
+return true;
+3:	! (descripción -- con un lienzo colocado en él)
+!!
+!!	Cuando el caballete tiene el lienzo colocado en él, sigue abierto (claro) 
+!!	en medio de la terraza.
+!!
+print "Mensaje 3 del caballete.";
+new_line;
+return true;
+4:	! (acción: abrirlo -- si ya está abierto)
+!!
+!!	Mensaje de error. No puede abrirlo si ya está abierto.
+!!
+print "Ya está abierto.";
+new_line;
+return true;
+5:	! (acción: abrirlo -- si está cerrado)
+!!
+!!	Silvia abre el caballete y lo deja en medio de la terraza, mirando al mar. 
+!!	Este mensaje se muestra si el interlector introduce la acción ABRE EL 
+!!	CABALLETE, pero si no está presente el lienzo aún por ninguna parte.
+!!
+print "Mensaje 5 del caballete.";
+new_line;
+return true;
+6:	! (acción: cerrarlo -- si ya está cerrado)
+!!
+!!	Mensaje de error. No puede cerrarlo si ya está cerrado.
+!!
+print "Ya está cerrado.";
+new_line;
+return true;
+7:	! (acción: cerrarlo -- si tiene el lienzo colocado en él)
+!!
+!!	Mensaje de error. Silvia no puede cerrarlo mientras el lienzo esté colocado 
+!!	en el caballete.
+!!
+print "Mensaje 7 del caballete.";
+new_line;
+return true;
+8:	! (acción: cerrarlo -- si está abierto)
+!!
+!!	Silvia cierra el caballete y lo deja apoyado contra la pared de la casa. 
+!!	Solo se puede cerrar si no tiene el lienzo colocado encima.
+!!
+print "Mensaje 8 del caballete.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	macetas
+H11_macetas: switch (n) {
+!!
+!!	Las macetas son otro de esos objetos cuya descripción cambia con el tiempo. 
+!!	Al principio, en ellas sólo habrá plantas secas y hierbajos, pero a medida 
+!!	que avanza el tiempo, tendrán plantadas diferentes flores:
+!!
+!!	1)	Entre los minutos 0-15: plantas secas y hierbajos.
+!!	2)	Minutos 15-30: geranios.
+!!	3)	Minutos 30-45: clavelinas y malvas.
+!!	4)	Minutos 45-59: gardenias.
+!!
+1:	! (descripción -- mins. 0-15)
+!!
+!!	Las macetas están llenas de plantas secas y hierbajos.
+!!
+print "Mensaje 1 de las macetas.";
+new_line;
+return true;
+2:	! (descripción -- mins. 15-30)
+!!
+!!	Tienen plantados unos coloridos geranios.
+!!
+print "Mensaje 2 de las macetas.";
+new_line;
+return true;
+3:	! (descripción -- mins. 30-45)
+!!
+!!	Hay clavelinas y malvas plantadas en las macetas.
+!!
+print "Mensaje 3 de las macetas.";
+new_line;
+return true;
+4:	! (descripción -- mins. 45-59)
+!!
+!!	Hay unas gardenias de tonos blancos plantadas en las macetas.
+!!
+print "Mensaje 4 de las macetas.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	mesa y sillas de exterior
+H11_muebles: switch (n) {
+1:	! (descripción)
+!!
+!!	Un juego de mesa y sillas de exterior, de madera y mimbre. El tiempo, el 
+!!	sol y el salitre los ha ha deteriorado bastante. Si Silvia ha cogido las 
+!!	pinturas y el lienzo del taller y los ha sacado a la terraza para continuar 
+!!	pintando el cuadro que empezó su padre, las pinturas pasarán a estar 
+!!	colocadas sobre la mesa (habría que describirlas).
+!!
+print "Mensaje 1 de la mesa y las sillas. (Sobre la mesa puede ver <lista de objetos que hay sobre la mesa>).";
+new_line;
+return true;
+}
+
+
+	}
+];
+
+
+!!------------------------------------------------------------------------------
+!!
+!!	# EXPLICACIÓN REAL DE LA SITUACIÓN
+!!
+!!	El relato trata los últimos 59 minutos en la vida de Silvia, el personaje 
+!!	manejado por el interlector. Silvia está sóla en la casa de sus padres, ya 
+!!	fallecidos, y sabe que va a morir. La causa por la que aparentemente va a 
+!!	morir no se describirá explícitamente en ningún momento; podría ser el 
+!!	impacto de un meteorito, como en la película Deep Impact, un ataque 
+!!	nuclear, el apocalipsis bíblico o el Ragnarök, no se sabe. La clave del 
+!!	relato es el personaje y sus recuerdos, no el fin de los días. Sin embargo, 
+!!	a lo largo del relato si que se arrojan pequeñas pistas sobre lo que está 
+!!	pasando en realidad y es tarea del interlector interpretar estas pistas de 
+!!	la forma que le parezca bien de forma que pueda sacar sus propias 
+!!	conclusiones. Idealmente, el relato debe ser lo suficientemente ambiguo 
+!!	como para contemplar diferentes interpretaciones posibles.
+!!
+!!	Como he apuntado, el foco de la historia no está en el fin de los días, 
+!!	sino en el personaje, Silvia, y sus recuerdos. A lo largo del relato hay 
+!!	ciertos momentos en los que el interlector podrá manipular ciertos objetos 
+!!	que activarán "flashbacks" o recuerdos interactivos con los que se 
+!!	describirán escenas del pasado de Silvia. Pues bien, aunque no se dice 
+!!	directamente en ningún momento, el propio escenario principal, la casa, no 
+!!	es tampoco un espacio real y también forma parte en realidad de los 
+!!	recuerdos de Silvia. Estamos en todo momento en el interior de su cabeza.
+!!
+!!	La realidad que no se llega a desvelar nunca es que el personaje ha sufrido 
+!!	un accidente y está incosnciente, a punto de morir. No es una idea 
+!!	especialmente original, pero ya que tenemos puesto el foco constantemente 
+!!	en Silvia y sus recuerdos, me gusta la idea de jugar constantemente con la 
+!!	idea de que la casa sea una especie de palacio de la memoria de la mujer. 
+!!	Seguir explorando sus recuerdos no sólo durante las escenas de recuerdos 
+!!	interactivos, sino también a lo largo de la línea de narración principal.
+!!
+!!	En cualquier caso, incidiremos más sobre esto del accidente y la muerte de 
+!!	Silvia en la versión 0.3 del documento. De momento nos preocuparemos en dar 
+!!	forma al escenario de la casa.
+!!
+!!------------------------------------------------------------------------------
+
+
+!!==============================================================================
+!!	Rutina para imprimir los mensajes de los objetos
+!!------------------------------------------------------------------------------
+
+[ O__M obj n x1;
+	if (n == 0) n = 1;
+	LanguageOM(obj, n, x1);
+];
+
+
