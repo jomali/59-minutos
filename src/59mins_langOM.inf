@@ -7,6 +7,8 @@
 
 
 
+
+
 X00_LIMBO: switch (n) {
 1:	! (descripción)
 print "Más allá de la barrera casi insuperable que separa la realidad de todo lo demás. Un lugar etéreo, donde la vida, la materia y la vitalidad no son necesariamente constantes; un lugar donde el tiempo y el espacio no existen tal y como los capta nuestro ser despierto...";
@@ -125,6 +127,8 @@ print "Hay unos grandes ventanales en la fachada que dan a la cocina y al salón.
 new_line;
 return true;
 }
+
+
 
 
 
@@ -949,7 +953,7 @@ return true;
 
 H09_SALON: switch (n) {
 1:	! (descripción)
-print "La habitación más grande de la casa. Es un lugar agradable, con varias ", (name) H09_estanterias, " repletas de ", (name) H09_libros, " y viejos sillones de aspecto cómodo. Destacan ", (a) H09_televisor, " con ", (name) H09_DVD, " y ", (a) H09_muebleBar, ", en una esquina. Está conectada con la ";
+print "La habitación más grande de la casa. Es un lugar agradable, con varias estanterías repletas de ", (name) H09_libros, " y viejos sillones de aspecto cómodo. Destacan ", (a) H09_televisor, " con ", (name) H09_DVD, " y ", (a) H09_muebleBar, ", en una esquina. Está conectada con la ";
 link( H02_COCINA, " cocina");
 print " y el ";
 link( H08_RECIBIDOR, " recibidor");
@@ -1265,6 +1269,216 @@ print "Mensaje 1 de la mesa y las sillas. (Sobre la mesa puede ver <lista de obj
 new_line;
 return true;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+M07_PARQUE: switch(n) {
+1:	! descripción
+print "Después de varios días seguidos de mal tiempo finalmente brillaba el sol en un cielo azul intenso y sin nubes. Era primera hora de la tarde y apenas había gente aún en el parque. Aparte de ellas dos, sólo había un grupo de ", (name) M07_ninos, " correteando algo más allá, al lado de sus padres, y el anciano y el perro que paseaban bajo la sombra de los árboles.";
+new_line;
+return true;
+2:	! acción: escuchar
+print "Se podía escuchar el canto de los pájaros que revoloteaban entre las copas de los árboles y el griterío de los niños jugando.";
+new_line;
+return true;
+3:	! acción: oler
+print "El olor del césped se entremezclaba con el de las florecillas esparcidas aquí y allá.";
+new_line;
+return true;
+}
+
+M07_hombre: switch(n) {
+1:	! descripción
+print "Mensaje 1. Descripción del hombre.";
+new_line;
+return true;
+}
+
+M07_hombre: switch(n) {
+1:	! descripción
+print "Mensaje 1. Descripción del perro.";
+new_line;
+return true;
+}
+
+M07_ninos: switch(n) {
+1:	! descripción
+print "Mucha gente piensa que la infancia es la única etapa de nuestra vida durante la que podemos ser plenamente felices. No es cierto. Como los adultos, los niños se enfrentan a diario a un montón de problemas y preocupaciones que pueden llegar a angustiarles, aunque con el tiempo muchas de estas cosas les parecerán absurdas; como aquel miedo a que la cocinera del comedor del colegio te envenenase la comida. Chiquilladas. Pero que de chiquilla te atormentan. Esto era algo que tenía claro. Sabía perfectamente que esa idílica imagen de la infancia feliz no era más que una ilusión suya, que no era real. Y a pesar de todo, en aquel momento Silvia era incapaz de ver jugar a aquellos niños sin sentir envidia de ellos. Envidia de la niña que fue.";
+new_line;
+return true;
+}
+
+M07_conversacion_Carmen: switch(n) {
+1:	! inicio de la conversación
+print "---Dime una cosa, ¿me quieres?
+^^
+La pregunta cogió a Silvia por sorpresa. Sin saber qué contestar, se limitó a desviar la mirada, incómoda de pronto. Habían decidido salir a dar un paseo aprovechando la tarde despejada y en ese momento estaban las dos sentadas en uno de los bancos del parque. El olor del césped flotaba en el aire, junto a las risas y los gritos de un grupo que niños que jugaba a la sombra de los árboles ante los ojos supervisores de sus padres. Un anciano se acercaba lentamente a ellas por uno de los senderos, paseando a un perro chiquitajo. La desbordante vivacidad del animal amarrado a la correa en contraste con la calma serena del que la sujetaba. Entonces Carmen preguntó de nuevo.
+^^
+---Contéstame, Silvia. ¿Me quieres?";
+new_line;
+return true;
+2:	! conversación iniciada
+print "Carmen la miraba fijamente, esperando que respondiera a su pregunta... ¿era así? ¿podía decirla que la quería?";
+new_line;
+return true;
+3:	! conversación iniciada
+print "Tenía la vista clavada en el suelo y el gesto concentrado, como un jugador de ajedrez experto que planifica sus próximos movimientos. Y, en cierto modo, eso era exactamente lo que estaba haciendo.";
+new_line;
+return true;
+4:	! conversación iniciada
+print "Seguía sin dirigirla la mirada, concentrada en aquella particular partida de ajedrez.";
+new_line;
+return true;
+}
+
+M07_op01: switch(n) {
+1:
+print "---Sí.
+^^
+Guardaron silencio. Durante un momento se escuchó sólo el canto de los pájaros que revoloteaban alrededor y las risas y los gritos de los niños. El anciano y el perro habían llegado ya casi a su altura, se les podía escuchar charlando animadamente al uno con el otro.
+^^
+---Mira, no te lo digo a malas ---empezó Carmen al cabo---, pero yo ya estoy cansada.
+^^
+---¿Qué quieres decir?
+^^
+---Pues que tengo que estar detrás tuyo a todas horas. Que soy yo la que tira siempre de la relación. Ya estoy cansada.
+^^
+---Podemos dejar de vernos si quieres.
+^^
+Carmen rió.
+^^
+---No. Nada de ", (emph) "si quiero yo", ". Esta vez no. ¿Que quieres dejarme? Muy bien, pero dilo claro y no esperes a que sea yo la que dé el paso. Esta vez no.
+^^
+---No te entiendo.
+^^
+---La que no te entiendo soy yo a ti. De verdad. Y ahora hablo de muchas cosas...
+^^
+---¿Qué? Primero me haces decirte que te quiero y luego vienes con que estás -
+^^
+---No digas eso ---cortó Carmen---. No digas que te he dicho decir nada. Es horrible.
+^^
+Guardaron silencio otra vez. A Silvia le dolía la palma de la mano y reparó entonces en que estaba clavándose las uñas. Observó durante un momento, curiosa, la marca blanca que se había dejado en la piel, mientras la sangre volvía poco a poco a circular con normalidad.";
+new_line;
+return true;
+}
+
+M07_op02: switch(n) {
+1:
+print "", (emph) "(Esta entrada está por escribir)", "";
+new_line;
+return true;
+}
+
+M07_op03: switch(n) {
+1:
+print "", (emph) "(Esta entrada está por escribir)", "";
+new_line;
+return true;
+}
+
+M07_op04: switch(n) {
+1:
+print "", (emph) "(Esta entrada está por escribir)", "";
+new_line;
+return true;
+}
+
+M07_op05: switch(n) {
+1:
+print "---No. Claro que no quiero dejarte. No sé cómo has llegado a una conclusión así.
+^^
+---Llevas actuando como si fuese lo que quieres mucho tiempo.
+^^
+---Creo que ya te lo he dicho muchas veces. Hay cosas que me cuestan... cosas... cosas que no se me dan bien. Hablar de mis sentimientos, por ejemplo.
+^^
+---No se te da bien lo que no quieres. Yo también te he avisado otras veces, Silvia... si realmente te interesara ya hubieras hecho por hablar las cosas antes.";
+new_line;
+return true;
+}
+
+M07_op06: switch(n) {
+1:
+print "", (emph) "(Esta entrada está por escribir)", "";
+new_line;
+return true;
+}
+
+M07_op07: switch(n) {
+1:
+print "---No me interesará.
+^^
+---Pues dilo claro de una puta vez y se acabó tanta historia.
+^^
+---O deja de dar cosas por sentado.
+^^
+---Te vuelvo a decir lo mismo: si quieres esforzarte un poquito en la relación... pues bien. Y si no, pues nada.
+^^
+---¿Pero qué más quieres que te diga? No estoy constantemente diciéndote lo que siento o dejo de sentir. ¿Y qué? Sé que es importante, y lo siento, pero desde luego que eso no quiere decir que no me interese, ni que no quiera que esto funcione... ¡ni que no haga esfuerzos por la relación! No sé qué esperas de mí. No me acuses de cosas que no son.
+^^
+---Sí. Ya he visto todos los esfuerzos que haces.
+^^
+---Vale.
+^^
+---Vale.
+^^
+Se quedaron de nuevo en silencio durante un momento.
+^^
+---Es mejor que me vaya ---dijo Silvia finalmente, sin saber qué otra cosa podía hacer---. Estamos las dos a la defensiva y así no vamos a arreglar nada.
+^^
+---No, no. Si ya he visto que pasas.
+^^
+---No. Sólo es que si seguimos así lo único que voy a conseguir es rebotarme mucho. Y rebotarte a ti ---se puso en pie---.
+^^
+---Muy bien ---Carmen seguía sentada, mirando al frente---. Tú no te preocupes por nada ni por nadie.
+^^
+---Por mí, un poco.
+^^
+---Si de verdad lo hicieras...";
+new_line;
+return true;
+}
+
+M07_op08: switch(n) {
+1:
+print "", (emph) "(Esta entrada está por escribir)", "";
+new_line;
+return true;
+}
+
+M07_op09: switch(n) {
+1:
+print "---Da igual. Dejo de hacerte perder el tiempo. Ya nos veremos.
+^^
+---Eres increíble. Adiós.";
+new_line;
+return true;
+}
+
+M07_op10: switch(n) {
+1:
+print "---Mira, que te den por culo.
+^^
+Carmen rió una última vez.
+^^
+---Pues si. Ya veo lo mucho que me quieres.";
+new_line;
+return true;
+}
+
 
 
 	}

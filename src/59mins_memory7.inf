@@ -1,0 +1,230 @@
+
+
+!!==============================================================================
+!!
+!!	59 MINUTOS
+!!	Recuerdo interactivo: La discusión
+!!
+!!==============================================================================
+!!
+!!	File:			59mins_memory7.inf
+!!	Author(s):		J. Francisco Martín <jfm.lisaso@gmail.com>
+!!	Languague:		ES (Castellano)
+!!	System:			Inform-INFSP 6
+!!	Platform:		Máquina-Z / GLULX
+!!	Version:		0.1
+!!	Released:		2014/06/09
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	Este archivo forma parte de 59 MINUTOS.
+!!
+!!	59 MINUTOS es software libre: usted puede redistribuirlo y/o
+!!	modificarlo bajo los términos de la Licencia Pública General GNU
+!!	publicada por la Fundación para el Software Libre, ya sea la versión
+!!	3 de la Licencia, o (a su elección) cualquier versión posterior.
+!!
+!!	59 MINUTOS se distribuye con la esperanza de que sea útil, pero
+!!	SIN GARANTÍA ALGUNA; ni siquiera la garantía implícita MERCANTIL o
+!!	de APTITUD PARA UN PROPÓSITO DETERMINADO. Consulte los detalles de
+!!	la Licencia Pública General GNU para más información.
+!!
+!!	Debería haber recibido una copia de la Licencia Pública General GNU
+!!	junto a 59 MINUTOS. En caso contrario, consulte
+!!	<http://www.gnu.org/licenses/>.
+!!
+!!	Copyright (c) 2014, J. Francisco Martín
+!!
+!!------------------------------------------------------------------------------
+
+
+Room	M07_PARQUE "Parque de los reyes"
+ with	name_m	'arboleda' 'jardin' 'parque' 'reyes',
+		gender	G_MASCULINO,
+		initial [; if (self hasnt visited) {
+			SetGrammaticalInflection(THIRD_PERSON_PAST);
+		}],
+		description [;
+			!! Al llegar al parque por primera vez, se inicia la conversación 
+			!! con carmen en lugar de imprimir la descripción de la localidad:
+			if (self hasnt visited) {
+				ConversationManager.start(M07_conversacion_Carmen);
+				return true;
+			}
+			!! Descripción normal de la localidad:
+			return O__M(self, 1);
+		],
+		before [;
+			Listen:
+				return O__M(self, 2);
+			Smell:
+				return O__M(self, 3);
+		],
+ has	male;
+
+Atrezzo	-> M07_hombre "hombre"
+ with	name_f	'persona',
+		name_m	'amo' 'anciano' 'animal' 'caballero' 'dueno' 'hombre' 
+				'individuo' 'propietario' 'senor' 'viejo',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	concealed male;
+
+Atrezzo	-> M07_perro "perro"
+ with	name_m	'animal' 'can' 'chucho' 'perro' 'tuso',
+		gender	G_MASCULINO,
+		description [; return O__M(self, 1); ],
+ has	concealed male;
+
+Atrezzo	-> M07_ninos "niños"
+ with	name_f	'cria' 'chiquilla' 'hija' 'mocosa' 'nena' 'nina' 'peque' 
+				'pequena' 'persona' 'rapaz',
+		name_m	'crio' 'chico' 'chiquillo' 'hijo' 'mocoso' 'muchacho' 'nene'
+				'nino' 'pequeno',
+		name_fp	'crias' 'chicas' 'chiquillas' 'hijas' 'jovenes' 'mocosas' 
+				'muchachas' 'nenas' 'ninas' 'peques' 'pequenas' 'personas'
+				'rapaces',
+		name_mp	'crios' 'chicos' 'chiquillos' 'hijos' 'mocosos' 'muchachos'
+				'nenes' 'ninos' 'pequenos',
+		gender	G_MASCULINO + G_PLURAL,
+		description [; return O__M(self, 1); ],
+ has	concealed male pluralname;
+
+NPC		-> M07_Carmen "Carmen"
+ with	name	'Carmen',
+		name_f	'chica' 'joven' 'muchacha' 'mujer' 'persona',
+		gender	G_FEMENINO,
+		before [;
+			Examine:
+				<<TalkTo self>>;
+			TalkTo:
+				ConversationManager.start(M07_conversacion_Carmen);
+				return true;
+		],
+ has	concealed female proper;
+
+Conversation	M07_conversacion_Carmen "(conversación con Carmen)"
+ with	initial_action [;
+			self.add_topic(M07_op01);
+			self.add_topic(M07_op02);
+			self.add_topic(M07_op03);
+			return O__M(self, 1);
+		],
+		inter_action [; switch (self.state) {
+			0:	return O__M(self, 2);
+			1:	return O__M(self, 3);
+			default: return O__M(self, 4);
+		}],
+		final_action [; "Si no hay más temas..."; ],
+		state 0;
+
+ConversationTopic	M07_op01
+ with	entry [; link("Afirmar"); ],
+		keys
+			'afirma' 'afirmar' 'si',
+		reply [; return O__M(self, 1); ],
+		reaction [; M07_conversacion_Carmen.state++; ],
+		relatives M07_op02 M07_op03,
+		subtopics M07_op04 M07_op05 M07_op06,
+		append_topic_inventory true;
+
+ConversationTopic	M07_op02
+ with	entry [; link("Negar"); ],
+		keys
+			'negar' 'niega' 'no',
+		reply [; return O__M(self, 1); ],
+		append_topic_inventory true;
+
+ConversationTopic	M07_op03
+ with	entry [; link("Esquivar la pregunta"); ],
+		keys
+			'esquiva' 'esquivar' 'pregunta',
+		reply [; return O__M(self, 1); ],
+		append_topic_inventory true;
+
+ConversationTopic	M07_op04
+ with	entry [; link("Terminar con la relación"); ],
+		keys
+			'acaba' 'acabar' 'relacion' 'termina' 'terminar',
+		reply [; return O__M(self, 1); ],
+		append_topic_inventory true;
+
+ConversationTopic	M07_op05
+ with	entry [; link("Decirla que quiere que sigan juntas"); ],
+		keys
+			'quiere' 'quiero' 'seguir' 'sigan' 'juntas',
+		reply [; return O__M(self, 1); ],
+		reaction [; M07_conversacion_Carmen.state++; ],
+		relatives M07_op04,
+		subtopics M07_op07 M07_op08,
+		append_topic_inventory true;
+
+ConversationTopic	M07_op06
+ with	entry [; link("Preguntar qué espera de ella"); ],
+		keys
+			'pregunta' 'preguntar' 'espera' 'ella',
+		reply [; return O__M(self, 1); ],
+		append_topic_inventory true;
+
+ConversationTopic	M07_op07
+ with	entry [; link("Acusarla de estar equivocada"); ],
+		keys
+			'acusa' 'acusala' 'acusar' 'acusarla' 'estar' 'estas' 'equivocada',
+		reply [; return O__M(self, 1); ],
+		reaction [; M07_conversacion_Carmen.state++; ],
+		relatives M07_op06 M07_op08,
+		subtopics M07_op09 M07_op10,
+		append_topic_inventory true;
+
+ConversationTopic	M07_op08
+ with	entry [; link("Decirla que si la interesa"); ],
+		keys
+			'decir' 'decirla' 'di' 'dila' 'si' 'interesa',
+		reply [; return O__M(self, 1); ],
+		append_topic_inventory true;
+
+ConversationTopic	M07_op09
+ with	entry [; link("Marcharse"); ],
+		keys
+			'marcha' 'marcharse' 'marchate',
+		reply [; return O__M(self, 1); ],
+		reaction [;
+			press_any_key();
+			!!------------------------------------------------------------------
+			!! TODO - Quitar de la versión final
+			#Ifdef DEBUG;
+			new_line;
+			horizontal_rule();
+			new_line;
+			print (parser) "Fin de la demostración.";
+			press_any_key();
+			@restart; L__M(##Restart, 2);
+			#Endif; ! DEBUG;
+			!!------------------------------------------------------------------
+		],
+		relatives M07_op10,
+		append_topic_inventory false;
+
+ConversationTopic	M07_op10
+ with	entry [; link("Mandarla a tomar por culo"); ],
+		keys
+			'manda' 'mandar' 'mandala' 'vete' 'tomar' 'culo',
+		reply [; return O__M(self, 1); ],
+		reaction [;
+			press_any_key();
+			!!------------------------------------------------------------------
+			!! TODO - Quitar de la versión final
+			#Ifdef DEBUG;
+			new_line;
+			horizontal_rule();
+			new_line;
+			print (parser) "Fin de la demostración.";
+			press_any_key();
+			@restart; L__M(##Restart, 2);
+			#Endif; ! DEBUG;
+			!!------------------------------------------------------------------
+		],
+		relatives M07_op09,
+		append_topic_inventory false;
+
+

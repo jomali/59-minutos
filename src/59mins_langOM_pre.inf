@@ -40,17 +40,31 @@
 !!
 !!	# TABLA DE CONTENIDOS:
 !!
-!!	1)	LIMBO: En algún lugar.
-!!	2)	BAÑO: Baño.
-!!	3)	COCINA: Cocina.
-!!	4)	DORMITORIO: Dormitorio.
-!!	5)	HABITACION: Habitación multiusos.
-!!	6)	PASILLO: Pasillo de la segunda planta.
-!!	7)	PLAYA: Playa.
-!!	8)	RECIBIDOR: Recibidor.
-!!	9)	SALON: Salón.
-!!	10)	TALLER: Pequeño taller.
-!!	11)	TERRAZA: Terraza.
+!!	1)	PREÁMBULO:
+!!		1.1)	LIMBO: En algún lugar.
+!!
+!!	2)	LA CASA:
+!!		2.1)	BAÑO: Baño.
+!!		2.2)	COCINA: Cocina.
+!!		2.3)	DORMITORIO: Dormitorio de su padre.
+!!		2.4)	HABITACIÓN: Habitación multiusos.
+!!		2.5)	HABITACIÓN: Su viejo dormitorio.
+!!		2.6)	PASILLO: Pasillo de la segunda planta.
+!!		2.7)	PLAYA: Playa.
+!!		2.8)	RECIBIDOR: Recibidor.
+!!		2.9)	SALÓN: Salón.
+!!		2.10)	TALLER: Pequeño taller.
+!!		2.11)	TERRAZA: Terraza.
+!!
+!!	3)	RECUERDOS INTERACTIVOS:
+!!		3.1)	EL ERIZO. (6 años)
+!!		3.2)	LA SONRISA. (9 años)
+!!		3.3)	EL LOCAL. (16 años)
+!!		3.4)	EL DIBUJO. (26 años)
+!!		3.5)	EL REGALO DE CUMPLEAÑOS. (30 años)
+!!		3.6)	LA NOCHE DE MAYO. (30-33 años)
+!!		3.7)	LA DISCUSIÓN. (33 años)
+!!		3.8)	EL ACCIDENTE. (33 años)
 !!
 !!------------------------------------------------------------------------------
 !!
@@ -155,17 +169,25 @@
 
 !!==============================================================================
 !!
-!!	1)	LIMBO: En algún lugar.
+!!								  1) PREÁMBULO
 !!
-!!	Conexiones:
-!!	 -	Ninguna
+!!------------------------------------------------------------------------------
+
+
+!!==============================================================================
 !!
-!!	Objetos importantes:
-!!	 -	botas (se pueden vestir/desvestir)
-!!	 -	paredes (presentes en múltiples localidades)
-!!	 -	ropa (se puede vestir/desvestir)
-!!	 -	Silvia (objeto personaje manejado por el interlector)
-!!	 -	ventanas (presentes en múltiples localidades)
+!!	1.1)	LIMBO: "En algún lugar".
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	Objetos para los que se definen mensajes:
+!!
+!!	 -	X00_LIMBO
+!!		 -	X00_paredes
+!!		 -	X00_Silvia
+!!			 -	X00_botas
+!!			 -	X00_ventanas
+!!		 -	X00_ventanas
 !!
 !!------------------------------------------------------------------------------
 
@@ -457,18 +479,26 @@ return true;
 
 !!==============================================================================
 !!
-!!	2)	BAÑO: Baño.
+!!								   2) LA CASA
 !!
-!!	Conexiones:
-!!	 -	SUR: al dormitorio
-!!	 -	SUROESTE: al pasillo
+!!------------------------------------------------------------------------------
+
+
+!!==============================================================================
 !!
-!!	Objetos importantes:
-!!	 -	armario (se pueden meter cosas dentro)
-!!	 -	bañera
-!!	 -	espejo
-!!	 -	medicinas (dentro del armario. Se pueden ingerir)
-!!	 -	velas (dentro del armario. Se pueden encender)
+!!	2.1)	BAÑO: "Baño".
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	Objetos para los que se definen mensajes:
+!!
+!!	 -	H01_BANNO
+!!		 -	H01_armario
+!!			 -	H01_medicinas
+!!			 -	H01_productosHigiene
+!!			 -	H01_velas
+!!		 -	H01_bannera
+!!		 -	H01_espejo
 !!
 !!------------------------------------------------------------------------------
 
@@ -891,18 +921,13 @@ return true;
 
 !!==============================================================================
 !!
-!!	3)	COCINA: Cocina.
+!!	2.2)	COCINA: "Cocina".
 !!
-!!	Conexiones:
-!!	 -	ESTE: al salón
-!!	 -	NORTE/FUERA: a la terraza
+!!------------------------------------------------------------------------------
 !!
-!!	Objetos importantes:
-!!	 -	café (aparece después de encender la cafetera)
-!!	 -	cafetera (encima de la encimera)
-!!	 -	mechero (encima de la encimera)
-!!	 -	nevera
-!!	 -	periódico (encima de la mesa)
+!!	Objetos para los que se definen mensajes:
+!!
+!!	 -	H02_COCINA
 !!
 !!------------------------------------------------------------------------------
 
@@ -1283,22 +1308,13 @@ return true;
 
 !!==============================================================================
 !!
-!!	DORMITORIO: Dormitorio.
+!!	2.3)	DORMITORIO: "Dormitorio".
 !!
-!!	Conexiones:
-!!	 -	NORTE: al baño
-!!	 -	OESTE: al pasillo
+!!------------------------------------------------------------------------------
 !!
-!!	Objetos importantes:
-!!	 -	caja de zapatos (debajo de la cama. Se pueden meter cosas dentro)
-!!	 -	cajón (forma parte de la mesita)
-!!	 -	cama (se puede entrar en ella)
-!!	 -	llave (dentro de la caja de zapatos. Abre el arcón del taller)
-!!	 -	mesita de noche (se pueden colocar cosas encima)
-!!	 -	preservativos (dentro del cajón)
-!!	 -	radiodespertador (encima de la mesita)
-!!	 -	ropa interior (dentro del cajón)
-!!	 -	trastos (dentro de la caja de zapatos)
+!!	Objetos para los que se definen mensajes:
+!!
+!!	 -	H03_DORMITORIO
 !!
 !!------------------------------------------------------------------------------
 
@@ -1784,22 +1800,13 @@ return true;
 
 !!==============================================================================
 !!
-!!	HABITACION: Habitación multiusos.
+!!	2.4)	HABITACION: "Habitación multiusos".
 !!
-!!	Conexiones:
-!!	 -	SUR: al pasillo
+!!------------------------------------------------------------------------------
 !!
-!!	Objetos importantes:
-!!	 -	armario (se puede abrir y cerrar)
-!!	 -	balón de baloncesto
-!!	 -	bicicleta estática (se puede subir encima)
-!!	 -	caja de herramientas
-!!	 -	escritorio (se pueden colocar objetos encima)
-!!	 -	puerta del armario (forma parte del armario)
-!!	 -	silla (se puede subir encima)
-!!	 -	bolso (se pueden colocar objetos dentro)
-!!	 -	cuaderno (dentro del bolso)
-!!	 -	exámenes sin corregir (dentro del bolso)
+!!	Objetos para los que se definen mensajes:
+!!
+!!	 -	H04_HABITACION
 !!
 !!------------------------------------------------------------------------------
 
@@ -2100,27 +2107,28 @@ default: return false;
 }
 
 
-!! XXX - Falta una localidad H05. El plan es estudiar si crear una versión 
-!! alternativa de la localidad H04, para intercambiar una por otra a lo largo 
-!! del relato.
+!!==============================================================================
+!!
+!!	2.5)	HABITACION: "Su viejo dormitorio".
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	TODO - Esta localidad se encuentra sin definir. La idea es implementar una 
+!!	versión de la habitación definida como *H04_HABITACION* tal y como estaba 
+!!	en el pasado, cuando se trataba del dormitorio de Silvia.
+!!
+!!------------------------------------------------------------------------------
 
 
 !!==============================================================================
 !!
-!!	PASILLO: Pasillo de la segunda planta.
+!!	2.6)	PASILLO: "Pasillo de la segunda planta".
 !!
-!!	Conexiones:
-!!	 -	NORTE: a la habitación multiusos
-!!	 -	ESTE: al dormitorio
-!!	 -	NORESTE: al baño
-!!	 -	ABAJO: al recibidor
+!!------------------------------------------------------------------------------
 !!
-!!	Objetos importantes:
-!!	 -	fotografías
-!!	 -	fotografía de su madre de joven
-!!	 -	fotografía de su noveno cumpleaños
-!!	 -	fotografía de carnavales
-!!	 -	fotografía de ella con su padre
+!!	Objetos para los que se definen mensajes:
+!!
+!!	 -	H06_PASILLO
 !!
 !!------------------------------------------------------------------------------
 
@@ -2221,14 +2229,13 @@ return true;
 
 !!==============================================================================
 !!
-!!	PLAYA: Playa.
+!!	2.7)	PLAYA: "Playa".
 !!
-!!	Conexiones:
-!!	 -	SUR: a la terraza
+!!------------------------------------------------------------------------------
 !!
-!!	Objetos importantes:
-!!	 -	casa
-!!	 -	mar (se puede entrar dentro)
+!!	Objetos para los que se definen mensajes:
+!!
+!!	 -	H07_PLAYA
 !!
 !!------------------------------------------------------------------------------
 
@@ -2357,17 +2364,15 @@ return true;
 
 
 !!==============================================================================
-!!	RECIBIDOR: Recibidor.
 !!
-!!	Conexiones:
-!!		-	NORTE: al salón
-!!		-	ARRIBA: al pasillo del segundo piso
+!!	2.8)	RECIBIDOR: "Recibidor".
 !!
-!!	Objetos importantes:
-!!		-	cómoda (pueden colocarse objetos encima)
-!!		-	cajón (de la cómoda. Pueden colocarse objetos dentro)
-!!		-	teléfono (sobre la cómoda): activa el recuerdo "DISCUSIÓN"
-!!		-	cajetilla (dentro del cajón): activa "TARDES EN EL LOCAL"
+!!------------------------------------------------------------------------------
+!!
+!!	Objetos para los que se definen mensajes:
+!!
+!!	 -	H08_RECIBIDOR
+!!
 !!------------------------------------------------------------------------------
 
 !!------------------------------------------------------------------------------
@@ -2585,27 +2590,22 @@ return true;
 
 
 !!==============================================================================
-!!	SALON: Salón.
 !!
-!!	Conexiones:
-!!	 -	OESTE: a la cocina
-!!	 -	SUR: al recibidor
+!!	2.9)	SALON: "Salón".
 !!
-!!	Objetos importantes:
-!!	 -	televisión
-!!	 -	reproductor de DVD
-!!	 -	libros
-!!	 -	libro "En busca del tiempo perdido", de Marcel Proust
-!!	 -	mueble-bar (pueden colocarse objetos dentro)
-!!	 -	trofeos (dentro del mueble-bar)
-!!	 -	botella de güisqui medio vacía (dentro del mueble-bar)
+!!------------------------------------------------------------------------------
+!!
+!!	Objetos para los que se definen mensajes:
+!!
+!!	 -	H09_SALON
+!!
 !!------------------------------------------------------------------------------
 
 !!------------------------------------------------------------------------------
 !!	Salón
 H09_SALON: switch (n) {
 1:	! (descripción)
-print "La habitación más grande de la casa. Es un lugar agradable, con varias [H09_estanterias] repletas de [H09_libros] y viejos sillones de aspecto cómodo. Destacan [un H09_televisor] con [H09_DVD] y [un H09_muebleBar], en una esquina. Está conectada con la [enlace: H02_COCINA, cocina] y el [enlace: H08_RECIBIDOR, recibidor].";
+print "La habitación más grande de la casa. Es un lugar agradable, con varias estanterías repletas de [H09_libros] y viejos sillones de aspecto cómodo. Destacan [un H09_televisor] con [H09_DVD] y [un H09_muebleBar], en una esquina. Está conectada con la [enlace: H02_COCINA, cocina] y el [enlace: H08_RECIBIDOR, recibidor].";
 new_line;
 return true;
 }
@@ -2811,20 +2811,13 @@ return true;
 
 !!==============================================================================
 !!
-!!	TALLER: Pequeño taller.
+!!	2.10)	TALLER: "Pequeño taller".
 !!
-!!	Conexiones:
-!!	 -	ESTE/FUERA: a la terraza
+!!------------------------------------------------------------------------------
 !!
-!!	Objetos importantes:
-!!	 -	arcón (debajo de la mesa. Pueden colocarse objetos dentro)
-!!	 -	cerradura (del arcón)
-!!	 -	dibujo
-!!	 -	lienzos
-!!	 -	lienzo a medio terminar
-!!	 -	mesa de trabajo (pueden colocarse objetos encima)
-!!	 -	pinturas (sobre la mesa de trabajo)
-!!	 -	rifle de caza
+!!	Objetos para los que se definen mensajes:
+!!
+!!	 -	H10_TALLER
 !!
 !!------------------------------------------------------------------------------
 
@@ -3143,18 +3136,13 @@ return true;
 
 !!==============================================================================
 !!
-!!	TERRAZA: Terraza.
+!!	2.11)	TERRAZA: "Terraza".
 !!
-!!	Conexiones:
-!!	 -	NORTE: a la playa
-!!	 -	SUR: a la cocina
-!!	 -	OESTE: al taller
+!!------------------------------------------------------------------------------
 !!
-!!	Objetos importantes:
-!!	 -	aro de baloncesto
-!!	 -	caballete
-!!	 -	macetas
-!!	 -	mesa y sillas de exterior
+!!	Objetos para los que se definen mensajes:
+!!
+!!	 -	H11_TERRAZA
 !!
 !!------------------------------------------------------------------------------
 
@@ -3376,6 +3364,296 @@ print "Mensaje 1 de la mesa y las sillas. (Sobre la mesa puede ver <lista de obj
 new_line;
 return true;
 }
+
+
+!!==============================================================================
+!!
+!!							3) RECUERDOS INTERACTIVOS
+!!
+!!------------------------------------------------------------------------------
+
+
+!!==============================================================================
+!!
+!!	3.1)	EL ERIZO. (6 años)
+!!
+!!------------------------------------------------------------------------------
+
+
+!!==============================================================================
+!!
+!!	3.2)	LA SONRISA. (9 años)
+!!
+!!------------------------------------------------------------------------------
+
+
+!!==============================================================================
+!!
+!!	3.3)	EL LOCAL. (16 años)
+!!
+!!------------------------------------------------------------------------------
+
+
+!!==============================================================================
+!!
+!!	3.4)	EL DIBUJO. (26 años)
+!!
+!!------------------------------------------------------------------------------
+
+
+!!==============================================================================
+!!
+!!	3.5)	EL REGALO DE CUMPLEAÑOS. (30 años)
+!!
+!!------------------------------------------------------------------------------
+
+
+!!==============================================================================
+!!
+!!	3.6)	LA NOCHE DE MAYO. (30-33 años)
+!!
+!!------------------------------------------------------------------------------
+
+
+!!==============================================================================
+!!
+!!	3.7)	LA DISCUSIÓN. (33 años)
+!!
+!!------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!!	Parque
+M07_PARQUE: switch(n) {
+1:	! descripción
+print "Después de varios días seguidos de mal tiempo finalmente brillaba el sol en un cielo azul intenso y sin nubes. Era primera hora de la tarde y apenas había gente aún en el parque. Aparte de ellas dos, sólo había un grupo de [M07_ninos] correteando algo más allá, al lado de sus padres, y el anciano y el perro que paseaban bajo la sombra de los árboles.";
+new_line;
+return true;
+2:	! acción: escuchar
+print "Se podía escuchar el canto de los pájaros que revoloteaban entre las copas de los árboles y el griterío de los niños jugando.";
+new_line;
+return true;
+3:	! acción: oler
+print "El olor del césped se entremezclaba con el de las florecillas esparcidas aquí y allá.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	hombre del perro
+M07_hombre: switch(n) {
+1:	! descripción
+print "Mensaje 1. Descripción del hombre.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	perro del hombre
+M07_hombre: switch(n) {
+1:	! descripción
+print "Mensaje 1. Descripción del perro.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	niños
+M07_ninos: switch(n) {
+1:	! descripción
+print "Mucha gente piensa que la infancia es la única etapa de nuestra vida durante la que podemos ser plenamente felices. No es cierto. Como los adultos, los niños se enfrentan a diario a un montón de problemas y preocupaciones que pueden llegar a angustiarles, aunque con el tiempo muchas de estas cosas les parecerán absurdas; como aquel miedo a que la cocinera del comedor del colegio te envenenase la comida. Chiquilladas. Pero que de chiquilla te atormentan. Esto era algo que tenía claro. Sabía perfectamente que esa idílica imagen de la infancia feliz no era más que una ilusión suya, que no era real. Y a pesar de todo, en aquel momento Silvia era incapaz de ver jugar a aquellos niños sin sentir envidia de ellos. Envidia de la niña que fue.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	conversación con Carmen
+M07_conversacion_Carmen: switch(n) {
+1:	! inicio de la conversación
+print "---Dime una cosa, ¿me quieres?
+^^
+La pregunta cogió a Silvia por sorpresa. Sin saber qué contestar, se limitó a desviar la mirada, incómoda de pronto. Habían decidido salir a dar un paseo aprovechando la tarde despejada y en ese momento estaban las dos sentadas en uno de los bancos del parque. El olor del césped flotaba en el aire, junto a las risas y los gritos de un grupo que niños que jugaba a la sombra de los árboles ante los ojos supervisores de sus padres. Un anciano se acercaba lentamente a ellas por uno de los senderos, paseando a un perro chiquitajo. La desbordante vivacidad del animal amarrado a la correa en contraste con la calma serena del que la sujetaba. Entonces Carmen preguntó de nuevo.
+^^
+---Contéstame, Silvia. ¿Me quieres?";
+new_line;
+return true;
+2:	! conversación iniciada
+print "Carmen la miraba fijamente, esperando que respondiera a su pregunta... ¿era así? ¿podía decirla que la quería?";
+new_line;
+return true;
+3:	! conversación iniciada
+print "Tenía la vista clavada en el suelo y el gesto concentrado, como un jugador de ajedrez experto que planifica sus próximos movimientos. Y, en cierto modo, eso era exactamente lo que estaba haciendo.";
+new_line;
+return true;
+4:	! conversación iniciada
+print "Seguía sin dirigirla la mirada, concentrada en aquella particular partida de ajedrez.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	contestación: Afirmar
+M07_op01: switch(n) {
+1:
+print "---Sí.
+^^
+Guardaron silencio. Durante un momento se escuchó sólo el canto de los pájaros que revoloteaban alrededor y las risas y los gritos de los niños. El anciano y el perro habían llegado ya casi a su altura, se les podía escuchar charlando animadamente al uno con el otro.
+^^
+---Mira, no te lo digo a malas ---empezó Carmen al cabo---, pero yo ya estoy cansada.
+^^
+---¿Qué quieres decir?
+^^
+---Pues que tengo que estar detrás tuyo a todas horas. Que soy yo la que tira siempre de la relación. Ya estoy cansada.
+^^
+---Podemos dejar de vernos si quieres.
+^^
+Carmen rió.
+^^
+---No. Nada de *si quiero yo*. Esta vez no. ¿Que quieres dejarme? Muy bien, pero dilo claro y no esperes a que sea yo la que dé el paso. Esta vez no.
+^^
+---No te entiendo.
+^^
+---La que no te entiendo soy yo a ti. De verdad. Y ahora hablo de muchas cosas...
+^^
+---¿Qué? Primero me haces decirte que te quiero y luego vienes con que estás -
+^^
+---No digas eso ---cortó Carmen---. No digas que te he dicho decir nada. Es horrible.
+^^
+Guardaron silencio otra vez. A Silvia le dolía la palma de la mano y reparó entonces en que estaba clavándose las uñas. Observó durante un momento, curiosa, la marca blanca que se había dejado en la piel, mientras la sangre volvía poco a poco a circular con normalidad.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	TODO
+!!	contestación: Negar
+M07_op02: switch(n) {
+1:
+print "*(Esta entrada está por escribir)*";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	TODO
+!!	contestación: Esquivar la pregunta
+M07_op03: switch(n) {
+1:
+print "*(Esta entrada está por escribir)*";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	TODO
+!!	contestación: Terminar con la relación
+M07_op04: switch(n) {
+1:
+print "*(Esta entrada está por escribir)*";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	contestación: Decirla que quiere que sigan juntas
+M07_op05: switch(n) {
+1:
+print "---No. Claro que no quiero dejarte. No sé cómo has llegado a una conclusión así.
+^^
+---Llevas actuando como si fuese lo que quieres mucho tiempo.
+^^
+---Creo que ya te lo he dicho muchas veces. Hay cosas que me cuestan... cosas... cosas que no se me dan bien. Hablar de mis sentimientos, por ejemplo.
+^^
+---No se te da bien lo que no quieres. Yo también te he avisado otras veces, Silvia... si realmente te interesara ya hubieras hecho por hablar las cosas antes.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	TODO
+!!	contestación: Preguntar qué espera de ella
+M07_op06: switch(n) {
+1:
+print "*(Esta entrada está por escribir)*";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	contestación: Acusarla de estar equivocada
+M07_op07: switch(n) {
+1:
+print "---No me interesará.
+^^
+---Pues dilo claro de una puta vez y se acabó tanta historia.
+^^
+---O deja de dar cosas por sentado.
+^^
+---Te vuelvo a decir lo mismo: si quieres esforzarte un poquito en la relación... pues bien. Y si no, pues nada.
+^^
+---¿Pero qué más quieres que te diga? No estoy constantemente diciéndote lo que siento o dejo de sentir. ¿Y qué? Sé que es importante, y lo siento, pero desde luego que eso no quiere decir que no me interese, ni que no quiera que esto funcione... ¡ni que no haga esfuerzos por la relación! No sé qué esperas de mí. No me acuses de cosas que no son.
+^^
+---Sí. Ya he visto todos los esfuerzos que haces.
+^^
+---Vale.
+^^
+---Vale.
+^^
+Se quedaron de nuevo en silencio durante un momento.
+^^
+---Es mejor que me vaya ---dijo Silvia finalmente, sin saber qué otra cosa podía hacer---. Estamos las dos a la defensiva y así no vamos a arreglar nada.
+^^
+---No, no. Si ya he visto que pasas.
+^^
+---No. Sólo es que si seguimos así lo único que voy a conseguir es rebotarme mucho. Y rebotarte a ti ---se puso en pie---.
+^^
+---Muy bien ---Carmen seguía sentada, mirando al frente---. Tú no te preocupes por nada ni por nadie.
+^^
+---Por mí, un poco.
+^^
+---Si de verdad lo hicieras...";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	TODO
+!!	contestación: Decirla que si la interesa
+M07_op08: switch(n) {
+1:
+print "*(Esta entrada está por escribir)*";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	contestación: Marcharse
+M07_op09: switch(n) {
+1:
+print "---Da igual. Dejo de hacerte perder el tiempo. Ya nos veremos.
+^^
+---Eres increíble. Adiós.";
+new_line;
+return true;
+}
+
+!!------------------------------------------------------------------------------
+!!	contestación: Mandarla a tomar por culo
+M07_op10: switch(n) {
+1:
+print "---Mira, que te den por culo.
+^^
+Carmen rió una última vez.
+^^
+---Pues si. Ya veo lo mucho que me quieres.";
+new_line;
+return true;
+}
+
+!!==============================================================================
+!!
+!!	3.8)	EL ACCIDENTE. (33 años)
+!!
+!!------------------------------------------------------------------------------
 
 
 	}
