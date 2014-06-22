@@ -13,7 +13,7 @@
 !!	Language:		ES (Castellano)
 !!	System:			Inform-INFSP 6
 !!	Platform:		Máquina-Z / GLULX
-!!	Version:		3.3
+!!	Version:		3.4
 !!	Released:		2014/06/22
 !!
 !!------------------------------------------------------------------------------
@@ -47,24 +47,28 @@
 !!
 !!	# NUEVAS ACCIONES
 !!
-!!	 *	Dance
-!!	 *	GoDown
-!!	 *	GoUp
-!!	 *	KnockOn
-!!	 *	Masturbate
-!!	 *	Shout
-!!	 *	Sit
-!!	 *	SleepWith
-!!	 *	StandUp
-!!	 *	Untie
-!!	 *	Use
-!!	 *	Write
-!!	 *	Xyzzy
+!!	 -	Dance
+!!	 -	GoDown
+!!	 -	GoUp
+!!	 -	Iron
+!!	 -	KnockOn
+!!	 -	Masturbate
+!!	 -	Read
+!!	 -	Shout
+!!	 -	Sit
+!!	 -	SleepWith
+!!	 -	StandUp
+!!	 -	Untie
+!!	 -	Use
+!!	 -	Write
+!!	 -	Xyzzy
 !!
 !!------------------------------------------------------------------------------
 
 Default	GRAMMATICAL_INFLECTION 2;
 
+!!------------------------------------------------------------------------------
+!! Nuevos sinónimos:
 !!------------------------------------------------------------------------------
 
 Verb	'machaca'						= 'ataca';
@@ -78,6 +82,8 @@ Verb	'incinera' 'tuesta'				= 'quema';
 VerboIrregular "tostar" with imperativo 'tuesta';
 Verb	'acaricia'						= 'toca';
 
+!!------------------------------------------------------------------------------
+!! Extensiones a las acciones de la librería por defecto:
 !!------------------------------------------------------------------------------
 
 Extend	'sopla'
@@ -96,10 +102,6 @@ Extend	'prende' last
 	* 'a//' noun 'fuego' 'con' held	-> Burn
 ;
 
-Verb	'baila'
-	*								-> Dance
-;
-
 Verb	'muerde'
 	* noun							-> Eat
 	* edible						-> Eat
@@ -107,49 +109,16 @@ Verb	'muerde'
 !	* 'a' animate					-> Attack
 ; VerboIrregular "morder" with imperativo 'muerde';
 
-Verb	'desciende'
-	*								-> GoDown
-	* noun							-> Enter
-	* 'por' noun					-> Enter
-; VerboIrregular "descender" with imperativo 'desciende';
-
-Verb	'asciende'
-	*								-> GoUp
-	* noun							-> Enter
-	* 'por' noun					-> Enter
-; VerboIrregular "ascender" with imperativo 'asciende';
-
-Verb	'plancha' 'estira' 'desarruga'
-	* noun							-> Iron
-;
-
 Extend	'salta'
 	* 'en' noun						-> JumpOver
 ;
 
-Verb	'llama'
-	* door							-> KnockOn
-	* 'a' door						-> KnockOn
-	* animate						-> Tell
-	* 'a' animate					-> Tell
-;
-
-Extend only 'golpea' first
-	* door							-> KnockOn
-	* 'a' door						-> KnockOn
-;
-
 Extend	'mira'
 	* 'alrededor'					-> Look
-	* 'a' 'tu' 'alrededor'			-> Look
-;
-
-Verb	'masturba'
-	* '-me'/'-te'					-> Masturbate
-;
-
-Extend	'lee' first
-	* noun							-> Read
+	* 'a' 'mi'/'tu' 'alrededor'		-> Look
+	* 'a' 'nuestro' 'alrededor'		-> Look
+	* 'a' 'vuestro' 'alrededor'		-> Look
+	* 'a' 'su' 'alrededor'			-> Look
 ;
 
 Extend	'busca'
@@ -162,19 +131,6 @@ Extend	'mira'
 	* 'entre' noun					-> Search
 ;
 
-Extend	'grita' last
-	*								-> Shout
-;
-
-Extend    'sienta' replace
-    * 								-> Sit
-	* '-te' / '-me'					-> Sit
-	* noun							-> Sit
-	* '-te' / '-me' noun			-> Sit
-	* 'en' noun						-> Sit
-	* '-te' / '-me'	'en' noun		-> Sit
-; VerboIrregular "sentar" with imperativo 'sientate';
-
 Extend	'duerme'
 	* '-te'/'-me'					-> Sleep
 	* noun							-> Sleep
@@ -183,78 +139,17 @@ Extend	'duerme'
 	* '-te'/'-me' 'en' noun			-> Sleep
 ;
 
-Verb	'folla' 'copula'
-	* animate						-> SleepWith
-	* '-te' / '-me' animate			-> SleepWith
-	* 'a//' / 'con' animate			-> SleepWith
-	* '-te' / '-me' 'a' animate		-> SleepWith
-;
-
-Extend	only 'jode' first
-	* animate						-> SleepWith
-	* 'a//' / 'con' animate			-> SleepWith
-;
-
-Verb	'ten'
-	* 'sexo' 'con' animate			-> SleepWith
-	* 'coito' 'con' animate			-> SleepWith
-;
-
-Verb	'haz'
-	* 'el' 'amor' 'con' animate		-> SleepWith
-;
-
-Extend	only 'levantate' 'levantarse' 'levantarte' first
-	*								-> StandUp
-	* 'de' noun						-> StandUp;
-Verb    'levanta' 'incorpora'
-    * 								-> StandUp
-	* '-te'/'-me'					-> StandUp
-    * 'de' noun 					-> StandUp
-	* '-te'/'-me' 'de//' noun		-> StandUp
-;
-
-Verb	'desata' 'libera' 'desune' 'desenchufa'
-	* noun							-> Untie
-	* 'a//' creature				-> Untie
-	* 'a//' creature 'de' noun		-> Untie
-	* noun 'de' noun				-> Untie
-;
-
-Extend	only 'desconecta' last
-	* noun 'de' noun				-> Untie
-;
-
-Verb	'emplea' 'usa' 'utiliza'
-	* noun							-> Use
-	* noun 'con'/'en' noun			-> Use
-;
-
-Verb	'actua' 'interactua'
-	* noun							-> Use
-	* 'con' noun					-> Use
-	* noun 'con'/'en' noun			-> Use
-	* 'con' noun 'en' noun			-> Use
-	* 'en' noun 'con' noun			-> Use reverse
-;
-	
-
 Verb	meta 'creditos' 'credits' 'autor' 'author' 'informacion' 'info'
 	*								-> Version
 ;
 
-Verb	'escribe'
-	* noun							-> Write
-	* 'en'/'el' noun				-> Write
-	* noun 'con' noun				-> Write
-	* 'en'/'el' noun 'con' noun		-> Write
-; VerboIrregular "escribir" with imperativo 'escribe';
-
-Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
-	*								-> Xyzzy
-;
-
 !!------------------------------------------------------------------------------
+!! ##Dance
+!!------------------------------------------------------------------------------
+
+Verb	'baila'
+	*								-> Dance
+;
 
 [ DanceSub gna;
 	gna = GetGNAOfObject(player, true);
@@ -298,6 +193,22 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 	}
 ];
 
+!!------------------------------------------------------------------------------
+!! ##GoDown, ##GoUp
+!!------------------------------------------------------------------------------
+
+Verb	'desciende'
+	*								-> GoDown
+	* noun							-> Enter
+	* 'por' noun					-> Enter
+; VerboIrregular "descender" with imperativo 'desciende';
+
+Verb	'asciende'
+	*								-> GoUp
+	* noun							-> Enter
+	* 'por' noun					-> Enter
+; VerboIrregular "ascender" with imperativo 'asciende';
+
 [ GoDownSub;
 	<<Go d_obj>>;
 ];
@@ -306,6 +217,14 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 	<<Go u_obj>>;
 ];
 
+!!------------------------------------------------------------------------------
+!! ##Iron
+!!------------------------------------------------------------------------------
+
+Verb	'plancha' 'estira' 'desarruga'
+	* noun							-> Iron
+;
+
 [ IronSub;
 	switch (GRAMMATICAL_INFLECTION) {
 	1,2,3:	"No tiene sentido intentar hacer algo así.";
@@ -313,16 +232,40 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 	}
 ];
 
+!!------------------------------------------------------------------------------
+!! ##KnockOn
+!!------------------------------------------------------------------------------
+
+Extend only 'golpea' first
+	* door							-> KnockOn
+	* 'a' door						-> KnockOn
+;
+
+Verb	'llama'
+	* door							-> KnockOn
+	* 'a' door						-> KnockOn
+	* animate						-> Tell
+	* 'a' animate					-> Tell
+;
+
 [ KnockOnSub;
 	switch (GRAMMATICAL_INFLECTION) {
 	1,2,3:
-		if (noun has door) "Nadie contesta.";
+		if (noun has door) "No contesta nadie.";
 		"No ocurre nada.";
 	4,5,6:
-		if (noun has door) "Nadie contestó.";
+		if (noun has door) "No contestó nadie.";
 		"No ocurrió nada.";
 	}
 ];
+
+!!------------------------------------------------------------------------------
+!! ##Masturbate
+!!------------------------------------------------------------------------------
+
+Verb	'masturba'
+	* '-me'/'-te'					-> Masturbate
+;
 
 [ MasturbateSub gna;
 	gna = GetGNAOfObject(player, true);
@@ -354,12 +297,32 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 	}
 ];
 
+!!------------------------------------------------------------------------------
+!! ##Read
+!!------------------------------------------------------------------------------
+
+Extend	'lee' first
+	* noun							-> Read
+;
+
 [ ReadSub;
 	switch (GRAMMATICAL_INFLECTION) {
 		1,2,3:	"No hay nada que leer en ", (the) noun, ".";
 		4,5,6:	"No había nada que leer en ", (the) noun, ".";
 	}
 ];
+
+!!------------------------------------------------------------------------------
+!! ##Shout
+!!------------------------------------------------------------------------------
+
+Verb	'chilla'
+	*								-> Shout
+;
+
+Extend	'grita' last
+	*								-> Shout
+;
 
 [ ShoutSub gna;
 	gna = GetGNAOfObject(player, true);
@@ -389,8 +352,21 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 		3,4,9,10:	"Gritaron con fuerza.";
 		}
 	}
-!	"---¡AARRGHH!";
+	!! "---¡AARRGHH!";
 ];
+
+!!------------------------------------------------------------------------------
+!! ##Sit
+!!------------------------------------------------------------------------------
+
+Extend    'sienta' replace
+    * 								-> Sit
+	* '-te' / '-me'					-> Sit
+	* noun							-> Sit
+	* '-te' / '-me' noun			-> Sit
+	* 'en' noun						-> Sit
+	* '-te' / '-me'	'en' noun		-> Sit
+; VerboIrregular "sentar" with imperativo 'sientate';
 
 [ SitSub gna;
 	gna = GetGNAOfObject(player, true);
@@ -434,6 +410,31 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 	}
 ];
 
+!!------------------------------------------------------------------------------
+!! ##SleepWith
+!!------------------------------------------------------------------------------
+
+Verb	'folla' 'copula'
+	* animate						-> SleepWith
+	* '-te' / '-me' animate			-> SleepWith
+	* 'a//' / 'con' animate			-> SleepWith
+	* '-te' / '-me' 'a' animate		-> SleepWith
+;
+
+Extend	only 'jode' first
+	* animate						-> SleepWith
+	* 'a//' / 'con' animate			-> SleepWith
+;
+
+Verb	'ten'
+	* 'sexo' 'con' animate			-> SleepWith
+	* 'coito' 'con' animate			-> SleepWith
+;
+
+Verb	'haz'
+	* 'el' 'amor' 'con' animate		-> SleepWith
+;
+
 [ SleepWithSub gna;
 	if (noun == player) <<Masturbate>>;
 	gna = GetGNAOfObject(player, true);
@@ -471,6 +472,22 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 	}
 ];
 
+!!------------------------------------------------------------------------------
+!! ##StandUp
+!!------------------------------------------------------------------------------
+
+Extend	only 'levantate' 'levantarse' 'levantarte' first
+	*								-> StandUp
+	* 'de' noun						-> StandUp
+;
+
+Verb    'levanta' 'incorpora'
+    * 								-> StandUp
+	* '-te'/'-me'					-> StandUp
+    * 'de' noun 					-> StandUp
+	* '-te'/'-me' 'de//' noun		-> StandUp
+;
+
 [ StandUpSub gna;
 	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
@@ -501,6 +518,21 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 		}
 	}
 ];
+
+!!------------------------------------------------------------------------------
+!! ##Untie
+!!------------------------------------------------------------------------------
+
+Verb	'desata' 'libera' 'desune' 'desenchufa'
+	* noun							-> Untie
+	* 'a//' creature				-> Untie
+	* 'a//' creature 'de' noun		-> Untie
+	* noun 'de' noun				-> Untie
+;
+
+Extend	only 'desconecta' last
+	* noun 'de' noun				-> Untie
+;
 
 [ UntieSub gna;
 	gna = GetGNAOfObject(player, true);
@@ -544,6 +576,23 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 	}
 ];
 
+!!------------------------------------------------------------------------------
+!! ##Use
+!!------------------------------------------------------------------------------
+
+Verb	'emplea' 'usa' 'utiliza'
+	* noun							-> Use
+	* noun 'con'/'en' noun			-> Use
+;
+
+Verb	'actua' 'interactua'
+	* noun							-> Use
+	* 'con' noun					-> Use
+	* noun 'con'/'en' noun			-> Use
+	* 'con' noun 'en' noun			-> Use
+	* 'en' noun 'con' noun			-> Use reverse
+;
+
 [ UseSub gna;
 	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
@@ -586,6 +635,17 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 	}
 ];
 
+!!------------------------------------------------------------------------------
+!! ##Write
+!!------------------------------------------------------------------------------
+
+Verb	'escribe'
+	* noun							-> Write
+	* 'en'/'el' noun				-> Write
+	* noun 'con' noun				-> Write
+	* 'en'/'el' noun 'con' noun		-> Write
+; VerboIrregular "escribir" with imperativo 'escribe';
+
 [ WriteSub gna;
 	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
@@ -615,6 +675,14 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 		}
 	}
 ];
+
+!!------------------------------------------------------------------------------
+!! ##Xyzzy
+!!------------------------------------------------------------------------------
+
+Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
+	*								-> Xyzzy
+;
 
 [ XyzzySub gna;
 	gna = GetGNAOfObject(player, true);
