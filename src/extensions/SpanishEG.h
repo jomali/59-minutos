@@ -13,8 +13,8 @@
 !!	Language:		ES (Castellano)
 !!	System:			Inform-INFSP 6
 !!	Platform:		Máquina-Z / GLULX
-!!	Version:		3.1
-!!	Released:		2014/01/28
+!!	Version:		3.2
+!!	Released:		2014/06/22
 !!
 !!------------------------------------------------------------------------------
 !!
@@ -256,14 +256,45 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 
 !!------------------------------------------------------------------------------
 
-[ DanceSub;
+[ DanceSub gna;
+	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
-	1:	"Nunca he sido un gran bailarín.";
-	2:	"Nunca has sido un gran bailarín.";
-	3:	"Nunca ha sido un gran bailarín.";
-	4:	"Nunca fui un gran bailarín.";
-	5:	"Nunca fuiste un gran bailarín.";
-	6:	"Nunca fue un gran bailarín.";
+	1:	switch (gna) {
+		0, 6:	"Nunca he sido un gran bailarín.";
+		1, 7:	"Nunca he sido una gran bailarina.";
+		3, 9:	"Nunca hemos sido unos grandes bailarines.";
+		4, 10:	"Nunca hemos sido unas grandes bailarinas.";
+		}
+	2:	switch (gna) {
+		0, 6:	"Nunca has sido un gran bailarín.";
+		1, 7:	"Nunca has sido una gran bailarina.";
+		3, 9:	"Nunca habéis sido unos grandes bailarines.";
+		4, 10:	"Nunca habéis sido unas grandes bailarinas.";
+		}
+	3:	switch (gna) {
+		0, 6:	"Nunca ha sido un gran bailarín.";
+		1, 7:	"Nunca ha sido una gran bailarina.";
+		3, 9:	"Nunca han sido unos grandes bailarines.";
+		4, 10:	"Nunca han sido unas grandes bailarinas.";
+		}
+	4:	switch (gna) {
+		0, 6:	"Nunca fui un gran bailarín.";
+		1, 7:	"Nunca fui una gran bailarina.";
+		3, 9:	"Nunca fuimos unos grandes bailarines.";
+		4, 10:	"Nunca fuimos unas grandes bailarinas.";
+		}
+	5:	switch (gna) {
+		0, 6:	"Nunca fuiste un gran bailarín.";
+		1, 7:	"Nunca fuiste una gran bailarina.";
+		3, 9:	"Nunca fuisteis unos grandes bailarines.";
+		4, 10:	"Nunca fuisteis unas grandes bailarinas.";
+		}
+	6:	switch (gna) {
+		0, 6:	"Nunca fue un gran bailarín.";
+		1, 7:	"Nunca fue una gran bailarina.";
+		3, 9:	"Nunca fueron unos grandes bailarines.";
+		4, 10:	"Nunca fueron unas grandes bailarinas.";
+		}
 	}
 ];
 
@@ -293,14 +324,33 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 	}
 ];
 
-[ MasturbateSub;
+[ MasturbateSub gna;
+	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
-	1:	"Ahora no tengo ganas.";
-	2:	"Ahora no tienes ganas.";
-	3:	"Ahora no tiene ganas.";
-	4:	"No tenía ganas.";
-	5:	"No tenías ganas.";
-	6:	"No tenía ganas.";
+	1:	switch (gna) {
+		0,1,6,7:	"Ahora no tengo ganas.";
+		3,4,9,10:	"Ahora no tenemos ganas.";
+		}
+	2:	switch (gna) {
+		0,1,6,7:	"Ahora no tienes ganas en realidad.";
+		3,4,9,10:	"Ahora no teneis ganas en realidad.";
+		}
+	3:	switch (gna) {
+		0,1,6,7:	"Ahora no tiene ganas.";
+		3,4,9,10:	"Ahora no tienen ganas.";
+		}
+	4:	switch (gna) {
+		0,1,6,7:	"No tenía ganas.";
+		3,4,9,10:	"No teníamos ganas.";
+		}
+	5:	switch (gna) {
+		0,1,6,7:	"No tenías ganas.";
+		3,4,9,10:	"No teníais ganas.";
+		}
+	6:	switch (gna) {
+		0,1,6,7:	"No tenía ganas.";
+		3,4,9,10:	"No tenían ganas.";
+		}
 	}
 ];
 
@@ -311,98 +361,281 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 	}
 ];
 
-[ ShoutSub;
+[ ShoutSub gna;
+	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
-	1:	"Grito con fuerza.";
-	2:	"Gritas con fuerza.";
-	3:	"Grita con fuerza.";
-	4:	"Grité con fuerza.";
-	5:	"Gritaste con fuerza.";
-	6:	"Gritó con fuerza.";
+	1:	switch (gna) {
+		0,1,6,7:	"Grito con fuerza.";
+		3,4,9,10:	"Gritamos con fuerza.";
+		}
+	2:	switch (gna) {
+		0,1,6,7:	"Gritas con fuerza.";
+		3,4,9,10:	"Gritais con fuerza.";
+		}
+	3:	switch (gna) {
+		0,1,6,7:	"Grita con fuerza.";
+		3,4,9,10:	"Gritan con fuerza.";
+		}
+	4:	switch (gna) {
+		0,1,6,7:	"Grité con fuerza.";
+		3,4,9,10:	"Gritamos con fuerza.";
+		}
+	5:	switch (gna) {
+		0,1,6,7:	"Gritaste con fuerza.";
+		3,4,9,10:	"Gritasteis con fuerza.";
+		}
+	6:	switch (gna) {
+		0,1,6,7:	"Gritó con fuerza.";
+		3,4,9,10:	"Gritaron con fuerza.";
+		}
 	}
 !	"---¡AARRGHH!";
 ];
 
-[ SitSub;
+[ SitSub gna;
+	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
-	1:	"Ya estoy bastante cómodo de pie.";
-	2:	"Ya estás bastante cómodo de pie.";
-	3:	"Ya está bastante cómodo de pie.";
-	4:	"Ya estaba bastante cómodo de pie.";
-	5:	"Ya estabas bastante cómodo de pie.";
-	6:	"Ya estaba bastante cómodo de pie.";
+	1:	switch (gna) {
+		0, 6:	"Ya estoy bastante cómodo de pie.";
+		1, 7:	"Ya estoy bastante cómoda de pie.";
+		3, 9:	"Ya estamos bastante cómodos de pie.";
+		4, 10:	"Ya estamos bastante cómodas de pie.";
+		}
+	2:	switch (gna) {
+		0, 6:	"Ya estás bastante cómodo de pie.";
+		1, 7:	"Ya estás bastante cómoda de pie.";
+		3, 9:	"Ya estáis bastante cómodos de pie.";
+		4, 10:	"Ya estáis bastante cómodas de pie.";
+		}
+	3:	switch (gna) {
+		0, 6:	"Ya está bastante cómodo de pie.";
+		1, 7:	"Ya está bastante cómoda de pie.";
+		3, 9:	"Ya están bastante cómodos de pie.";
+		4, 10:	"Ya están bastante cómodas de pie.";
+		}
+	4:	switch (gna) {
+		0, 6:	"Ya estaba bastante cómodo de pie.";
+		1, 7:	"Ya estaba bastante cómoda de pie.";
+		3, 9:	"Ya estábamos bastante cómodos de pie.";
+		4, 10:	"Ya estábamos bastante cómodas de pie.";
+		}
+	5:	switch (gna) {
+		0, 6:	"Ya estabas bastante cómodo de pie.";
+		1, 7:	"Ya estabas bastante cómoda de pie.";
+		3, 9:	"Ya estabais bastante cómodos de pie.";
+		4, 10:	"Ya estabais bastante cómodas de pie.";
+		}
+	6:	switch (gna) {
+		0, 6:	"Ya estaba bastante cómodo de pie.";
+		1, 7:	"Ya estaba bastante cómoda de pie.";
+		3, 9:	"Ya estaban bastante cómodos de pie.";
+		4, 10:	"Ya estaban bastante cómodas de pie.";
+		}
 	}
 ];
 
-[ SleepWithSub;
+[ SleepWithSub gna;
 	if (noun == player) <<Masturbate>>;
+	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
-	1:	"No creo que deba.";
-	2:	"En realidad no crees que debas.";
-	3:	"No cree que deba.";
-	4:	"No se me hubiese pasado por la cabeza algo así en aquel momento.";
-	5:	"No se te hubiese pasado por la cabeza algo así en aquel momento.";
-	6:	"No se le hubiese pasado por la cabeza algo así en aquel momento.";
+	1:	switch (gna) {
+		0,1,6,7:  "Ni se me pasa por la cabeza algo así ahora.";
+		3,4,9,10: "Ni se nos pasa por la cabeza algo así ahora.";
+		}
+	2:	switch (gna) {
+		0,1,6,7:  "En realidad no se te pasaría por la cabeza algo así ahora.";
+		3,4,9,10: "En realidad no se os pasaría por la cabeza algo así ahora.";
+		}
+	3:	switch (gna) {
+		0,1,6,7:  "En realidad no se le pasaría por la cabeza algo así ahora.";
+		3,4,9,10: "En realidad no se les pasaría por la cabeza algo así ahora.";
+		}
+	4:	switch (gna) {
+		0,1,6,7: 	"No se me hubiese pasado por la cabeza algo así en aquel 
+					momento.";
+		3,4,9,10:	"No se nos hubiese pasado por la cabeza algo así en aquel 
+					momento.";
+		}
+	5:	switch (gna) {
+		0,1,6,7:	"No se te hubiese pasado por la cabeza algo así en aquel 
+					momento.";
+		3,4,9,10:	"No se os hubiese pasado por la cabeza algo así en aquel 
+					momento.";
+		}
+	6:	switch (gna) {
+		0,1,6,7:	"No se le hubiese pasado por la cabeza algo así en aquel 
+					momento.";
+		3,4,9,10:	"No se les hubiese pasado por la cabeza algo así en aquel 
+					momento.";
+		}
 	}
 ];
 
-[ StandUpSub;
+[ StandUpSub gna;
+	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
-		1:	"No estoy en ningún sitio del que deba levantarme.";
-		2:	"No estás en ningún sitio del que debas levantarte.";
-		3:	"No está en ningún sitio del que deba levantarse.";
-		4:	"No estaba en ningún sitio del que debiese levantarme.";
-		5:	"No estabas en ningún sitio del que debieses levantarte.";
-		6:	"No estaba en ningún sitio del que debiese levantarse.";
+	1:	switch (gna) {
+		0,1,6,7:	"No estoy en ningún sitio del que deba levantarme.";
+		3,4,9,10:	"No estamos en ningún sitio del que debamos levantarnos.";
+		}
+	2:	switch (gna) {
+		0,1,6,7:	"No estás en ningún sitio del que debas levantarte.";
+		3,4,9,10:	"No estais en ningún sitio del que debais levantaros.";
+		}
+	3:	switch (gna) {
+		0,1,6,7:	"No está en ningún sitio del que deba levantarse.";
+		3,4,9,10:	"No están en ningún sitio del que deban levantarse.";
+		}
+	4:	switch (gna) {
+		0,1,6,7:	"No estaba en ningún sitio del que debiese levantarme.";
+		3,4,9,10:	"No estábamos en ningún sitio del que debiésemos 
+					levantarnos.";
+		}
+	5:	switch (gna) {
+		0,1,6,7:	"No estabas en ningún sitio del que debieses levantarte.";
+		3,4,9,10:	"No estabais en ningún sitio del que debieseis levantaros.";
+		}
+	6:	switch (gna) {
+		0,1,6,7:	"No estaba en ningún sitio del que debiese levantarse.";
+		3,4,9,10:	"No estaban en ningún sitio del que debiesen levantarse.";
+		}
 	}
 ];
 
-[ UntieSub;
+[ UntieSub gna;
+	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
-	1:	"No estoy seguro de cómo hacerlo.";
-	2:	"No estás seguro de cómo hacerlo.";
-	3:	"No parece estar seguro de cómo hacerlo.";
-	4:	"No sabía cómo hacer eso.";
-	5:	"No sabías cómo hacer eso.";
-	6:	"No sabía cómo hacer eso.";
+	1:	switch (gna) {
+		0, 6:	"No estoy seguro de cómo hacerlo.";
+		1, 7:	"No estoy segura de cómo hacerlo.";
+		3, 9:	"No estamos seguros de cómo hacerlo.";
+		4, 10:	"No estamos seguras de cómo hacerlo.";
+		}
+	2:	switch (gna) {
+		0, 6:	"No estás seguro de cómo hacerlo.";
+		1, 7:	"No estás segura de cómo hacerlo.";
+		3, 9:	"No estáis seguros de cómo hacerlo.";
+		4, 10:	"No estáis seguras de cómo hacerlo.";
+		}
+	3:	switch (gna) {
+		0, 6:	"No parece estar seguro de cómo hacerlo.";
+		1, 7:	"No parece estar segura de cómo hacerlo.";
+		3, 9:	"No parecen estar seguros de cómo hacerlo.";
+		4, 10:	"No parecen estar seguras de cómo hacerlo.";
+		}
+	4:	switch (gna) {
+		0, 6:	"No estaba seguro de cómo hacer eso.";
+		1, 7:	"No estaba segura de cómo hacer eso.";
+		3, 9:	"No estábamos seguros de cómo hacer eso.";
+		4, 10:	"No estábamos seguras de cómo hacer eso.";
+		}
+	5:	switch (gna) {
+		0, 6:	"No estabas seguro de cómo hacer eso.";
+		1, 7:	"No estabas segura de cómo hacer eso.";
+		3, 9:	"No estabais seguros de cómo hacer eso.";
+		4, 10:	"No estabais seguras de cómo hacer eso.";
+		}
+	6:	switch (gna) {
+		0, 6:	"No estaba seguro de cómo hacer eso.";
+		1, 7:	"No estaba segura de cómo hacer eso.";
+		3, 9:	"No estaban seguros de cómo hacer eso.";
+		4, 10:	"No estaban seguras de cómo hacer eso.";
+		}
 	}
 ];
 
 [ UseSub;
+	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
-	1:	"Pienso en algún uso para ", (the) noun ,", pero no termino de 
-		decidirme por una acción concreta.";
-	2:	"Piensas en algún uso para ", (the) noun, ", pero no terminas de 
-		decidirte por una acción concreta.";
-	3:	"Piensa en algún uso para ", (the) noun, ", pero no termina de 
-		decidirse por una acción concreta.";
-	4:	"Pensé en algún uso para ", (the) noun, ", pero no terminé de 
-		decidirme por una acción concreta.";
-	5:	"Pensaste en algún uso para ", (the) noun, ", pero no terminaste de 
-		decidirte por una acción concreta.";
-	6:	"Pensó en algún uso para ", (the) noun, ", pero no terminó de 
-		decidirse por una acción concreta.";
+	1:	switch (gna) {
+		0,1,6,7:	"Pienso en algún uso para ", (the) noun ,", pero no 
+					termino de decidirme por una acción concreta.";
+		3,4,9,10:	"Pensamos en algún uso para ", (the) noun ,", pero no 
+					terminamos de decidirnos por una acción concreta."; 
+		}
+	2:	switch (gna) {
+		0,1,6,7:	"Piensas en algún uso para ", (the) noun ,", pero no 
+					terminas de decidirte por una acción concreta.";
+		3,4,9,10:	"Pensais en algún uso para ", (the) noun ,", pero no 
+					terminais de decidiros por una acción concreta."; 
+		}
+	3:	switch (gna) {
+		0,1,6,7:	"Piensa en algún uso para ", (the) noun ,", pero no 
+					termina de decidirse por una acción concreta.";
+		3,4,9,10:	"Piensan en algún uso para ", (the) noun ,", pero no 
+					terminan de decidirse por una acción concreta."; 
+		}
+	4:	switch (gna) {
+		0,1,6,7:	"Pensé en algún uso para ", (the) noun ,", pero no 
+					terminé de decidirme por una acción concreta.";
+		3,4,9,10:	"Pensamos en algún uso para ", (the) noun ,", pero no 
+					terminamos de decidirnos por una acción concreta."; 
+		}
+	5:	switch (gna) {
+		0,1,6,7:	"Pensaste en algún uso para ", (the) noun ,", pero no 
+					terminaste de decidirte por una acción concreta.";
+		3,4,9,10:	"Pensasteis en algún uso para ", (the) noun ,", pero no 
+					terminasteis de decidiros por una acción concreta."; 
+		}
+	6:	switch (gna) {
+		0,1,6,7:	"Pensó en algún uso para ", (the) noun ,", pero no 
+					terminó de decidirse por una acción concreta.";
+		3,4,9,10:	"Pensaron en algún uso para ", (the) noun ,", pero no 
+					terminaron de decidirse por una acción concreta."; 
+		}
 	}
 ];
 
-[ WriteSub;
+[ WriteSub gna;
+	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
-	1:	"Ahora no tengo nada que escribir.";
-	2:	"Ahora no tienes nada que escribir.";
-	3:	"Ahora no tiene nada que escribir.";
-	4:	"No tenía nada que escribir.";
-	5:	"No tenías nada que escribir.";
-	6:	"No tenía nada que escribir.";
+	1:	switch (gna) {
+		0,1,6,7:	"Ahora no tengo nada que escribir.";
+		3,4,9,10:	"Ahora no tenemos nada que escribir.";
+		}
+	2:	switch (gna) {
+		0,1,6,7:	"Ahora no tienes nada que escribir.";
+		3,4,9,10:	"Ahora no teneis nada que escribir.";
+		}
+	3:	switch (gna) {
+		0,1,6,7:	"Ahora no tiene nada que escribir.";
+		3,4,9,10:	"Ahora no tienen nada que escribir.";
+		}
+	4:	switch (gna) {
+		0,1,6,7:	"No tenía nada que escribir.";
+		3,4,9,10:	"No teníamos nada que escribir.";
+		}
+	5:	switch (gna) {
+		0,1,6,7:	"No tenías nada que escribir.";
+		3,4,9,10:	"No teníais nada que escribir.";
+		}
+	6:	switch (gna) {
+		0,1,6,7:	"No tenía nada que escribir.";
+		3,4,9,10:	"No tenían nada que escribir.";
+		}
 	}
 ];
 
-[ XyzzySub;
+[ XyzzySub gna;
+	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
-	1:	"Un rumor silencioso responde a mis palabras.";
-	2:	"Un rumor silencioso responde a tus palabras.";
+	1:	switch (gna) {
+		0,1,6,7:	"Un rumor silencioso responde a mis palabras.";
+		3,4,9,10:	"Un rumor silencioso responde a nuestras palabras.";
+		}
+	2:	switch (gna) {
+		0,1,6,7:	"Un rumor silencioso responde a tus palabras.";
+		3,4,9,10:	"Un rumor silencioso responde a vuestras palabras.";
+		}
 	3:	"Un rumor silencioso responde a sus palabras.";
-	4:	"Un rumor silencioso respondió a mis palabras.";
-	5:	"Un rumor silencioso respondió a tus palabras.";
+	4:	switch (gna) {
+		0,1,6,7:	"Un rumor silencioso respondió a mis palabras.";
+		3,4,9,10:	"Un rumor silencioso respondió a nuestras palabras.";
+		}
+	5:	switch (gna) {
+		0,1,6,7:	"Un rumor silencioso respondió a tus palabras.";
+		3,4,9,10:	"Un rumor silencioso respondió a vuestras palabras.";
+		}
 	6:	"Un rumor silencioso respondió a sus palabras.";
 	}
 ];
