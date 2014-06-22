@@ -13,7 +13,7 @@
 !!	Language:		ES (Castellano)
 !!	System:			Inform-INFSP 6
 !!	Platform:		Máquina-Z / GLULX
-!!	Version:		3.2
+!!	Version:		3.3
 !!	Released:		2014/06/22
 !!
 !!------------------------------------------------------------------------------
@@ -544,7 +544,7 @@ Verb	'xyzzy' 'plugh' 'plover' 'abracadabra'
 	}
 ];
 
-[ UseSub;
+[ UseSub gna;
 	gna = GetGNAOfObject(player, true);
 	switch (GRAMMATICAL_INFLECTION) {
 	1:	switch (gna) {
