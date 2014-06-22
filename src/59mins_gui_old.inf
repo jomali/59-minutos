@@ -1,0 +1,236 @@
+
+
+!!==============================================================================
+!!
+!!	59 MINUTOS
+!!	Definición de la interfaz gráfica (sólo en GLULX)
+!!
+!!==============================================================================
+!!
+!!	File:			59mins_gui.inf
+!!	Author(s):		J. Francisco Martín <jfm.lisaso@gmail.com>
+!!	Languague:		ES (Castellano)
+!!	System:			Inform-INFSP 6
+!!	Platform:		Máquina-Z / GLULX
+!!	Version:		1.2
+!!	Released:		2014/06/06
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	# HISTORIAL DE VERSIONES
+!!
+!!	1.2: 2014/06/06	Eliminación de gramáticas asociadas a la ventana gráfica.
+!!	1.1: 2014/05/29	Correcciones sobre el comportamiento de la operaciones para 
+!!					abrir la ventana gráfica.
+!!	1.0: 2014/03/05
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	Copyright (c) 2014, J. Francisco Martín
+!!
+!!	Este archivo forma parte de 59 MINUTOS.
+!!
+!!	59 MINUTOS es software libre: usted puede redistribuirlo y/o
+!!	modificarlo bajo los términos de la Licencia Pública General GNU
+!!	publicada por la Fundación para el Software Libre, ya sea la versión
+!!	3 de la Licencia, o (a su elección) cualquier versión posterior.
+!!
+!!	59 MINUTOS se distribuye con la esperanza de que sea útil, pero
+!!	SIN GARANTÍA ALGUNA; ni siquiera la garantía implícita MERCANTIL o
+!!	de APTITUD PARA UN PROPÓSITO DETERMINADO. Consulte los detalles de
+!!	la Licencia Pública General GNU para más información.
+!!
+!!	Debería haber recibido una copia de la Licencia Pública General GNU
+!!	junto a 59 MINUTOS. En caso contrario, consulte
+!!	<http://www.gnu.org/licenses/>.
+!!
+!!------------------------------------------------------------------------------
+
+
+!!==============================================================================
+!!	Constantes y variables
+!!------------------------------------------------------------------------------
+
+Constant MARGIN_WIDTH 8;		! Ancho del margen interior (def. 8)
+Constant FRAME_WIDTH 56;		! Ancho del marco (def. 56)
+Constant GRAPHIC_WIN_WIDTH 28;	! Ancho de la ventana de imágenes (def. 28)
+
+
+!!==============================================================================
+!!	Librerías
+!!------------------------------------------------------------------------------
+
+Include "gimage.h";				! GWindows; Image Window Widget
+Include "gstatusX.h";			! GWindows; Status Window Module
+Include "gtile.h";				! GWindows; Tiled Image Windows
+
+
+!!==============================================================================
+!!	Definición de la interfaz
+!!------------------------------------------------------------------------------
+!!
+!!	+---+---------------------------+---+
+!!	| O |             M             | N |
+!!	+---+---------------------------+---+	(A) - textWindow: TextBuffer
+!!	|   |             G             |   |	(B) - graphicWindow: GImageWin
+!!	|   +---------------------------+   |	(C) - rightMargin: GraphWin
+!!	|   |             F             |   |	(D) - leftMargin: GraphWin
+!!	|   +---+-----+-------------+---+   |	(E) - bottomMargin: GraphWin
+!!	|   |   |     |             |   |   |	(F) - topMargin: GraphWin
+!!	|   |   |     |             |   |   |	(G) - statusBar: GStatusXWin
+!!	|   |   |     |             |   |   |	(H) - rightSide: GVTileWin
+!!	| I | D |  B  |      A      | C | H |	(I) - leftSide: GVTileWin
+!!	|   |   |     |             |   |   |	(J) - bottomSide: GHTileWin
+!!	|   |   |     |             |   |   |	(K) - bottomRightCorner: GImageWin
+!!	|   |   |     |             |   |   |	(L) - bottomLeftCorner: GImageWin
+!!	|   +---+-----+-------------+---+   |	(M) - topSide: GHTileWin
+!!	|   |             E             |   |	(N) - topRightCorner: GImageWin
+!!	+---+---------------------------+---+	(O) - topLeftCorner: GImageWin
+!!	| L |             J             | K |
+!!	+---+---------------------------+---+
+!!
+!!------------------------------------------------------------------------------
+WindowPair rootUI;
+  WindowPair -> bottomCentralArea;
+    WindowPair -> -> centralArea;
+      WindowPair -> -> -> centralSecondaryArea;
+        WindowPair -> -> -> -> interiorArea;
+          WindowPair -> -> -> -> -> bottomCentralInteriorArea;
+            WindowPair -> -> -> -> -> -> centralInteriorArea;
+              WindowPair -> -> -> -> -> -> -> centralSecondaryInteriorArea;
+                WindowPair -> -> -> -> -> -> -> -> mainArea;
+
+                  WindowPair -> -> -> -> -> -> -> -> -> X;
+                   WindowPair -> -> -> -> -> -> -> -> -> -> Z;
+
+                     !! A
+                     TextBuffer -> -> -> -> -> -> -> -> -> -> ->  textWindow;
+                     GraphWin -> -> -> -> -> -> -> -> -> -> -> interiorMargin 
+                       with split 0, split_dir winmethod_Left;
+                !! B
+                GImageWin -> -> -> -> -> -> -> -> -> -> graphicWindow
+                  with split 0, split_dir winmethod_Left,
+				  has on;
+
+!!------------------------------------------------------------------------------
+!!	Definición de márgenes interiores
+!!------------------------------------------------------------------------------
+                  !! C
+                  GraphWin -> -> -> -> -> -> -> -> -> rightMargin
+                    with split MARGIN_WIDTH, split_dir winmethod_Right;
+                !! D
+                GraphWin -> -> -> -> -> -> -> -> leftMargin
+                  with split MARGIN_WIDTH, split_dir winmethod_Left;
+              !! E
+              GraphWin -> -> -> -> -> -> -> bottomMargin
+                with split MARGIN_WIDTH / 4, split_dir winmethod_Below;
+            !! F
+            GraphWin -> -> -> -> -> -> topMargin
+              with split MARGIN_WIDTH / 4, split_dir winmethod_Above;
+          !! G
+          GStatusXWin -> -> -> -> -> statusBar
+            with split_dir winmethod_Above;
+
+!!------------------------------------------------------------------------------
+!!	Definición del marco
+!!------------------------------------------------------------------------------
+        !! H
+		GVTileWin -> -> -> -> rightSide
+		  with split FRAME_WIDTH, split_dir winmethod_Right, 
+               image FRAME_RIGHT,
+		  has abssplit;
+      !! I
+	  GVTileWin -> -> -> leftSide
+		with split FRAME_WIDTH, split_dir winmethod_Left, 
+             image FRAME_LEFT,
+		has abssplit;
+    WindowPair -> -> bottomArea;
+	  WindowPair -> -> -> bottomSecondaryArea;
+        !! J
+		GHTileWin -> -> -> -> bottomSide
+		  with split FRAME_WIDTH, split_dir winmethod_Below, 
+               image FRAME_BOTTOM,
+		  has abssplit;
+        !! K
+		GImageWin -> -> -> -> bottomRightCorner
+		  with split FRAME_WIDTH, split_dir winmethod_Right, 
+               image FRAME_BOTTOM_RIGHT,
+		  has aspected abssplit;
+      !! L
+	  GImageWin -> -> -> bottomLeftCorner
+		with split FRAME_WIDTH, split_dir winmethod_Left, 
+             image FRAME_BOTTOM_LEFT,
+		has aspected abssplit;
+  WindowPair -> topArea;
+    WindowPair -> -> topSecondaryArea;
+      !! M
+	  GHTileWin -> -> -> topSide
+		with split FRAME_WIDTH, split_dir winmethod_Above, 
+             image FRAME_TOP,
+		has abssplit;
+      !! N
+	  GImageWin -> -> -> topRightCorner
+		with split FRAME_WIDTH, split_dir winmethod_Right, 
+             image FRAME_TOP_RIGHT,
+		has aspected abssplit;
+    !! O
+	GImageWin -> -> topLeftCorner
+	  with split FRAME_WIDTH, split_dir winmethod_Left, 
+           image FRAME_TOP_LEFT,
+	  has aspected abssplit;
+
+
+!!==============================================================================
+!!	Funciones para abrir/cerrar la ventana gráfica
+!!------------------------------------------------------------------------------
+
+[ ShowGraphicWindow img;
+	!! Si no tiene anchura, se evita que la ventana se abra:
+	if (GRAPHIC_WIN_WIDTH == 0) return false;
+	!! Se redimensiona la ventana gráfica:
+	glk_window_set_arrangement(parent(graphicWindow).winid, 
+		winmethod_Left|winmethod_Proportional, 
+		GRAPHIC_WIN_WIDTH, 
+		graphicWindow.winid);
+	graphicWindow.split = GRAPHIC_WIN_WIDTH;
+	!! Se redimensiona el margen interior:
+	glk_window_set_arrangement(parent(interiorMargin).winid, 
+		winmethod_Left|winmethod_Proportional, 
+		MARGIN_WIDTH + 2, 
+		interiorMargin.winid);
+	interiorMargin.split = MARGIN_WIDTH + 2;
+	!! Se establece la imagen de la ventana gráfica:
+	if (img) graphicWindow.setImage(img);
+	else if (graphicWindow.image) graphicWindow.setImage(graphicWindow.image);
+	!! Se activa el indicador de la ventana gráfica:
+	give graphicWindow on;
+];
+
+[ HideGraphicWindow;
+	!! Se redimensiona la ventana gráfica:
+	glk_window_set_arrangement(parent(graphicWindow).winid, 
+		winmethod_Left|winmethod_Proportional, 
+		0, 
+		graphicWindow.winid);
+	graphicWindow.split = 0;
+	!! Se redimensiona el margen interior:
+	glk_window_set_arrangement(parent(interiorMargin).winid, 
+		winmethod_Left|winmethod_Proportional, 
+		0, 
+		interiorMargin.winid);
+	interiorMargin.split = 0;
+	!! Se desactiva el indicador de la ventana gráfica:
+	give graphicWindow ~on;
+];
+
+
+!!==============================================================================
+!!	Inicialización de la interfaz
+!!------------------------------------------------------------------------------
+
+[ InitGWindows;
+	Active_UI = rootUI;
+	Main_GWindow = textWindow;
+];
+
+
