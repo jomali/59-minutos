@@ -3471,7 +3471,7 @@ M07_conversacion_Carmen: switch(n) {
 1:	! inicio de la conversación
 print "---Dime una cosa, ¿me quieres?
 ^^
-La pregunta cogió a Silvia por sorpresa. Sin saber qué contestar, se limitó a desviar la mirada, incómoda de pronto. Habían decidido salir a dar un paseo aprovechando la tarde despejada y en ese momento estaban las dos sentadas en uno de los bancos del parque. El olor del césped flotaba en el aire, junto a las risas y los gritos de un grupo que niños que jugaba a la sombra de los árboles ante los ojos supervisores de sus padres. Un anciano se acercaba lentamente a ellas por uno de los senderos, paseando a un perro chiquitajo. La desbordante vivacidad del animal amarrado a la correa en contraste con la calma serena del que la sujetaba. Entonces Carmen preguntó de nuevo.
+La pregunta cogió a Silvia por sorpresa. Sin saber qué contestar, se limitó a desviar la mirada, incómoda de pronto. Habían decidido salir a dar un paseo aprovechando la tarde despejada y en ese momento estaban las dos sentadas en uno de los bancos del parque. El olor del césped flotaba en el aire, junto a las risas y los gritos de un [enlace: M07_ninos, grupo que niños] que jugaba a la sombra de los árboles ante los ojos supervisores de sus padres. Un anciano se acercaba lentamente a ellas por uno de los senderos, paseando a un perro chiquitajo. La desbordante vivacidad del animal amarrado a la correa en contraste con la calma serena del que la sujetaba. [M07_Carmen] volvió a preguntar.
 ^^
 ---Contéstame, Silvia. ¿Me quieres?";
 new_line;

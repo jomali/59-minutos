@@ -74,6 +74,8 @@
 !!	1)	Constantes y variables globales del relato.
 !!------------------------------------------------------------------------------
 
+!! Información bibliográfica:
+
 Constant Story "59 MINUTOS";
 Constant Headline "Un relato interactivo de J. Francisco Martín, 2014";
 
@@ -93,7 +95,7 @@ Release 0; Serial "140311";		! 1.0 - 2014/03/11
 !Constant Checking 1;			! Código de la versión del relato
 !Release 0; Serial "140311";	! 1.0 - 2014/03/11
 
-!Constant NO_MULTIMEDIA;		! No se incluyen contenidos multimedia
+!! Constantes de la librería Inform:
 
 Constant MANUAL_PRONOUNS;		! Los pronoms. refieren a objetos ya mencionados
 Constant MAX_CARRIED 2;			! Máx. objetos que se pueden llevar en mano
@@ -102,12 +104,30 @@ Constant NO_SCORE;				! No se lleva conteo de puntuación
 Constant SACK_OBJECT X00_ropa;	! Contenedor principal para la librería
 Constant SIN_MENSAJES;			! Se omiten los mensajes por defecto de la lib.
 
-Constant PARSER_STYLE _IST_;	! Selecciona estilo de los mensajes del parser
-Constant PARSER_PREFIX "[";		! Define texto inicial de los mens. del parser
-Constant PARSER_SUFIX "]";		! Define texto final de los mens. del parser
+!! Constantes de la extensión types:
 
-Global highlight_st = _BST_;	! Selecciona estilo de texto resaltado
+Constant PARSER_STYLE	_IST_;	! Selecciona estilo de los mensajes del parser
+Constant PARSER_PREFIX	"[";	! Define texto inicial de los mens. del parser
+Constant PARSER_SUFIX	"]";	! Define texto final de los mens. del parser
+
+!! Constantes de la extensión topicInventory:
+
+Constant TINV_STYLE		_IST_;	! Estilo de los mensajes
+Constant TINV_PREFIX	"[";	! Texto inicial de los mensajes
+Constant TINV_SUFIX		"]";	! Texto final de los menssajes
+Constant TINV_MSG1		"";		! Texto del mensaje MSG1
+Constant TINV_MSG2		"";		! Texto del mensaje MSG2
+Constant TINV_COMMA		" / ";	! Separador del inventario de temas
+Constant TINV_OR		" / ";	! Separador final del inventario de temas
+
+!! Estilo de texto resaltado:
+
+Global highlight_st = _IST_;	! Selecciona estilo de texto resaltado
 Global highlight_flag = true;	! Indica si el estilo resaltado está activado
+
+!! Otras constantes del relato:
+
+!Constant NO_MULTIMEDIA;		! No se incluyen contenidos multimedia
 
 
 !!==============================================================================
@@ -177,9 +197,9 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 	8:	! evtype_Hyperlink   - selection of a hyperlink in a window
 		glk_request_hyperlink_event(gg_mainwin);
 		glk_cancel_line_event(gg_mainwin, 0);
-		read_name_buffer(ev-->2); ! ev--> 2 es el valor del enlace. Un obj.
-		for (i = 0 : i <= name_buffer-->0 : i++) {
-			abortres-->i = name_buffer-->i;
+		write_text_buffer(ev-->2); ! ev--> 2 es el valor del enlace. Un obj.
+		for (i = 0 : i <= text_buffer-->0 : i++) {
+			abortres-->i = text_buffer-->i;
 		}
 		return 2;
 	}
@@ -219,9 +239,9 @@ Include "gwincls.h";			! GWindows; Window Class Framework
 	8:	! evtype_Hyperlink   - selection of a hyperlink in a window
 		glk_request_hyperlink_event(gg_mainwin);
 		glk_cancel_line_event(gg_mainwin, 0);
-		read_name_buffer(ev-->2); ! ev--> 2 es el valor del enlace. Un obj.
-		for (i = 0 : i <= name_buffer-->0 : i++) {
-			abortres-->i = name_buffer-->i;
+		write_text_buffer(ev-->2); ! ev--> 2 es el valor del enlace. Un obj.
+		for (i = 0 : i <= text_buffer-->0 : i++) {
+			abortres-->i = text_buffer-->i;
 		}
 		return 2;
 	}
@@ -329,7 +349,7 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 !! Inicializaciones del relato (en modo de depuración):
 #Ifdef DEBUG;
 [ InitialiseDebug;
-	location = H02_COCINA;
+	location = M07_PARQUE;
 ];
 #Endif; ! DEBUG;
 
@@ -497,38 +517,51 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 
 !!------------------------------------------------------------------------------
 !! Imprime el nombre corto del objeto *obj* pasado como parámetro con estilo de 
-!! texto resaltado (siempre que el estilo resaltado esté activado y el objeto 
-!! cuente con el atributo *remarkable*) o, en caso de que se incluya uno, el 
-!! texto *text*. Además, sólo en GLULX: crea un hipervínculo asociado al objeto 
-!! *obj*.
+!! texto resaltado, si es que el estilo resaltado está activado y el objeto 
+!! cuenta con el atributo *remarkable*. En caso que se incluya una cadena de 
+!! caracteres como segundo parámetro (es opcional), se imprime ésta en lugar 
+!! del nombre corto del objeto. Además, sólo en GLULX, crea un hipervínculo 
+!! asociado a este objeto *obj*.
+!!
+!! Si en lugar de un objeto se pasa una cadena de texto como parámetro *obj*, 
+!! se imprime y, en GLULX, se crea un hipervínculo asociado a la cadena.
 !!------------------------------------------------------------------------------
 [ link obj text
 	st;
-	read_name_buffer(obj);
 
-	if ((obj ofclass Object) 
-		&& ((name_buffer-->0 ~= 4) || ~~(name_buffer->(0+WORDSIZE) == 'n' 
-		&& name_buffer->(1+WORDSIZE) == 'a' && name_buffer->(2+WORDSIZE) == 'd'
-		&& name_buffer->(3+WORDSIZE) == 'a'))) {
-
+	if (metaclass(obj) == String) {
 		#Ifdef TARGET_GLULX;
 		glk_set_hyperlink(obj);
 		#Endif; ! TARGET_GLULX;
+		print (string) obj;
+		#Ifdef TARGET_GLULX;
+		glk_set_hyperlink(0);
+		#Endif; ! TARGET_GLULX;
+		return true;
+	}
 
+	write_text_buffer(obj);
+	if ((metaclass(obj) == Object)
+		&& ((text_buffer-->0 ~= 4) || ~~(text_buffer->(0+WORDSIZE) == 'n' 
+		&& text_buffer->(1+WORDSIZE) == 'a' && text_buffer->(2+WORDSIZE) == 'd'
+		&& text_buffer->(3+WORDSIZE) == 'a'))) {
+		#Ifdef TARGET_GLULX;
+		glk_set_hyperlink(obj);
+		#Endif; ! TARGET_GLULX;
 		st = current_style;
 		if (obj has remarkable) highlight_style();
 		if (metaclass(text) == String) print (string) text;
 		else print (name) obj;
 		switch (st) {
-		_RST_:	roman_style();
-		_IST_:	italic_style();
-		_BST_:	bold_style();
-		_MST_:	monospaced_style();
+			_RST_:	roman_style();
+			_IST_:	italic_style();
+			_BST_:	bold_style();
+			_MST_:	monospaced_style();
 		}
-
 		#Ifdef TARGET_GLULX;
 		glk_set_hyperlink(0);
 		#Endif; ! TARGET_GLULX;
+		return true;
 	}
 ];
 
@@ -582,46 +615,54 @@ Include "VerbLib.h";			! Define cómo trabajan las acciones
 ];
 
 !!------------------------------------------------------------------------------
-!! Escribe en un array el nombre de un objeto pasado como parámetro.
+!! Escribe una cadena de caracteres en un array. Se pueden pasar dos tipos de 
+!! parámetros posibles: la propia cadena que se desea escribir, o la referencia 
+!! a un objeto, en cuyo caso se escribe en el array el nombre de dicho objeto.
 !!------------------------------------------------------------------------------
-Constant NAME_BUFFER_STREAM_ID = 666;	! Cualquier stream libre
-Constant NAME_BUFFER_SIZE = 64;
-Array name_buffer --> NAME_BUFFER_SIZE;
+Constant TEXT_BUFFER_STREAM_ID = 666; ! Cualquier stream libre
+Constant TEXT_BUFFER_SIZE = 64;
+Array text_buffer --> TEXT_BUFFER_SIZE;
 
-[ read_name_buffer obj
+[ write_text_buffer param
 	old_stream;
+	!! Se comprueba que el parámetro sea válido:
+	if (metaclass(param) ~= String && metaclass(param) ~= Object) return false;
+
 	#Ifdef TARGET_ZCODE;
-	old_stream = NAME_BUFFER_STREAM_ID; ! por evitar advertencias del compilador
-	!! Se cambia el fujo de salida a un array de memoria:
-	@output_stream 3 name_buffer;
-	!! Se escribe en el array:
-	print (name) obj;
+	old_stream = TEXT_BUFFER_STREAM_ID; ! por evitar advertencias del compilador
+	!! Se cambia el flujo de salida a un array de memoria:
+	@output_stream 3 text_buffer;
+	!! Se escribe la cadena de texto en el array:
+	if (metaclass(param) == String) print (string) param;
+	else print (name) param;
 	!! Se vuelve al flujo de salida original:
 	@output_stream -3;
 	#Ifnot; ! TARGET_GLULX;
 	!! Se cambia el flujo de salida a un array de memoria:
 	old_stream = glk_stream_get_current();
-	glk_stream_set_current(glk_stream_open_memory(name_buffer + WORDSIZE, 
-		NAME_BUFFER_SIZE, filemode_Write, NAME_BUFFER_STREAM_ID));
-	!! Se escribe en el array:
-	print (name) obj;
+	glk_stream_set_current(glk_stream_open_memory(text_buffer + WORDSIZE, 
+		TEXT_BUFFER_SIZE, filemode_Write, TEXT_BUFFER_STREAM_ID));
+	!! Se escribe la cadena de texto en el array:
+	if (metaclass(param) == String) print (string) param;
+	else print (name) param;
 	!! Se vuelve al flujo de salida original:
 	glk_stream_close(glk_stream_get_current(), gg_arguments);
 	glk_stream_set_current(old_stream);
-	name_buffer --> 0 = gg_arguments --> 1;
+	text_buffer --> 0 = gg_arguments --> 1;
 	#Endif; ! TARGET_
 ];
 
-!!	[ print_name_buffer
-!!		tmp len;
-!!		len = name_buffer-->0;
-!!		tmp = name_buffer + WORDSIZE;
-!!		#Ifdef TARGET_ZCODE;
-!!		@print_table tmp len;
-!!		#Ifnot; ! TARGET_GLULX;
-!!		glk_put_buffer(tmp, len);
-!!		#Endif; ! TARGET_
-!!	];
+!! Función para imprimir los contenidos del array *text_buffer*:
+[ print_text_buffer
+	tmp len;
+	len = text_buffer --> 0;
+	tmp = text_buffer + WORDSIZE;
+	#Ifdef TARGET_ZCODE;
+	@print_table tmp len;
+	#Ifnot; ! TARGET_GLULX;
+	glk_put_buffer(tmp, len);
+	#Endif; ! TARGET_
+];
 
 !!------------------------------------------------------------------------------
 !! TODO - revisar
@@ -772,6 +813,7 @@ VerboIrregular "desvestir" with imperativo 'desnuda' 'desviste';
 Verb meta 'gna'
 	* multi							-> GNA
 ;
+VerboIrregular "determinar GNA" with imperativo 'gna';
 
 [ GNA g;
 	g = GetGNAOfObject(noun);
@@ -1012,7 +1054,6 @@ Verb	'cavila'
 	"Piensa en ", (the) noun, ".";
 ];
 
-
 !!------------------------------------------------------------------------------
 !! ##TalkOn, ##TalkTo
 !!------------------------------------------------------------------------------
@@ -1129,7 +1170,7 @@ Verb 'teleport.verb'
 
 Verb	meta 'temas' 't//'
 	*								-> TopicInventory
-;
+; 
 VerboIrregular "mostrar inventario de temas" with imperativo 'temas' 't//';
 
 [ TopicInventorySub;
@@ -1192,6 +1233,13 @@ VerboIrregular "vestir" with imperativo
 
 Include ">59mins_classes.inf";
 Include ">59mins_objects.inf";
-Include ">59mins_objects2.inf";
+Include ">59mins_memory1.inf";
+Include ">59mins_memory2.inf";
+Include ">59mins_memory3.inf";
+Include ">59mins_memory4.inf";
+Include ">59mins_memory5.inf";
+Include ">59mins_memory6.inf";
+Include ">59mins_memory7.inf";
+Include ">59mins_memory8.inf";
 
 

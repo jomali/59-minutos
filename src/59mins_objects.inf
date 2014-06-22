@@ -901,6 +901,37 @@ Furniture	-> H11_aroBaloncesto "aro de baloncesto"
 		gender	G_MASCULINO,
 		adjectives 'baloncesto',
 		description [; return O__M(self, 1); ],
+		before [;
+			DefaultAction:
+				if (self hasnt described) <<Examine self>>;
+				else <<Use self>>;
+			Use:
+				if (~~IndirectlyContains(player, H04_balonBaloncesto))
+					"No se puede jugar sin balón.";
+				print "Se coloca frente a la canasta y se prepara para lanzar 
+				un tiro libre...^";
+				print "Velocidad: ", self.speed, "^";
+				switch (self.free_throw()) {
+				0:	if (self.speed > 2) self.speed = self.speed - 2;
+					"^¡Encesta!";
+				1:	self.speed = self.start_speed;
+					"^La pelota da en el aro y sale rebotada sin entrar.";
+				default:
+					self.speed = self.start_speed;
+					"^Falla el tiro.";
+				}
+		],
+ private
+		free_throw [ x;
+			AimingManager.set_timer_frequency(self.speed);
+			x = AimAndFire();
+			if (x == -2 || x == -1) return random(0,1,2,3,4);
+			if (x < 3) return 0;
+			if (x < 8) return 1;
+			return 2;
+		],
+		speed 20,
+		start_speed 20,
  has	male;
 
 Furniture	-> H11_caballete "caballete"

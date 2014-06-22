@@ -13,13 +13,15 @@
 !!	Language:		ES (Castellano)
 !!	System:			Inform-INFSP 6
 !!	Platform:		Z-Machine / Glulx
-!!	Version:		2.0
-!!	Released:		2014/04/03
+!!	Version:		2.1
+!!	Released:		2014/06/12
 !!
 !!------------------------------------------------------------------------------
 !!
 !!	# HISTORIAL DE VERSIONES
 !!
+!!	2.1: 2014/06/12	Modificaciones en la propiedad *show_topic_inventory* del 
+!!					objeto gestor. Nueva constante CONVERSATION_COMMA.
 !!	2.0: 2014/04/03	Mejora la gestión del cambio de distintas conversaciones y 
 !!					añade temas con presencia temporizada, temas relacionados 
 !!					(análogos a los subtopics, pero a la inversa; se eliminan 
@@ -131,7 +133,7 @@
 !!
 !!	# SOBRE LOS MENSAJES
 !!
-!!	El autor puede definir hasta 7 constantes para modificar los textos por 
+!!	El autor puede definir hasta 8 constantes para modificar los textos por 
 !!	defecto de la extensión:
 !!
 !!	 *	CONVERSATION_STYLE: (0-3) Define el estilo con el que se imprimen los 
@@ -141,6 +143,7 @@
 !!	 *	CONVERSATION_MSG1: Antecede a la lista de temas del inventario.
 !!	 *	CONVERSATION_MSG2: Si hay más de un tema en el inventario, se imprime 
 !!		entre CONVERSATION_MSG1 y la lista de temas.
+!!	 *	CONVERSATION_COMMA: Separador de los temas del inventario.
 !!	 *	CONVERSATION_OR: Separador de los dos últimos temas del inventario.
 !!	 *	CONVERSATION_NO_MSG: Mensaje cuando no hay temas en el inventario.
 !!
@@ -171,13 +174,14 @@ System_file;
 !Constant DEBUG_COMPARE_WORD_ROUTINE;
 
 !! Estilo y textos por defecto de la extensión:
-Default CONVERSATION_STYLE	1; ! (0-3)
-Default CONVERSATION_PREFIX	"(";
-Default CONVERSATION_SUFIX	")";
-Default CONVERSATION_MSG1	"Puedes ";
-Default CONVERSATION_MSG2	"escoger entre ";
-Default CONVERSATION_OR		" o ";
-Default CONVERSATION_NO_MSG	"No hay temas que tratar";
+Default TINV_STYLE	1; ! (0-3)
+Default TINV_PREFIX	"(";
+Default TINV_SUFIX	".)";
+Default TINV_MSG1	"Puedes ";
+Default TINV_MSG2	"escoger entre ";
+Default TINV_COMMA	", ";
+Default TINV_OR		" o ";
+Default TINV_NO_MSG	"No hay temas que tratar";
 
 !! Objeto de apoyo para reordenar los temas de una conversación:
 Object	TopicBag "(Topic Bag)";
@@ -436,12 +440,12 @@ Class	Conversation
 			size = self.topic_inventory_size();
 
 			!! Se imprimen los mensajes previos al inventario:
-			if ((size == 0) && (CONVERSATION_NO_MSG ~= 0))
-				print (string) CONVERSATION_NO_MSG;
-			if ((size > 0) && (CONVERSATION_MSG1 ~= 0))
-				print (string) CONVERSATION_MSG1;
-			if ((size > 1) && (CONVERSATION_MSG2 ~= 0))
-				print (string) CONVERSATION_MSG2;
+			if ((size == 0) && (TINV_NO_MSG ~= 0))
+				print (string) TINV_NO_MSG;
+			if ((size > 0) && (TINV_MSG1 ~= 0))
+				print (string) TINV_MSG1;
+			if ((size > 1) && (TINV_MSG2 ~= 0))
+				print (string) TINV_MSG2;
 
 			!! Se recolocan los temas en la conversación de forma aleatoria:
 			for (i=size : i>0 : i--) {
@@ -460,13 +464,16 @@ Class	Conversation
 				PrintOrRun(topic, entry, true);
 				if (sibling(topic) ~= nothing) {
 					if (sibling(sibling(topic)) == nothing) {
-						if (CONVERSATION_OR ~= 0) {
-							print (string) CONVERSATION_OR;
+						if (TINV_OR ~= 0) {
+							print (string) TINV_OR;
 						}
-					} else print ", ";
+					} else {
+						if (TINV_COMMA ~= 0) {
+							print (string) TINV_COMMA;
+						}
+					}
 				}
 			}
-			print ".";
 			return true;
 		],
 		!! Permite indicar con quién se lleva a cabo la conversación. Puede ser 
@@ -490,6 +497,23 @@ Class	Conversation
 !!	de funciones que pueden ser utilizadas por un autor de relatos interactivos 
 !!	para manejar conversaciones:
 !!
+!!	 *	get_topic_inventory_flag() - Retorna el valor del atributo 
+!!		*inventory_flag* (booleano).
+!!
+!!	 *	is_running(conv:Conversation) - Retorna verdadero si la conversación 
+!!		pasada como parámetro está activada en el gestor. Si no se pasan 
+!!		parámetros, retorna verdadero si hay una conversación cualquiera 
+!!		activada. Retorna falso en otro caso.
+!!
+!!	 *	run() - Función principal del gestor. Comprueba si la entrada de 
+!!		usuario se refiere a alguno de los temas disponibles en la conversación 
+!!		activa  y lanza la acción adecuada para tratarlo si es así. Debe 
+!!		invocarse desde el punto de entrada *BeforeParsing()*.
+!!
+!!	 *	show_topic_inventory(flag:boolean) - Invoca la función 
+!!		*show_topic_inventory(flag)* de la conversación activa para imprimir el 
+!!		inventario de temas.
+!!
 !!	 *	start(conv:Conversation, no_action:boolean) - Inicia y deja activa en 
 !!		el gestor la conversación pasada como parámetro. Si además se invoca 
 !!		con *no_action* verdadero, se evita la ejecución de las acciones 
@@ -499,127 +523,18 @@ Class	Conversation
 !!
 !!	 *	stop() - Quita del gestor la conversación activa.
 !!
-!!	 *	is_running(conv:Conversation) - Retorna verdadero si la conversación 
-!!		pasada como parámetro está activada en el gestor. Si no se pasan 
-!!		parámetros, retorna verdadero si hay una conversación cualquiera 
-!!		activada. Retorna falso en otro caso.
-!!
 !!	 *	topic_inventory_size() - Retorna el número de temas de la conversación 
-!!		activa. 
-!!
-!!	 *	show_topic_inventory(flag:boolean) - Invoca la función 
-!!		*show_topic_inventory(flag)* de la conversación activa para imprimir el 
-!!		inventario de temas.
-!!
-!!	 *	run() - Función principal del gestor. Comprueba si la entrada de 
-!!		usuario se refiere a alguno de los temas disponibles en la conversación 
-!!		activa  y lanza la acción adecuada para tratarlo si es así. Debe 
-!!		invocarse desde el punto de entrada *BeforeParsing()*.
+!!		activa.
 !!------------------------------------------------------------------------------
 
 Object ConversationManager "(Conversation Manager)"
- with	start [ conv no_action;
-			!! Se comprueba que la conversación pasada sea válida:
-			if ((conv == 0) || ~~(conv ofclass Conversation)) {
-				#Ifdef DEBUG_TOPICINVENTORY;
-				print "ERROR. La conversación introducida no es válida.^";
-				#Endif;
-				return false;
-			}
-			!! Si la conversación ha finalizado, ejecuta la acción de final de 
-			!! conversación (si está definida) y retorna:
-			if (conv has general) {
-				if ((conv.final_action ~= 0) && ~~(no_action)) {
-					PrintOrRun(conv, final_action);
-				}
-				return false;
-			}
-			!! Si la conversación ya está activada, ejecuta la acción de 
-			!! conversación en ejecución (si está definida):
-			if (self.is_running(conv)) {
-				if ((conv.inter_action ~= 0) && ~~(no_action)) {
-					PrintOrRun(conv, inter_action);
-					new_line;
-				}
-			}
-			!! Se ejecuta la acción de inicio de conversación (si está 
-			!! definida) y activa la conversación en el gestor:
-			else {
-				if ((conv.initial_action ~= 0) && ~~(no_action)) {
-					PrintOrRun(conv, initial_action);
-					new_line;
-				}
-				self.current_conversation = conv;
-			}
-			!! Imprime el inventario de temas de la conversación activa:
-			self.show_topic_inventory();
-			return true;
-		], 
-		stop [;
-			self.current_conversation = 0;
-			return true;
-		], 
+ with	get_topic_inventory_flag [;
+			return self.topic_inventory_flag;
+		],
 		is_running [ conv;
 			if (conv ~= nothing) return self.current_conversation == conv;
 			else return self.current_conversation ~= nothing;
-		], 
-		topic_inventory_size [;
-			return self.current_conversation.topic_inventory_size();
 		],
-		!! XXX - Requiere la extensión types.h v4.X o superior. Se puede 
-		!! cambiar por la versión alternativa de la propiedad (definida más 
-		!! abajo) que no hace uso de la extensión.
-		show_topic_inventory [ flag;
-			if (self.current_conversation == 0) return false;
-			start_parser_style();
-			self.current_conversation.show_topic_inventory(flag);
-			end_parser_style();
-			new_line;
-			return true;
-		],
-		!! XXX - Versión alternativa de la propiedad show_topic_inventory. 
-		!! Descomentar si no se quiere utilizar la extensión types.h.
-!		show_topic_inventory [ flag;
-!			if (self.current_conversation == 0) return false;
-!			switch (CONVERSATION_STYLE) {
-!			0:	!! Estilo: Romana
-!				#Ifdef TARGET_ZCODE;
-!				font_on; style roman;
-!				#Ifnot; ! TARGET_GLULX;
-!				glk($0086, 0);
-!				#Endif;	! TARGET_
-!			1:	!! Estilo: Itálica
-!				#Ifdef	TARGET_ZCODE;
-!				font on; style underline;
-!				#Ifnot;	! TARGET_GLULX;
-!				glk($0086, 1);
-!				#Endif;	! TARGET_
-!			2:	!! Estilo: Negrita
-!				#Ifdef	TARGET_ZCODE;
-!				font on; style bold;
-!				#Ifnot;	! TARGET_GLULX;
-!				glk($0086, 3);
-!				#Endif;	! TARGET_
-!			3:	!! Estilo: Monoespaciada
-!				#Ifdef	TARGET_ZCODE;
-!				font off;
-!				#Ifnot;	! TARGET_GLULX;
-!				glk($0086, 2);
-!				#Endif;	! TARGET_
-!			}
-!			if (CONVERSATION_PREFIX ~= 0)
-!				print (string) CONVERSATION_PREFIX;
-!			self.current_conversation.show_topic_inventory(flag);
-!			if (CONVERSATION_SUFIX ~= 0)
-!				print (string) CONVERSATION_SUFIX;
-!			#Ifdef	TARGET_ZCODE;		!!
-!			font on; style roman;		!!
-!			#Ifnot;	! TARGET_GLULX;		!! Romana
-!			glk($0086, 0);				!!
-!			#Endif; ! TARGET_			!!
-!			new_line;
-!			return true;
-!		],
 		run [ o o_tmp_hits;
 			if (self.current_conversation) {
 
@@ -700,9 +615,106 @@ Object ConversationManager "(Conversation Manager)"
 			!! Retorna de la función sin hacer nada -> tratamiento normal de 
 			!! la entrada del usuario:
 			return false;
-		], 
-		get_topic_inventory_flag [;
-			return self.topic_inventory_flag;
+		],
+		show_topic_inventory [ flag;
+			#Ifdef _TYPES_;
+			!! Si se incluye la extensión types.h v4.3 o superior, se utiliza 
+			!! esta versión de la rutina *show_topic_inventory(flag: boolean)*. 
+			!! En caso contrario, la versión utilizada es la que se define más 
+			!! abajo.
+			if (self.current_conversation == 0) return false;
+			start_parser_style();
+			self.current_conversation.show_topic_inventory(flag);
+			end_parser_style();
+			new_line;
+			return true;
+			#Ifnot;
+			!! Versión alternativa de la función que se utiliza en caso de que 
+			!! no se haya incluido la extensión types.h.
+			if (self.current_conversation == 0) return false;
+			switch (TINV_STYLE) {
+			0:	!! Estilo: Romana
+				#Ifdef TARGET_ZCODE;
+				font_on; style roman;
+				#Ifnot; ! TARGET_GLULX;
+				glk($0086, 0);
+				#Endif;	! TARGET_
+			1:	!! Estilo: Itálica
+				#Ifdef	TARGET_ZCODE;
+				font on; style underline;
+				#Ifnot;	! TARGET_GLULX;
+				glk($0086, 1);
+				#Endif;	! TARGET_
+			2:	!! Estilo: Negrita
+				#Ifdef	TARGET_ZCODE;
+				font on; style bold;
+				#Ifnot;	! TARGET_GLULX;
+				glk($0086, 3);
+				#Endif;	! TARGET_
+			3:	!! Estilo: Monoespaciada
+				#Ifdef	TARGET_ZCODE;
+				font off;
+				#Ifnot;	! TARGET_GLULX;
+				glk($0086, 2);
+				#Endif;	! TARGET_
+			}
+			if (TINV_PREFIX ~= 0)
+				print (string) TINV_PREFIX;
+			self.current_conversation.show_topic_inventory(flag);
+			if (TINV_SUFIX ~= 0)
+				print (string) TINV_SUFIX;
+			#Ifdef	TARGET_ZCODE;		!!
+			font on; style roman;		!!
+			#Ifnot;	! TARGET_GLULX;		!! Romana
+			glk($0086, 0);				!!
+			#Endif; ! TARGET_			!!
+			new_line;
+			return true;
+			#Endif; ! _TYPES_;
+		],
+		start [ conv no_action;
+			!! Se comprueba que la conversación pasada sea válida:
+			if ((conv == 0) || ~~(conv ofclass Conversation)) {
+				#Ifdef DEBUG_TOPICINVENTORY;
+				print "ERROR. La conversación introducida no es válida.^";
+				#Endif;
+				return false;
+			}
+			!! Si la conversación ha finalizado, ejecuta la acción de final de 
+			!! conversación (si está definida) y retorna:
+			if (conv has general) {
+				if ((conv.final_action ~= 0) && ~~(no_action)) {
+					PrintOrRun(conv, final_action);
+				}
+				return false;
+			}
+			!! Si la conversación ya está activada, ejecuta la acción de 
+			!! conversación en ejecución (si está definida):
+			if (self.is_running(conv)) {
+				if ((conv.inter_action ~= 0) && ~~(no_action)) {
+					PrintOrRun(conv, inter_action);
+					new_line;
+				}
+			}
+			!! Se ejecuta la acción de inicio de conversación (si está 
+			!! definida) y activa la conversación en el gestor:
+			else {
+				if ((conv.initial_action ~= 0) && ~~(no_action)) {
+					PrintOrRun(conv, initial_action);
+					new_line;
+				}
+				self.current_conversation = conv;
+			}
+			!! Imprime el inventario de temas de la conversación activa:
+			self.show_topic_inventory();
+			return true;
+		],
+		stop [;
+			self.current_conversation = 0;
+			return true;
+		],
+		topic_inventory_size [;
+			return self.current_conversation.topic_inventory_size();
 		],
  private
 		!! Tema con mayor porcentaje de coincidencias hasta el momento.

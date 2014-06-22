@@ -99,7 +99,7 @@ Global GRAMMATICAL_INFLECTION = SECOND_PERSON_PRESENT;
 !!	*female* y *pluralname*.
 !!------------------------------------------------------------------------------
 [ _o obj gna;
-	gna = GetGNAOfObject (obj, true);
+	gna = GetGNAOfObject(obj, true);
 	switch (gna) {
 		0, 6:	print "o";
 		1, 7:	print "a";

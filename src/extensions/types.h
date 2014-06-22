@@ -12,12 +12,19 @@
 !!	Language:		ES (Castellano)
 !!	System:			Inform-INFSP 6
 !!	Platform:		Máquina-Z / GLULX
-!!	Version:		4.2
-!!	Released:		2013/04/02
+!!	Version:		4.3
+!!	Released:		2014/06/12
 !!
 !!------------------------------------------------------------------------------
 !!
-!!	Copyright (c) 2013, J. Francisco Martín
+!!	# HISTORIAL DE VERSIONES
+!!
+!!	4.3: 2014/06/12	Añadida constante TYPES para permitir comprobar si la 
+!!					extensión ha sido incluida.
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	Copyright (c) 2013, 2014, J. Francisco Martín
 !!
 !!	Este programa es software libre: usted puede redistribuirlo y/o 
 !!	modificarlo bajo los términos de la Licencia Pública General GNU 
@@ -37,20 +44,23 @@
 !!
 !!	# ESTILOS DE TEXTO
 !!
-!!	<>	romana
-!!	<>	itálica
-!!	<>	negrita
-!!	<>	monoespaciada
+!!	 -	romana (roman style)
+!!	 -	itálica (italic style)
+!!	 -	negrita (bold style)
+!!	 -	monoespaciada (monospaced style)
 !!
 !!	# ESTILOS ABSTRACTOS
 !!
-!!	<>	enfático
-!!	<>	fuerte
-!!	<>	código
-!!	<>	parser
+!!	 -	enfático (emph/em)
+!!	 -	fuerte (strong)
+!!	 -	código (code)
+!!	 -	parser
 !!
 !!------------------------------------------------------------------------------
 System_file;
+
+#Ifndef _TYPES_;
+Constant _TYPES_;
 
 Constant _RST_	= 0;
 Constant _IST_	= 1;
@@ -199,5 +209,7 @@ Global	current_style = _RST_;
 !! Alias:
 
 [ em text; return emph(text); ];
+
+#Endif; ! _TYPES_;
 
 

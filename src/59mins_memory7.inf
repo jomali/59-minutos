@@ -101,7 +101,7 @@ NPC		-> M07_Carmen "Carmen"
 				ConversationManager.start(M07_conversacion_Carmen);
 				return true;
 		],
- has	concealed female proper;
+ has	concealed female proper remarkable;
 
 Conversation	M07_conversacion_Carmen "(conversación con Carmen)"
  with	initial_action [;
